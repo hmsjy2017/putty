@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug keyboard-problems</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/keyboard-problems.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug keyboard-problems</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Problems with various keyboard layouts / input methods<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>Problems with various keyboard layouts and input methods.
+It would be hard for me to
+debug these myself because I'd have to be able to work in the same
+keymap as I was testing PuTTY in! If anybody can debug these
+problems it would be greatly appreciated. (Although to get any fixes
+rolled in, you'll probably need to convince us that it won't break for
+anyone <em>else's</em> keyboard layout, and that it works across all
+the Windows versions we support, because we just don't know enough
+about internationalisation.)
+
+<p>(Some of the items below have been on this list for a very long
+time, and may in fact have been fixed. Please do let us know if so.)
+<ul>
+<li>
+The
+<a href="http://www.users.one.se/liket/svorak/">svorak</a> (Swedish
+Dvorak) layout apparently gets a few control combinations wrong: ^W,
+^V and ^Z.
+<li>
+On the Danish keyboard, apparently the tilde (~) is acting as a dead
+key <em>and</em> generating a code in itself; so if you hit ~ and
+then n, you get a ~ followed by a ñ.  (OSD: I can't replicate
+this on Win2K with a Danish keymap.  I get only the ñ.)
+<li>
+There's been a report from a Korean user that Korean multi-byte
+input doesn't work.
+<li>
+A German user has reported that Caps Lock is more like Shift Lock -
+it affects a lot of keys other than alphabetics.
+<li>
+I believe there are also Eastern input mechanisms we don't handle
+sensibly.
+</ul>
+
+<p>
+There's a <a href="win-dead-keys.html">fix for dead keys</a> that
+might make some of this stuff go away.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/keyboard-problems;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

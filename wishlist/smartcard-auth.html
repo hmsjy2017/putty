@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish smartcard-auth</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/smartcard-auth.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish smartcard-auth</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY could use RSA keys held on smartcards<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>It's been suggested that PuTTY could use RSA keys held on a smartcard for
+authentication.  This would require interfacing with smartcard APIs and
+suchlike, and might be an application for the <a href="mdpi.html">MDPI</a>.
+
+<p>Alternatively, it might be better to integrate smartcard support into
+an SSH agent, either as part of Pageant or as a plug-in replacement for it.
+After all, the purpose of a smartcard is to generate cryptographic signatures
+on demand, which is what an SSH agent does too.
+
+<p>Some patches we've seen (links are on our
+<a href="../links.html">Links page</a>):
+<ul>
+<li><tt><200409231510.55383.kstef@mtppi.org></tt>
+<br>Patches against PuTTY/Pageant 0.55 to use PKCS#11 libraries (tested with 
+<a href="http://www.opensc-project.org/">OpenSC</a>)
+<br>These patches can be found in
+<a href="http://www.opensc-project.org/files/contrib/">opensc-project.org's contrib directory</a>.
+There is a packaged version called the Smart Card Bundle.
+<li><tt><300242548@web.de></tt>
+<br>Patch with extended key file format that uses external (PuTTY-specific?)
+DLL
+<br>A compiled binary called PuTTYcard can <em>also</em> be found in
+<a href="http://www.opensc-project.org/files/contrib/">opensc-project.org's contrib directory</a>,
+although confusingly it apparently doesn't <em>use</em> OpenSC.
+<li><tt><1673247798@web.de></tt>
+<br>... which was replaced by a directly smartcard-enabled Pageant.
+<li>PuTTY SC uses PKCS#11.
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/smartcard-auth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

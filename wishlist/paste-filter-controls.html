@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug paste-filter-controls</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/paste-filter-controls.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug paste-filter-controls</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Filter out control characters by default when pasting<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=10c910482277cd34119ab1dd0365556513516033">10c910482277cd34119ab1dd0365556513516033</a> 2018-03-12 (0.71)<br>
+<p>
+It's become widespread practice among terminal emulators to filter
+out most control characters when pasting text from the clipboard
+to the terminal (e.g.,
+<a href="http://invisible-island.net/xterm/xterm.log.html#xterm_292">xterm</a>,
+<a href="https://bugzilla.gnome.org/show_bug.cgi?id=753197">gnome-terminal</a>),
+to somewhat reduce the risk of text pasted from an untrusted
+source having unexpected effects.
+
+<p>
+PuTTY now does the same as xterm by default; that is, PuTTY filters
+out control characters other than CR, LF, tab, backspace, and DEL.
+There's an option to allow control characters (as previously),
+since they have their uses.
+
+<p>
+Note that this doesn't, in general, close the loophole when copying
+text from websites that what ends up in your clipboard may not resemble
+what it looked like you were selecting; there is still plenty of scope
+for mischief; see for instance
+<a href="https://thejh.net/misc/website-terminal-copy-paste">this demonstration</a>.
+(However, PuTTY does now prevent escaping from bracketed-paste mode,
+when enabled, as mentioned on that page.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/paste-filter-controls;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2018-03-24 15:36:36 +0000)</div>
+
+</BODY></HTML>

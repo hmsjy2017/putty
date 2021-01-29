@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish 256-colours</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/256-colours.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish 256-colours</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for more colours<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>depends</b>: <a href="compressed-scrollback.html">compressed-scrollback</a><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2004-11-29 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=0600e8cf75ef93750ccf057ac22ea0a422218dd0">0600e8cf75ef93750ccf057ac22ea0a422218dd0</a> (0.58)<br>
+<p>
+It's been suggested that PuTTY could usefully support xterm's 256-colour
+mode (ESC [ 38;5;XX m and ESC [ 48;5;XX m, where XX is a colour
+index from 0-255).
+
+<p>
+This would be a pretty easy piece of work, now that we have plenty
+of free bits in the attribute word in the termchar structure.
+However, I'm currently unaware of any applications that use it,
+aside from a vague suggestion that people might put 256-colour codes
+in their colour <code>ls</code> settings.
+
+<p>
+If anyone gives us a good reason why we should want to implement
+this, I'll probably just go ahead and do it.
+
+<p>
+(<1042233614.1153.15.camel@evilmagic.org> contains a patch
+to implement this, but it's very out of date.)
+
+<p>
+<b>SGT, 2004-11-28</b>: this is now done, and I don't <em>think</em>
+I've broken anything else en route.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/256-colours;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish multiple-connections</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/multiple-connections.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish multiple-connections</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Managing multiple connections in one PuTTY (eg. tabbed windows, MDI)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <a href="remove-statics.html">remove-statics</a><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+A lot of people seem to want a single PuTTY to be able to manage
+multiple connections. The
+<a href="http://www.ipetitions.com/petition/putty-tabs/">most popular</a>
+UI is per-session tabs on the window, like Firefox or konsole.
+Other options include selection with Alt-F1, Alt-F2 etc (like the
+Linux console) or an an MDI-style application, with one large main
+window containing several session windows.
+
+<p>
+For a start, this involves arranging to be able to run more than one
+connection within the same PuTTY process. The cross-platform parts
+of this work are long since done (see
+<a href="remove-statics.html">remove-statics</a>), but the Windows
+front end still uses a great many static variables within itself. So
+to even consider doing this work would mean a significant amount of
+restructuring of the Windows code.
+
+<p>
+In addition I'd want a strong guarantee of reliability (if one
+session crashes, can it avoid taking the other nine down?). Also I'd
+want to be able to configure PuTTY to be just the way it is now,
+because not everybody likes the idea of all their sessions being
+bound together in a single window; and finally I'd want to be
+convinced that the code size increase wouldn't be excessive. This is
+close to having priority "never", in fact, unless someone can
+convince me it's really worth its while.
+
+<p>
+Really, the approach we'd prefer is a separate application that can
+swallow instances of PuTTY and provide the tabbing interface. That
+way, you're not necessarily restricted to just grouping PuTTY
+instances together; you could in principle bundle a PuTTY instance with
+a Notepad and a Firefox, say. (This is another way of saying that
+the deficiency isn't specific to PuTTY, but is a lack of flexibility
+in the policies of most window managers.)
+
+<p>
+There are now several third-party implementations of this concept on
+our <a href="../links.html">Links page</a>.
+
+<p>
+A related suggestion is that separate PuTTY windows could know about
+each other, and a key combination such as Ctrl-Tab could switch
+between just PuTTY windows. A (scary) patch implementing this was
+once to be found
+<a href="http://hp.vector.co.jp/authors/VA024651/#PuTTYctrltab_top">here</a>
+(web page in Japanese).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/multiple-connections;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

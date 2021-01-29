@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug resize</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/resize.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug resize</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Resizing the window is still pretty flaky.<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <em><a href="startup-fullscreen.html">startup-fullscreen</a></em><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>Resizing the window is still pretty flaky. One particular current
+problem is: if you choose a font that fits 80 columns on your screen
+but not 132, then sending ESC[?3h to switch to 132-column mode will
+squish the font just enough to fit 132 columns in a full-width
+window. So far so good; but when you send ESC[?3l to return to 80
+columns, really it would be nice if the window was put back the way
+it started out. Also there's some indication that the squishing
+doesn't work quite right; first PuTTY expands the window to full
+width, then it chooses a font size, and then it leaves a big border
+down each side of the window when that font size fails to fit quite
+right. Really it should recompute the window size once it knows the
+font size.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/resize;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2002-05-06 13:23:12 +0000)</div>
+
+</BODY></HTML>

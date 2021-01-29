@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-rsa-kex-integer-overflow</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-rsa-kex-integer-overflow.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-rsa-kex-integer-overflow</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Integer overflow due to missing key-size check in RSA key exchange code<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.60<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d82854999516046122501b2e145099740ed0284f">d82854999516046122501b2e145099740ed0284f</a> 0.71<br>
+<p>
+Up to and including version 0.70, PuTTY's implementation of RSA key
+exchange (RFC 4432) failed to enforce that the RSA key sent by the
+server was of at least the length required by the specification (1024
+or 2048 bits, for the two specified methods).
+
+<p>
+In particular, the server could send an RSA key so short that when PuTTY
+computed the number of bits (<code>KLEN</code>) in the secret integer
+<code>K</code> it will encrypt with that key, the number of bits would
+come out negative. This led to an integer overflow and uncontrolled
+overwriting of memory.
+
+<p>
+We don't know if this can be exploited to gain control over the
+client. But because it occurs during key exchange, and therefore it
+happens before host key checking, the overflow can be induced by a
+MITM attack even if the MITM does not know the correct host key. So
+even if you trust the server you <em>think</em> you are connecting to,
+you are not safe.
+
+<p>
+As of 0.71, PuTTY now enforces the minimum key lengths specified in
+RFC 4432, which ensures that <code>KLEN</code> is always positive.
+
+<p>
+This vulnerability was found by Filipe Casal, as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+It has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9894">CVE-2019-9894</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-rsa-kex-integer-overflow;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-24 11:38:13 +0000)</div>
+
+</BODY></HTML>

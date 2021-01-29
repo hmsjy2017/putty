@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug pterm-timer</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pterm-timer.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug pterm-timer</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: pterm should use no CPU if it&#x27;s not doing anything<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-11-28 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=7ecf13564a8d716000ce78146d1aaf4422432a4f">7ecf13564a8d716000ce78146d1aaf4422432a4f</a> (0.58)<br>
+<p><pre>pterm currently runs a GTK timer function every 20ms (fifty times a
+second). This timer function takes care of calling term_update() to
+handle actual window updates, calling term_blink() to handle
+blinking cursors etc, and checking whether the child process has
+terminated.
+
+It would be nice if pterm could avoid doing this unless it was
+absolutely necessary. So, alternative ways of doing the same things:
+
+ - to detect stuff in the child process, I&#x27;d have to get
+   asynchronous notification of SIGCHLD. I suppose this means having
+   an intra-process pipe in the same way Unix plink does it, so that
+   pty.c&#x27;s SIGCHLD handler writes a byte to the pipe and the GTK
+   main function calls a function in response.
+
+ - the reason term_update() is called in the timer function is so
+   that it won&#x27;t happen more than 50 times per second, which means
+   that really fast-scrolling text doesn&#x27;t slow down pterm the way
+   it does xterm. So it would be a step backwards to move to just
+   calling term_update() after every term_out(). I think a sensible
+   way to fix this might be:
+
+    * Introduce a wrapper function in pterm.c, whose job is to
+      arrange a call to term_update either now or later.
+
+    * The wrapper function will first check how long it&#x27;s been since
+      the last term_update. If it&#x27;s been more than 20ms, it will
+      call term_update. If not, it should _schedule_ a GTK timer
+      function which will call term_update at some point 20ms or
+      less in the future. That timer function will then disable
+      itself the first time it runs.
+
+    * Then we call the wrapper function after every term_out().
+
+ - Regular calls to the terminal code are actually necessary if
+   blinking text or blinking cursor are enabled, or if a visual bell
+   is currently active. So I could introduce a spare function in
+   terminal.c which allows the front end to ask the terminal `Do you
+   have any pending events for which I should call you back in
+   future?&#x27; The wrapper function described above could call this
+   after term_update, and schedule the timer function _anyway_ if it
+   says yes.
+
+Patch (unreviewed): Pine.LNX.4.53mb.0304291625260.25393@ask.diku.dk
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pterm-timer;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

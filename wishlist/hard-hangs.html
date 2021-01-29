@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug hard-hangs</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/hard-hangs.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug hard-hangs</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY becomes unresponsive / unkillable on Win2000/XP<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>present-in</b>: 0.52 2002-02-24 0.53b 0.54<br>
+<b>fixed-in</b>: 2004-03-18 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=c4bfa9b7b77f719a61de6049c9c18d80c9685c9b">c4bfa9b7b77f719a61de6049c9c18d80c9685c9b</a> (0.55)<br>
+<p>
+Apparently, for some people, PuTTY randomly becomes unresponsive with
+Win2000/XP.
+
+<p>
+We've been getting rare but persistent reports of this for a while,
+but there seems to have been a rash of them recently (Feb 2004). None
+of us have ever seen this, so we're going to need some help if we're
+to stop it happening.
+
+<p>
+Common characteristics of the reports we've had:
+<ul>
+<li>When one PuTTY hangs, they all hang, including any new instances
+attempted (once they get to opening a terminal window), until the
+system is restarted. But other applications on the same system are
+unaffected.
+<li>When trying to close PuTTY via the task manager, one receives a
+message like "This program cannot be closed. If it is being debugged,
+please resume it or close the debugger first."
+<li>It doesn't seem to be correlated with any particular event - it
+can occur hours into an established connection.
+<li>It's claimed that the PuTTY backend is still functional (sending
+keepalives, etc).
+<li>Looks like it only happens with SSH (1 and 2)
+<li>May be absent in 0.49?
+</ul>
+
+<p>
+If I had to make a guess, I'd investigate some of the trickery we use
+to get noise for random numbers. My notes also suggest that I thought
+someone thought that sound might be implicated, but I can't find any
+evidence for that now.
+
+<p>
+Once the system has got into this state, an SSH packet log of a new
+session which hangs might be useful, so we can infer exactly where
+it's hanging and what it might be doing (since there's been a
+suggestion that it's some way into the SSH protocol).
+
+<p>
+If someone can debug one of the hanging PuTTY processes and tell us
+where it's got stuck, that would be good too.
+<br><em>Update, 2004-03-17</em>: someone did this, and PuTTY is
+hanging in <code>noise_get_light()</code>, around the call to
+<code>GetSystemPowerStatus()</code>.
+
+<p>
+Reports:
+<ul>
+<li>00ad01c1d996$8ed21920$0100a8c0@andrus
+<li>20020330110817.A5544@torres.ka0.zugschlus.de
+<li>000001c20e58$f34a7810$a600a8c0@local.muppets.com
+<li><a href="http://groups.google.com/groups?q=msgid%3Aacvoih$1imo$10%40innferno.news.tiscali.de">acvoih$1imo$10@innferno.news.tiscali.de</a>
+<li>3C4550B2.5EDB3F19@nada.kth.se
+<li><a href="http://groups.google.com/groups?q=msgid%3Ae3374ad6.0402170239.2d2a3455%40posting.google.com">e3374ad6.0402170239.2d2a3455@posting.google.com</a>
+<li><a href="http://groups.google.com/groups?q=msgid%3A7bd4d50d.0402200147.5824ed62%40posting.google.com">7bd4d50d.0402200147.5824ed62@posting.google.com</a>
+<br>more info: 9AC105024CEA64458BF66D1DE13CA50DDB44ED@tibbemeexs1.eu.jnj.com
+<li><a href="http://groups.google.com/groups?q=msgid%3Ac925c3dc.0402191059.102caeba%40posting.google.com">c925c3dc.0402191059.102caeba@posting.google.com</a>
+<li>001c01c3f7f2$4ca5b3a0$0200a8c0@bart
+</ul>
+
+<p>
+<em>Update, 2004-03-17</em>: one of our correspondents has been trying
+a version of the development code (more or less equivalent to 0.54) with
+the <code>GetSystemPowerStatus()</code> call disabled, and has reported
+that the problem seems to have gone away.
+
+<p>
+This source of noise has now been removed as of 2004-03-18 (there were
+<a href="ntpd-slowdown.html">other good reasons</a> too).
+Please let us know if this appears to solve (or not!) the problem.
+
+<p>
+(Perhaps we've been getting more reports recently because modern BIOI /
+Windows versions / whatever are more upset by frequent calls to the
+APM BIOS or whatever it is than older systems?)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/hard-hangs;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ki-multiprompt-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ki-multiprompt-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ki-multiprompt-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Crash with SSH keyboard-interactive packet with multiple prompts<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.57<br>
+<b>present-in</b>: 0.58 2005-05-11<br>
+<b>fixed-in</b>: 2005-10-31 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8719f92c1426609de7ead4a490a15d1d18875f53">8719f92c1426609de7ead4a490a15d1d18875f53</a> (0.59)<br>
+<p>
+In an SSH-2 session, if PuTTY is presented with a single
+`keyboard-interactive' packet containing multiple prompts, it will
+crash after the first prompt. This only affects PuTTY proper; the
+non-GUI tools (PSCP, PSFTP, Plink) should work fine.
+
+<p>
+This problem has the same root cause as
+<a href="ssh1-bad-passphrase-crash.html">ssh1-bad-passphrase-crash</a>,
+and should be fixed by the same rearrangement.
+
+<p>
+<em>Update, 2005-10-31:</em> I believe this should now be fixed,
+and we've had one report confirming that.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ki-multiprompt-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug unix-lp64</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/unix-lp64.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug unix-lp64</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY is broken on LP64 Unix systems<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.58<br>
+<b>fixed-in</b>: r8855 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=7e16457d14ffae47303da8c48af98de68bb3a6ed">7e16457d14ffae47303da8c48af98de68bb3a6ed</a> (0.61)<br>
+From <a href="http://bugs.debian.org/336390">Debian bug #336390</a>:
+<pre>
+Symptoms:
+I start pterm. It brings up its window, which is cleared to black
+with the cursor in the top left corner. After this, nothing happens: the
+expected shell prompt isn't printed. Pressing keys has no visible effect.
+When I click the mouse on the window or use the window manager to switch
+away this causes pterm to suddenly update, printing the shell prompt plus
+any characters corresponding to keys I had pressed earlier (and if say
+I had pressed 'ls<RET>' I also get the ls output now).
+...
+Actual problem:
+The gtkwin.c timer code implicitly assumes sizeof(int)==sizeof(long).
+On alpha, long is 64 bit, so timer ticks as returned by GETTICKCOUNT()
+are 64 bits (and at time of writing well overflowing into the high
+word). However, we pass this through to the timer_trigger() routine
+with GINT_TO_POINTER() and then retrieve it with GPOINTER_TO_INT().
+Unfortunately on alpha GPOINTER_TO_INT(x) is defined as
+((gint)  (glong) (x)), which truncates the count to 32 bits.
+The upshot is that the next timeout is scheduled for aeons in the
+future, and we never actually draw anything.
+
+Patch:
+
+---begin---
+--- gtkwin.c.orig       2005-10-29 22:58:37.000000000 +0100
++++ gtkwin.c    2005-10-30 00:22:57.000000000 +0100
+@@ -1187,14 +1187,14 @@
+ 
+ static gint timer_trigger(gpointer data)
+ {
+-    long now = GPOINTER_TO_INT(data);
++    long now = (long)(data);
+     long next;
+     long ticks;
+ 
+     if (run_timers(now, &next)) {
+        ticks = next - GETTICKCOUNT();
+        timer_id = gtk_timeout_add(ticks > 0 ? ticks : 1, timer_trigger,
+-                                  GINT_TO_POINTER(next));
++                                  (gpointer)(next));
+     }
+ 
+     /*
+@@ -1216,7 +1216,7 @@
+        ticks = 1;                     /* just in case */
+ 
+     timer_id = gtk_timeout_add(ticks, timer_trigger,
+-                              GINT_TO_POINTER(next));
++                              (gpointer)(next));
+ }
+ 
+ void fd_input_func(gpointer data, gint sourcefd, GdkInputCondition condition)
+---endit---
+
+Disclaimer: works for me on the Alpha, but totally untested on
+32 bit machines. Almost certainly won't work on systems where
+pointers are 32 bit but long is 64 bit.
+
+I think that we only ever have one outstanding timer (since
+timer_id is a single global, not an array), so we could just
+keep 'next' in a global, rather than trying to stuff it into
+a pointer and pull it back out again; maybe that'd be cleaner?
+
+Or we could force timer ticks to be 32 bit integers on all
+platforms...
+</pre>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/unix-lp64;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

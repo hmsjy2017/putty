@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish x11-auth</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/x11-auth.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish x11-auth</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Authenticate with local X servers<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: r8305 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=ca6fc3a4daf51166a15693feffc967bee9e3f59a">ca6fc3a4daf51166a15693feffc967bee9e3f59a</a> (0.61)<br>
+<p>
+X11 forwarding currently doesn't even attempt to authenticate with
+the local X server. In order for it to do so, PuTTY would have to
+know where to look for authentication data. It would be nice if this
+were to happen.
+
+<p>
+A simple approach might be for PuTTY just to pass on authentication
+data supplied by the X11 client if it has no better ideas.  The X
+Protocol Manual suggests that servers should ignore any authentication
+they aren't expecting, so this shouldn't break anything that currently
+works, and it would allow the user to copy back PuTTY's cookie to their
+real X server.
+<br>Ref: <code><web-71356@meredevice.com></code>
+
+<p>
+<b>SGT, 2003-01-14</b>: A couple of days ago I built in the
+infrastructure for this, since X forwarding in the Unix port of
+Plink is virtually useless without it. The platform-independent X
+forwarding code now has the ability to talk either of
+<code>MIT-MAGIC-COOKIE-1</code> or <code>XDM-AUTHORIZATION-1</code>
+to the local X server, provided a platform-specific function tells
+it what authentication cookie to use. So it's still not actually
+supported on Windows (since the Windows version of this function
+does nothing), but the amount of work that would need to be done to
+support it is now minimal.
+
+<p> <b>SGT, 2008-11-04</b>: I've just found <a
+href="https://lliurex.net/projects/valencia/lliurex-pool-ng/browser/ubuntu-mods/trunk/sabayon/lib/protosession.py?rev=5208&format=txt">this
+piece of source code</a> which contains a comment describing the
+format of the <code>.Xauthority</code> file. So as not to lose it,
+I'll reproduce the format here. The <code>.Xauthority</code> file is
+an end-to-end concatenation of records consisting of a 2-byte
+big-endian number followed by four strings. Each string consists of
+a 2-byte big-endian number giving the length, followed by that many
+bytes. The strings are, respectively: network address, display
+number, authorisation method (e.g.
+"<code>MIT-MAGIC-COOKIE-1</code>") and the authorisation data
+itself. The initial bare number specifies the address family, i.e. how
+to interpret the address string. Just to prove it works, the
+following hacky piece of Perl successfully untangles the first
+<code>.Xauthority</code> file I could lay my hands
+on:
+<pre><code>perl -e 'while (1) { read STDIN,$fam,2 or last; $fam = unpack "n", $fam; @strings = (); for $i (0..3) { read STDIN, $len, 2; $len = unpack "n", $len; $str=""; read STDIN, $str, $len; if ($i==1 or $i==2 or ($i==0 and $fam==256)) { $str = "\"" . $str . "\"" } else { $str = join "", "<", (map{sprintf"%02x",$_}unpack"C*",$str), ">"; } push @strings, $str; } printf "%s\n", join " ", $fam, @strings }' < ~/.Xauthority</code></pre>
+and the output of this also suggests that family code 0 means the
+address string is a binary-encoded IPv4 address, code 6 means a
+binary-encoded IPv6 address, and code 256 means
+the address string is a hostname and the access method is a
+Unix-domain socket on that host.
+
+<p> <b>SGT, 2008-11-17</b>: should now be done, at least for Windows
+X servers which provide X authority files in the standard format.
+There's a new config option on Windows which allows the user to
+point at the location of their X authority file, and PuTTY has the
+in-built ability to understand files in that format.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/x11-auth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

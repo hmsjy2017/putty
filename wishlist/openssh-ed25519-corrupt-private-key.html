@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug openssh-ed25519-corrupt-private-key</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/openssh-ed25519-corrupt-private-key.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug openssh-ed25519-corrupt-private-key</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTYgen mis-writes OpenSSH private key format for some Ed25519 keys<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.73<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4e6c69d5df8304d291eeccc7d23d1f6891811dd1">4e6c69d5df8304d291eeccc7d23d1f6891811dd1</a><br>
+<p>
+About 1/256 of all Ed25519 private keys cannot be converted to the
+OpenSSH private key format by PuTTYgen 0.73. The operation will appear
+to succeed, but will write out a file that OpenSSH cannot read, and
+neither can PuTTYgen itself.
+
+<p>
+The affected keys are those in which the most significant byte of the
+32-bit private key integer is zero. In that situation PuTTYgen would
+accidentally omit the leading zero byte in the OpenSSH key file,
+writing 31 (or even fewer) bytes of private data.
+
+<p>
+This was fixed after 0.73, as a side effect of <a href="ed448.html">ed448</a>.
+Current development snapshots of PuTTYgen do not exhibit the bug, and
+can write correct OpenSSH private key files even when the private key
+has a leading zero byte.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/openssh-ed25519-corrupt-private-key;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-05-03 11:02:55 +0100)</div>
+
+</BODY></HTML>

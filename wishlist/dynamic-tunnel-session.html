@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug dynamic-tunnel-session</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/dynamic-tunnel-session.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug dynamic-tunnel-session</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Cannot use dynamic port-forwarding with specific IP protocol in saved session<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>absent-in</b>: 0.62<br>
+<b>present-in</b>: 0.63<br>
+<b>fixed-in</b>: r10031 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=597cbddbb9248ece77032bc80bf3e828064416fd">597cbddbb9248ece77032bc80bf3e828064416fd</a> 2013-08-23 (0.64)<br>
+<p>
+In PuTTY 0.63 (but not older or newer releases), it's not possible to
+create a saved session with a dynamic SOCKS tunnel bound to a specific
+protocol (IPv4 or IPv6).
+
+<p>
+A dynamic port forwarding setting in a PuTTY session saved in 0.62 or
+before can fail to work in 0.63, if it explicitly specifies 'IPv4'
+or 'IPv6', with a message like 'Service lookup failed for source port
+"D8080"' in the Event Log.
+
+<p>
+Also, creating a fresh dynamic tunnel specifying IPv4/IPv6 and saving
+it in a session with 0.63 yields a saved session with a non-working
+tunnel (here you'd see 'Service lookup failed for source port "L8080"'
+in the Event Log). The tunnel only works as specified if the session
+is launched immediately after it is configured (but even then you see
+the nonsense string "DL8080" in the settings dialog).
+
+<p>
+Dynamic tunnels with the 'Auto' protocol setting (the default) are not
+affected by any of this.
+
+<p>
+After installing a fixed version of PuTTY, any affected sessions that
+were originally created with 0.63 will need to have the relevant
+dynamic tunnels removed, re-added, and re-saved.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/dynamic-tunnel-session;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

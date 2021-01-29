@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ext-data-at-start</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ext-data-at-start.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ext-data-at-start</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: &quot;unexpected packet type 95&quot; with VShell 2.1.5<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>present-in</b>: 0.53b<br>
+<b>fixed-in</b>: 2004-11-28 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=02b0474f578ec550552989bd6461fd7151609006">02b0474f578ec550552989bd6461fd7151609006</a> (0.58)<br>
+<p>
+We've had one report of the error <code>Unexpected response to
+shell/command request: packet type 95</code> when connecting to VShell
+2.1.5 with PSCP.
+
+<p>
+Packet type 95 is <code>SSH2_MSG_CHANNEL_EXTENDED_DATA</code>. Perhaps
+this is VShell complaining on stderr about a nonexistent SFTP server
+subsystem, or similar?
+
+<p>
+This seems likely to have the same root cause as
+<a href="portfwd-at-start.html">portfwd-at-start</a>: brittle code
+at connection startup.
+
+<p>
+Ref. <code><5.2.1.1.2.20030706150354.00b4e718@localhost></code>
+
+<p>
+<b>SGT, 2004-11-27</b>: I've rearchitected the SSH back end
+somewhat, so that it's now a hybrid of coroutine-based sequential
+code and random dispatch-table handling of incoming packets. This
+<em>ought</em> to solve this problem, although I'm unable to immediately
+test it.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ext-data-at-start;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish offer-to-reset</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/offer-to-reset.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish offer-to-reset</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Allow immediate change of initial-terminal-state settings<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2003-01-13 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=10eb26a7ddf723e66ff470a2aa4628b6bcaaea80">10eb26a7ddf723e66ff470a2aa4628b6bcaaea80</a> (0.54)<br>
+<p>
+Terminal settings that are modifiable from "Change Settings" but
+which only control an <em>initial</em> state should be handled
+better. Perhaps a sensible procedure would be that if the user
+changes such a setting, then when they hit Apply they get a message
+box: "You have modified the initial state of the Foo setting. This
+change will take effect the next time your terminal is reset. Do you
+want to force it to take effect immediately as well? [yes] [no]".
+
+<p>
+<b>SGT, 2003-01-14</b>: Recent code cleanups had the side effect of
+allowing me to detect changes in these features, so I arranged that
+the current state automatically gets updated when you change such a
+feature in mid-session. I didn't bother with the message box; it
+seemed excessive for such a small thing.
+
+<p>
+Just for reference, at the time of fixing, the full list of such
+features is: auto wrap mode, DEC origin mode, background-colour
+erase, whether blinking text really blinks, and the character
+classes for double-click word-at-a-time selection.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/offer-to-reset;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug mit-kerberos-dll-trouble</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/mit-kerberos-dll-trouble.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug mit-kerberos-dll-trouble</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: MIT Kerberos GSSAPI support broken (can&#x27;t load its DLLs)<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.67<br>
+<b>present-in</b>: 0.68<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=802b4edf4d59a04e903fc8ef5342e25b6a566dc6">802b4edf4d59a04e903fc8ef5342e25b6a566dc6</a> (0.69)<br>
+<p>
+We've had multiple reports that the fix for
+<a href="vuln-indirect-dll-hijack.html">vuln-indirect-dll-hijack</a>
+broke MIT Kerberos support.
+
+<p>
+Apparently <tt>gssapi32.dll</tt> needs to load other DLLs from a
+location like <tt>C:\Program Files\mit\kerberos\bin</tt>, such as
+<tt>krb5_32.dll</tt>.
+
+<p>
+Apparently you get a message something like "The program can not be
+started because krb5_32.dll is missing on the computer. Reinstall the
+program to resolve the problem." (wording may not be exact)
+
+<p>
+Reports:
+<ul>
+<li><tt>19d3ed49-b768-3716-b21f-7704cd08aa6c@mit.edu</tt> (with
+<a href="https://asedeno.scripts.mit.edu/gitweb/?p=PuTTY.git;a=commitdiff;h=510f49e405e71ba5c97875e7a019364e1ef5fac9">proposed fix strategy</a>)</li>
+<li><tt>5adb8b03-87c8-f613-c0ab-ce2ff4f15b03@uni-paderborn.de</tt> (also with
+<a href="https://github.com/odenbach/putty/commit/fa8ab74858c3f54d1c14318a40c4248ffd6dc993">fix</a>)</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/mit-kerberos-dll-trouble;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

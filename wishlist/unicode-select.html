@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug unicode-select</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/unicode-select.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug unicode-select</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Word-at-a-time selection configuration ignores Unicode<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Currently, the `character classes' configuration on the Selection
+panel for word-at-a-time selection only covers the first 128
+characters. It did not change when PuTTY was upgraded to Unicode.
+
+<p>
+It should probably support configurable selection for Unicode somehow,
+but clearly the UI will need major changes.
+
+<p>
+Currently there is some hard-coded wordness for Unicode that tries to
+do the right thing for particular Unicode ranges, in
+<code>terminal.c:wordtype()</code>. Perhaps the data structure here
+could be used as the basis of a simple UI. (Will need to translate
+existing configurations, of course.)
+
+<p>
+Possibly relevant references:
+<ul>
+<li>"Text Boundaries"
+(<a href="http://www.unicode.org/reports/tr29/">UAX #29</a>)
+<li>"Line Breaking Properties"
+(<a href="http://www.unicode.org/reports/tr14/">UAX #14</a>)
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/unicode-select;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-05-24 19:15:16 +0000)</div>
+
+</BODY></HTML>

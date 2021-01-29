@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug ssh-close-vs-request</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh-close-vs-request.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug ssh-close-vs-request</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Trouble when SSH channel closed with outstanding requests<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>fixed-in</b>: r10200 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=aaaf70a0fc0f071b9e9c6a51606c78b16a464841">aaaf70a0fc0f071b9e9c6a51606c78b16a464841</a> 2014-07-07 (0.64)<br>
+<p>
+There's been a long-standing problem with closing channels within an
+SSH session due to an ambiguity in the SSH-2 specification
+about what happens to CHANNEL_REQUESTs that are outstanding at the
+point a channel is closed, and a consequent variance in behaviour
+among SSH implementations. This leads to a small probability of
+trouble each time a channel is closed when connected to certain
+servers, which shows up particularly when forwarding X connections or
+browser traffic.
+
+<p>
+A discussion on the IETF SSH protocol implementers' list in April 2014
+yielded a consensus (that channel closure cancels outstanding channel
+requests). As of this change (first released in 0.64), PuTTY
+implements and expects the consensus behaviour, and has a
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-bug-chanreq">bug-compatibility mode</a>
+'Replies to channel requests after channel close' for servers that
+implement the other common behaviour (which detects
+<a href="https://bugzilla.mindrot.org/show_bug.cgi?id=1818">OpenSSH prior to 6.7</a>
+automatically).
+
+<p>
+In versions of PuTTY prior to 0.63 (which implemented what is now the
+consensus behaviour), this confusion could lead to symptoms such as
+PuTTY closing connections with messages like "Disconnected: Received
+SSH2_MSG_CHANNEL_FAILURE for nonexistent channel 257" when connecting
+to servers like OpenSSH prior to 6.7.
+
+<p>
+PuTTY's behaviour changed in 0.63, to what is now considered incorrect
+behaviour, in pursuit of <a href="half-closed.html">half-closed</a>; it
+held off sending CHANNEL_CLOSE itself until it had seen responses to
+all its outstanding channel requests. Unfortunately this could lead to
+hangs when talking to servers implementing what is now the consensus
+behaviour (such as Dropbear, which changed to this behaviour in 0.52
+<a href="flow-control.html">according to our notes</a>).
+
+<p>
+In 0.64, PuTTY's behaviour reverted to what is now the consensus.
+While users should not see a regression with old OpenSSH due to the
+automatic bug detection, server implementations not covered by that
+detection may cause a recurrence of the "nonexistent channel" message,
+in which case you'll have to set the bug-compatibility setting
+manually.
+
+<p>
+(Since the situation arises mostly with the 
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixF.html#sshnames-channel">`winadj' messages</a>
+PuTTY has sent <a href="flow-control.html">since 0.61</a>, a partial
+workaround for PuTTY 0.61, 0.62, and 0.63 was to set the "Chokes on
+PuTTY's SSH-2 'winadj' requests" bug-compatibility mode.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-close-vs-request;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

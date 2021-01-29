@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug portfwd-open-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portfwd-open-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug portfwd-open-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Crashes with heavy open/close activity in port-forwarding<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.52 2002-06-05 2002-06-06<br>
+<b>fixed-in</b>: 2002-06-16 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=3f8d151c5a26fec09708b2a51b57aabf3d7bd38f">3f8d151c5a26fec09708b2a51b57aabf3d7bd38f</a> 0.53<br>
+<p>
+Apparently, if working in a terminal session at the moment a
+tunnel is opened, there is a chance of causing a crash (either `Out of
+memory!', or `Windows has closed PuTTY due to errors').
+
+<p>
+This tends to be noticeable when lots of port-forwarded connections
+are being opened and closed (tunnelling HTTP or POP/SMTP for example).
+
+<p>
+All reports so far that have mentioned the protocol version have been
+against SSH-2, with local-to-remote tunnelling. There are suggestions
+that this is correlated specifically with user input rather than just
+any terminal activity.
+
+<p>
+<em>Update:</em> We believe this is fixed. I (JTN) can consistently
+reproduce the problem in 2002-06-05 but not 2002-06-18 (or
+2002-08-19).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portfwd-open-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

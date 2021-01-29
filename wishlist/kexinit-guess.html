@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug kexinit-guess</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/kexinit-guess.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug kexinit-guess</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: first_kex_packet_follows is ignored<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 2005-01-11<br>
+<b>fixed-in</b>: 2005-01-23 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5140b674352970bd74f395baf344e76d73a92c25">5140b674352970bd74f395baf344e76d73a92c25</a> (0.58)<br>
+<p><pre>The current SECSH transport draft, draft-ietf-secsh-transport-22.txt,
+specifies a boolean in the KEXINIT packet defined as:
+
+      first_kex_packet_follows
+         Indicates whether a guessed key exchange packet follows.  If a
+         guessed packet will be sent, this MUST be TRUE.  If no guessed
+         packet will be sent, this MUST be FALSE.
+
+         After receiving the SSH_MSG_KEXINIT packet from the other side,
+         each party will know whether their guess was right.  If the
+         other party&#x27;s guess was wrong, and this field was TRUE, the
+         next packet MUST be silently ignored, and both sides MUST then
+         act as determined by the negotiated key exchange method.  If
+         the guess was right, key exchange MUST continue using the
+         guessed packet.
+
+From code inspection, I think PuTTY currently ignores this field, which means
+that if it encounters a server that sets it to true and doesn&#x27;t share PuTTY&#x27;s
+preferred key-exchange method, it&#x27;ll get horribly confused.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/kexinit-guess;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win-silent-uninstall</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-silent-uninstall.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win-silent-uninstall</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Silent uninstall not possible on Windows<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>depends</b>: <a href="msi-installer.html">msi-installer</a><br>
+<b>fixed-in</b>: 0.67 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5c5879b99d2a0785095a384f48a2d934e1b2d4c5">5c5879b99d2a0785095a384f48a2d934e1b2d4c5</a><br>
+<p>
+The PuTTY <tt>.exe</tt> uninstaller has a <tt>/silent</tt> switch (and
+some others such as <tt>/verysilent</tt>); however, before 0.68, none
+of these actually allows a silent uninstall, as the user is always
+prompted to decide whether they want to remove all traces of PuTTY use
+(saved sessions and random seed file) from the machine:
+
+<pre>PuTTY Uninstallation
+
+Remove saved sessions and random seed file?
+
+If you hit Yes, ALL Registry entries associated
+with PuTTY will be removed, as well as the
+random seed file. THIS PROCESS WILL
+DESTROY YOUR SAVED SESSIONS.
+(This only affects the currently logged-in user.)
+
+If you hit No, uninstallation will proceed, but
+saved sessions etc will be left on the machine.</pre>
+
+<p>
+Last time we looked, this was unavoidable with the Inno Setup
+installer engine we were using (the "skipifsilent" flag was not
+supported in the [UninstallRun] section), as long as we wanted to
+offer this choice to users uninstalling interactively.
+
+<p>
+This is fixed in 0.67 by the provision of a 
+<a href="msi-installer.html">MSI installer</a> (which doesn't offer
+the option of clearing out old settings at all -- it always leaves
+them alone). The Inno Setup (<tt>.exe</tt>) installer still has this
+problem in 0.67.
+
+<p>
+For existing installations of the Inno Setup installer where you want
+to silently migrate to the MSI installer (which requires uninstalling
+the Inno Setup one first) or just uninstall, there are a couple of
+options:
+<ul>
+<li>
+The final release of the Inno Setup installer, 0.68, does not
+prompt to remove settings (it will always leave them alone). So you'll
+be able to (silently) install that, then silently uninstall it.
+<br>(The MSI installer does not have this option either; we've decided
+it's not sensible, given that it didn't remove all users' settings,
+only the current user's settings.
+If you want settings removed, you must run '<tt>putty -cleanup</tt>'
+before uninstallation.)
+</li>
+<li>
+If you don't want to involve post-0.67 installers, a workaround is
+apparently to delete putty.exe (which is invoked to put up the prompt)
+before starting the uninstall process. This is described in more detail
+<a href="http://www.adminarsenal.com/admin-arsenal-blog/how-silently-uninstall-putty/">here</a>.
+</li>
+</ul>
+
+<p>
+(A suspected problem with the Inno Setup to MSI migration is that if a program such
+as Pageant is running at the time you run the Inno Setup uninstaller,
+the machine can end up with no Pageant; we think the Inno Setup uninstaller
+leaves a note to remove the currently-in-use <tt>pageant.exe</tt> on next
+reboot, which the MSI installer is unaware of, so the MSI's
+<tt>pageant.exe</tt> gets removed. Or something like that.)
+
+<p>
+(The git commit id listed in Fixed-in is actually <em>after</em> 0.67,
+even though 0.67 has an MSI installer. That's not an error; I prepared
+the 0.67 MSI ad-hoc, after 0.67 itself was released.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-silent-uninstall;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2018-05-10 20:26:55 +0100)</div>
+
+</BODY></HTML>

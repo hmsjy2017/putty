@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug black-pointer</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/black-pointer.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug black-pointer</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Mouse pointer appears black on some systems<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>present-in</b>: 0.51 0.52 2002-12-28 0.58 0.60<br>
+<p>
+Some people have reported that PuTTY's default mouse pointer (the Windows
+I-beam) appears black-on-black, and is hence invisible.  It usually consists
+entirely of inverted pixels, and hence should appear white on PuTTY's default
+black background.
+
+<p>
+There have been sporadic reports of this for years, but they have become
+more frequent recently (2007), particularly associated with Windows Vista
+(but also
+<a href="http://osdir.com/ml/network.rdesktop.user/2005-03/msg00012.html">reported with rdesktop</a>).
+Some possible causes:
+<ul>
+<li>
+Perhaps on some installations, the I-beam pointer is black, rather than
+inverted. This wouldn't be very obvious with most Windows applications,
+with their light-coloured backgrounds, but would be obvious with PuTTY's
+default black background. We haven't personally seen this one, so it's
+pure speculation; please let us know if it turns out to be the case for
+you.
+<li>
+Even when the cursor <em>is</em> inverted, some video cards have an
+off-by-one error. In this case, a tiny change to PuTTY's background colour
+can help. See below. (We have had several reports where this did not
+help.)
+</ul>
+
+<p>
+In all cases, changing the Windows I-beam cursor to something chunkier
+(via Control Panel / Mouse / Pointers or similar) should give you
+something usable.
+
+<p>
+At least one user has found that updating Windows caused the problem to
+go away, suggesting that either Vista itself or a video driver had a
+relevant bug that got fixed.
+
+<hr>
+
+<p>
+From SGT:
+<blockquote>
+<p>
+I've seen this same problem personally on a GeForce2MX, and I
+investigated it carefully. I believe it is a bug in the GeForce2MX
+video driver. The I-beam cursor is supposed to invert whatever
+colour is underneath it, but it mistakenly inverts black to black.
+(My suspicion is that each RGB value x is mapped to 256-x instead of
+255-x, or some equally easy typo.)
+<p>
+Perhaps complaining to the video card manufacturer (assuming it's
+them who wrote the driver) might be a good first step? I haven't
+heard of anyone else who's had this problem doing so...
+<p>
+What I did to solve this myself was to design my own replacement
+I-beam mouse pointer, which was white with a black outline so as to
+show up on any kind of background. The video driver was quite happy
+with that one.
+<p>
+If anybody else has this problem, they should try reconfiguring
+their PuTTY colour scheme so that black is RGB 1,1,1 instead of RGB
+0,0,0. I <em>suspect</em> that that will make the problem go away;
+if so, that would confirm my theory about its cause.
+</blockquote>
+
+<hr>
+
+<p>
+Anyone suffering from this may find
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=blob_plain;f=contrib/nice-ibeam.cur;hb=HEAD">this replacement cursor file</a>
+useful.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/black-pointer;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-20 17:30:51 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ipv6-scoped-addr</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ipv6-scoped-addr.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ipv6-scoped-addr</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: On Windows, IPv6 scoped addresses don&#x27;t work<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>present-in</b>: 2005-10-14<br>
+<b>fixed-in</b>: 2006-12-24 r7007 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d86e01e8362019ca2845f56878e299c84e77d177">d86e01e8362019ca2845f56878e299c84e77d177</a> (0.59)<br>
+<p>It's been reported that IPv6 scoped addresses (as defined in
+RFC4007), such as <code>fe80::200:e2ff:fe65:9ce%4</code>, don't work
+correctly on Windows XP Home + XP2. The error is "Network error: No
+route to host". SecureCRT does work, which suggests that we might
+just need to invoke <code>getaddrinfo()</code> differently.  Scoped
+addresses work on Unix (NetBSD at least).
+ 
+<p><b>SGT, 2006-12-24</b>: Jeroen Massar, the original author of
+PuTTY's IPv6 code, has supplied a patch which fixes this. Users
+experiencing this bug might like to download a post-r7007 snapshot
+and make sure the problem has gone away.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ipv6-scoped-addr;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

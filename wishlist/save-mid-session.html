@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish save-mid-session</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/save-mid-session.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish save-mid-session</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Saving session preferences after starting the session<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-12-29 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=340afa273366858ad2a243b200a77b8fb3a1429a">340afa273366858ad2a243b200a77b8fb3a1429a</a> (0.58)<br>
+<p> When you adjust the properties of a running session using the
+"Change Settings" menu option, it might be nice to be able to save
+the adjusted settings back to the saved-session slot you loaded
+from, or to a new session slot.
+
+<p> This feature is one of our most requested, but is currently
+pending some design work:
+
+<ul>
+<li>
+If you load an existing saved session exactly "as is", by
+double-clicking or by running "<code>putty @sessionname</code>" or
+whatever, it's reasonably obvious that hitting the Save button in
+mid-session should write the changed details back to the same slot
+you loaded from.
+<li>
+What if you loaded the session, modified a setting or two, and
+<em>then</em> started it? Should a mid-session Save still write back
+to the original slot by default? It sounds as if it obviously
+should ... but what if the one setting you changed was the
+<em>hostname</em>? Suddenly I think it's no longer completely
+obvious that you should be conveniently able to overwrite your
+previous saved session with the new one.
+<li>
+So the user interface for this feature needs some serious thought;
+we have to have a means for working out precisely when it does and
+does not make sense to have an automatic
+save-to-where-we-loaded-from button available.
+</ul>
+
+<p>
+<b>SGT, 2004-12-28</b>: Someone - I've sadly forgotten who -
+suggested that the simplest possible solution is <em>not</em> to
+automatically highlight the session you loaded, or enter its name in
+the session name box. Just provide the list and the Load/Save
+buttons, so that you can save over an explicitly named session. Then
+anyone who modifies the hostname and saves over the original slot
+has to do so explicitly and deliberately, ensuring that it's
+probably what they meant to do.
+<p>
+Therefore, I've now done this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/save-mid-session;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

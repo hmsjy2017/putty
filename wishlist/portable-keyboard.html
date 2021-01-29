@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish portable-keyboard</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portable-keyboard.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish portable-keyboard</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Shared keyboard handler across platforms<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <em><a href="key-mapping.html">key-mapping</a></em><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p><pre>At present, each port of PuTTY has a separate keyboard handler, which takes
+keyboard events and converts them into bytes to be fed to the line discipline.
+This is clearly silly, since much of the code is shared, but a sensible
+abstraction is trickier than you might think.
+
+I (BJH) can think of the following kinds of keypress that PuTTY has to be able
+to handle.  Further suggestions welcome.
+
+1a: Typewriter keys, possibly affected by Caps Lock, Shift, Alt Gr, or Option.
+  These emit graphic characters in the current character set.  The graphic
+  character in question should be whatever the user expects, which is usually
+  determined by the OS.
+
+1b: Typewriter keys with Control held down.  For keys which would usually
+  generate ASCII characters without Control, it&#x27;s usually clear which
+  control character they should generate.  What about non-ASCII characters
+  (or non-ASCII keyboards)?  In the Mac OS, Command-key shortcuts are
+  always based on a Roman keyboard layout.  Should we do the same with
+  Control?
+
+1c: Typewriter keys handled through the &quot;compose&quot; mechanism.  These have to be
+  converted to characters as if Compose were not held down, and then composed
+  through a fixed table.
+
+2: Function keys, including Tab, Esc, Backspace, F1-F12 and editing keys, but
+  not the numeric keypad.  These emit escape sequences (sequences of _bytes_,
+  not characters), with the precise sequence depending on terminal modes,
+  configuration, keys held down etc.  While complex, I think this is all
+  entirely platform- and keyboard-layout independent, and hence not scary.
+
+3a: The numeric keypad in application mode.  In this mode, the keypad, including
+  Num Lock, behaves as a set of function keys.
+
+3b: The numeric keypad in normal mode, with Num Lock off.  In this mode, those
+  keypad keys which can also be editing keys generate the same sequences as
+  the editing keys themselves.  Other keys are, I think, processed as with
+  Num Lock on below.
+
+3c: The numeric keypad in normal mode, with Num Lock on.  In this mode, the
+  keypad behaves as typewriter keys.
+
+3d: The numeric keypad with Alt held down.  This accumulates a numeric character
+  code (line charset) in decimal which is sent when Alt goes up.
+
+* All the above, with Meta held down.  This should send the same sequence as
+  without Meta down, but preceded by ESC.
+
+* Keys which cause PuTTY to do things but which aren&#x27;t sent to the host. 
+  Some of these (e.g. Shift+Page Up) are platform-independent, and can
+  be treated as function keys.  Others (e.g. Alt+Space) are better handled
+  in platform-dependent code.
+
+* Keys which should be handled by the OS.  I don&#x27;t think the platform-
+  independent keyboard handler should see these at all.
+
+Now for some proposals:
+
+We define a list of modifiers, provisionally including:
+PKM_SHIFT
+PKM_CONTROL
+PKM_META
+PKM_ALT
+PKM_CAPSLOCK
+PKM_NUMLOCK
+
+Note that the Alt key (used for Alt+keypad) and the Meta key (used for
+Meta+typewriter) may or may not have distinct physical keys.  The PI code
+should ignore Meta on the keypad and Alt everywhere else.
+
+[ But what if I want to type Meta+Alt+123 on a system with separate Alt and
+  Meta keys?  Is that so wrong? ]
+
+We define a list of keysyms for function keys, with a null keysym:
+PK_NULL
+PK_F1
+PK_RETURN
+PK_UP
+PK_PF1
+...
+
+We define a function to be called by the platform keyboard handler when
+something happens:
+
+process_key(keysym, chars, modifiers)
+
+keysym can be PK_NULL if there&#x27;s no keysym for the current key.
+chars (a UCS-2 string) can be empty if the platform doesn&#x27;t have a translation
+for the current key.
+If both keysym is PK_NULL and chars is empty, the platform is just reporting
+a change of modifier state (for Alt+keypad).
+
+In the examples that follow, assume that what look like C strings are really
+UCS-2.
+
+Now for the specifics:
+Case 1a is easy:
+    process_key(PK_NULL, &quot;A&quot;, PKM_SHIFT);
+  NB that all modifiers are reported, but SHIFT and CAPSLOCK are assumed to
+  have been dealt with already.
+Case 1b is interesting.  On some platforms, the native keyboard handler
+  understands Control, so we can do:
+    process_key(PK_NULL, &quot;\001&quot;, PKM_CONTROL);
+  On the other hand, we might find that we need some extra ones, so
+  process_key would have to handle:
+    process_key(PK_NULL, &quot;`&quot;, PKM_CONTROL);
+  I can&#x27;t see any obvious problem with allowing both.
+Case 1c is a combination of 2 and 1a:
+    process_key(PK_COMPOSE, &quot;&quot;, 0);
+    process_key(PK_NULL, &quot;e&quot;, 0);
+    process_key(PK_NULL, &quot;&#x27;&quot;, 0);
+  Composition can then be handled in the PI code.
+Case 2 is trivial:
+    process_key(PK_F1, &quot;&quot;, 0);
+    process_key(PK_TAB, &quot;&quot;, PK_SHIFT);
+Case 3a-3d are mostly identical in the platform code:
+    process_key(PK_PF2, &quot;/&quot;, 0);
+    process_key(PK_KPDECIMAL, &quot;,&quot;, PKM_NUMLOCK); /* German kbd */
+But Num Lock is a pain -- I think I&#x27;d habe the platform code check the
+  application-keypad state and damn the layering violation:
+    process_key(PK_NULL, &quot;&quot;, PKM_NUMLOCK);
+    process_key(PK_PF1, &quot;&quot;, 0);
+If the Meta key is down, the platform code is expected to subtract it out of
+  the characters sent if it did anything:
+    process_key(PK_NULL, &quot;a&quot;, PKM_META);
+
+(Update: this idea appeared in the code in the form of term_key() in
+terminal.c in r2728; however it was never adopted in any of the
+mainstream ports, so was finally removed again in r9579.)
+
+(Update, Dec 2018: a lot of keyboard handling has been centralised as
+of Git commit 41e1a586fb.)
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portable-keyboard;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-17 16:32:06 +0000)</div>
+
+</BODY></HTML>

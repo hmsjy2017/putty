@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ssh2-keyderive-nonbug</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-keyderive-nonbug.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ssh2-keyderive-nonbug</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SSH 2.0.13 apparently doesn&#x27;t have key-derivation bug<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.53 0.53b 2002-10-07<br>
+<b>fixed-in</b>: 2002-12-19 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8cb52a26e14f86a9553000661c50a0ec95c34ae5">8cb52a26e14f86a9553000661c50a0ec95c34ae5</a> (0.54)<br>
+<p>Apparently, while PuTTY believes that SSH 2.0.* have the SSH-2 key-derivation
+bug, 2.0.13 (host OS/hardware not specified) doesn't, and this causes
+the expected decryption failures.  The current OpenSSH code suggests that
+the bug is only present in versions before SSH 2.0.11.
+
+<p>Ref: <code><Pine.SGI.3.96.1021008003747.69817B-100000@serdis.dis.ulpgc.es></code>
+
+<p>Workaround: change `Miscomputes SSH2 encryption keys' on the `Bugs'
+panel from `Auto' to `Off'.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-keyderive-nonbug;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

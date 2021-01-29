@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug pageant-backwards-compatibility</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pageant-backwards-compatibility.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug pageant-backwards-compatibility</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: 0.61-style Pageant does not work with 0.60-style PuTTY<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.61<br>
+<b>fixed-in</b>: r9264 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=52e5dae242e331ae34106eb3cc260067902d091d">52e5dae242e331ae34106eb3cc260067902d091d</a> 0.62<br>
+<p>
+Pageant ensures that other concurrent users of the same Windows
+machine do not connect to it by checking that a SID on the file
+mapping object passed to it in each request matches its own. In 0.60,
+it checked the SID against its default one, which caused some troubles
+with Cygwin
+(see <a href="cygwin-clobbers-pageant.html">cygwin-clobbers-pageant</a>)
+which does something odd to the default SID. In 0.61, it was reworked
+to check the SID against the one identifying the running <em>user</em>,
+and all the Pageant clients were correspondingly modified to make that
+SID the owner of the file mapping.
+
+<p>
+Unfortunately, this has the side effect that Pageant 0.61 will not
+talk to PuTTY 0.60, and (perhaps even more importantly) not to any
+other program that still uses 0.60's SID selection, such as WinSCP.
+
+<p>
+The fix is to allow Pageant to accept <em>either</em> the default or
+user SID as the owner of the file mapping. We think this is still safe
+in terms of keeping other users out of Pageant.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-backwards-compatibility;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

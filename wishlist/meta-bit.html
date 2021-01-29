@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish meta-bit</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/meta-bit.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish meta-bit</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Option to have Alt key set the meta bit<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+At present, the Alt key causes keys it's combined with to be sent preceded
+by ESC.  This is interpreted as a "meta" key by GNUish programs like 
+Emacs, but some others (notably NetHack) don't understand this convention,
+and expect "meta" to set the top bit of the character instead.  There should
+probably be an option to enable this behaviour.
+
+<p>
+Interesting questions about this include:
+<ul>
+<li>
+What should happen if the user presses Meta plus a key which
+transmits multiple characters (such as a function key). BJH thinks
+the best move is probably to have Meta produce no additional effect
+in this case.
+<li>
+What should happen if the terminal is in a multi-byte character set.
+Presumably in UTF-8 mode Meta-a should not produce the single byte
+0xE1, on the basis that applications ought at least to be able to
+expect the input data to be valid UTF-8! Should it instead produce
+the UTF-8 encoding of U+00E1? What if we subsequently support MB
+character sets other than UTF-8, in which U+00E1 might not be a
+representable character?
+<li>
+What should happen if the key pressed with Meta <em>already</em> has
+the high bit set: French keyboards, for example, produce some
+accented characters by single keypresses. Is the high bit toggled,
+or merely forced to 1?
+</ul>
+
+<p>SGT, 2005-12-23: I've just investigated xterm's answers to these
+questions. xterm itself has relatively little understanding of
+complex character sets: it operates either in "conventional 8bit
+mode" or in UTF-8 mode. In the former, the character set is assumed
+to be single-byte and the Meta key translates each low-half
+character into its high-half counterpart in the obvious way. In the
+latter mode, the Meta key translates ASCII into ISO-8859-1 and then
+encodes it as UTF-8 (so that, for example, Meta-a sends C3 A1 which
+is the UTF-8 encoding of U+00E1). xterm supports all other character
+sets by interposing "luit", which means that whether a Meta
+combination generates anything in (say) Shift-JIS will depend
+entirely on whether the relevant Unicode value between U+0080 and
+U+00FF is representable in the target character set. Meanwhile, Meta
+appears to do nothing at all if combined with anything <em>not</em>
+in the 00-7F range, be it a character outside that range or a
+multi-character sequence from a function key.
+
+<p>This all seems a bit chaotic: I had to work hard to get xterm to
+demonstrate both modes to me, although I got there in the end. Based
+on my findings, I think a possible specification for PuTTY which
+would offer all of xterm's functionality would be to have a
+three-way switch governing the behaviour of the Alt key. In the
+default mode, Alt/Meta generates a prefix ESC as it always has done.
+In the second mode (analogous to xterm's UTF-8 mode), it maps ASCII
+into the top half of ISO 8859-1, translating that as appropriate for
+the line codepage (so that some Meta combinations will generate
+nothing in some character sets) and affects nothing else at all. In
+the third mode (analogous to xterm's 8bit mode), it maps the low
+half of an SBCS into the high half, no matter what SBCS is chosen.
+We'd have to invent something arbitrary for the third mode to do if
+the line codepage were not an SBCS; probably the most sensible
+option is to fall back to the second mode.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/meta-bit;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2005-12-23 15:15:34 +0000)</div>
+
+</BODY></HTML>

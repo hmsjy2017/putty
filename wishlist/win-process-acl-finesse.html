@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win-process-acl-finesse</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-process-acl-finesse.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win-process-acl-finesse</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Restrictive Windows process ACL causes trouble with screen readers, etc<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.66<br>
+<b>present-in</b>: 0.67<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e22120fea8d39e6a2ef6b2f4ab3ee5502f56169a">e22120fea8d39e6a2ef6b2f4ab3ee5502f56169a</a> 2017-01-30 (0.68)<br>
+<p>
+In PuTTY 0.67 on Windows, we restricted the process ACL with
+SetSecurityInfo() in an attempt to defend against malicious other
+processes (such as
+<a rel="nofollow" href="https://github.com/seastorm/PuttyRider">PuttyRider</a>)
+injecting code, reading sensitive data, etc. (In 0.67 this only applied
+to PuTTY and PuTTYtel; in snapshots after 0.67, from 2016-04-03, we also
+did this for PSFTP, PSCP, Plink, PuTTYgen, and Pageant.)
+
+<p>
+Perhaps unsurprisingly, this broke some interactions with other
+software. Here are some things that stopped working with 0.67 which
+are known or suspected to have been broken by this change:
+
+<ul>
+<li>Screen readers and similar software. In 0.67, unable to read
+system menu or PuTTY settings category tree view contents.
+<ul>
+<li>Windows Narrator. In the snapshots, we've allowed
+<tt>PROCESS_QUERY_INFORMATION</tt>, which is relatively harmless and
+allows Narrator to work.</li>
+<li><a href="http://nvaccess.org">NVDA</a>. To work fully, this
+injects a DLL into PuTTY's memory space (IAccessible2Proxy.dll), so
+there's probably nothing we can do to fix this that won't also allow
+the likes of PuttyRider back in.</li>
+</ul>
+<li>Sharing PuTTY windows (read-only) with Microsoft Lync / Skype
+for Windows. (Sharing the entire screen still works, apparently.)
+Needs <tt>PROCESS_QUERY_INFORMATION | PROCESS_VM_READ</tt>,
+apparently; we don't have the latter.</li>
+<li>Trouble using Git with Plink as a transport
+(e.g., <a href="https://github.com/git-for-windows/git/issues/983">1</a>,
+<a href="http://stackoverflow.com/questions/38624606/error-waitpid-for-c-program-files-x86-putty-plink-exe-failed-no-child-proce">2</a>). Our rights setting
+implicitly turns off anything we haven't considered, including the
+ability to wait for our return status; apparently adding
+<tt>SYNCHRONIZE</tt> back in fixes this. We have not yet done
+this.</li>
+<li>Tools like AquaSnap or ac'tivaid used for arranging windows can't
+change the PuTTY window's size and position any more.</li>
+<li>Software installed in corporate environments such as
+<a href="https://en.wikipedia.org/wiki/Data_loss_prevention_software">'data loss prevention' software</a>
+(which watches clipboard operations and the like) has been reportedly
+disrupted by this change. Since such software is functionally
+indistinguishable from malware, this isn't surprising.</li>
+<li>(Of course, debuggers can't attach, but if you're debugging you
+could probably have recompiled PuTTY with the <tt>UNPROTECT</tt>
+option.)</li>
+</ul>
+
+<p>
+It might be possible to tone down our restrictive permissions to allow
+harmless interactions with legitimate software. We've done this a little
+bit since 0.67, although there's probably scope for more.
+
+<p>
+However, since it turns out that some screen-reading software (NVDA at
+least) has behaviour indistinguishable from malware, that approach won't
+be sufficient.
+
+<p>
+<b>Update, 2017-01:</b> we have turned off these ACL restrictions by
+default, so out of the box, all the things that were broken by this
+in 0.67 should be working again. A new command-line option
+<tt>-restrict-acl</tt> lets you get something like the 0.67 behaviour
+if you don't find it more trouble than it's worth.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-process-acl-finesse;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-02-25 09:47:14 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug scroll-button-hang</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/scroll-button-hang.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug scroll-button-hang</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Hangs on paste with middle button (Intellipoint implicated)<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>present-in</b>: 0.53b<br>
+<p>
+I've observed the following behaviour on a colleague's machine. I
+can't reproduce it myself. - JTN
+
+<p>
+PuTTY is set to paste on middle button. On this system, when the
+middle button is pressed, there's a chance that the Microsoft
+Intellipoint scroll pointer thing is activates (the pointer changes to
+a circle containing a dot and up/down triangles, and moving the mouse
+scrolls the window).
+
+<p>
+If the middle button is pressed and released quickly, there is no
+deletorious effect other than the appearance of this pointer.
+
+<p>
+However, if the middle button is held and then released part-way
+through a multi-line paste, the following occurs:
+<ul>
+<li>The pasting stops dead part-way through.
+<li>PuTTY appears to "hang" - keypresses do nothing, and the mouse
+pointer stays an I-beam over the title bar (normally it changes to a
+proper pointer).
+</ul>
+<p>
+Alt-Tabbing away unwedges PuTTY, although the missing pasted
+characters never come through.
+
+<p>
+Could be a bug in the way we deal with press/release events?
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/scroll-button-hang;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-10-08 15:08:57 +0000)</div>
+
+</BODY></HTML>

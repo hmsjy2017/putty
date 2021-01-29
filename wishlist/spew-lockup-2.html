@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug spew-lockup-2</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/spew-lockup-2.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug spew-lockup-2</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Remote terminal spew can freeze terminal and lock out local GUI (again)<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.63<br>
+<b>present-in</b>: 0.64<br>
+<b>fixed-in</b>: 2015-03-08 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=7d97c2a8fdb745905fd61a9ce4abbf822e167cef">7d97c2a8fdb745905fd61a9ce4abbf822e167cef</a> 0.65<br>
+<p>
+If the remote server floods Windows PuTTY with terminal data
+enthusiastically enough, it can saturate us with input data,
+completely locking out the local GUI (at least on Windows). The
+appearance is that PuTTY appears to hang: it consumes as much CPU as
+it can, the terminal display does not update, and the GUI (keyboard,
+menus etc) is unresponsive. If and when the stream of data abates,
+PuTTY becomes responsive again.
+
+<p>
+This bug previously appeared in 0.58 (see
+<a href="spew-lockup.html">spew-lockup</a>) and was fixed in 0.59.
+Unfortunately it then reappeared in 0.64, as a side effect of rewriting
+the main event loop using the 'toplevel callbacks' system.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/spew-lockup-2;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

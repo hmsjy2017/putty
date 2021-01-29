@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug pterm-logtype-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pterm-logtype-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug pterm-logtype-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: pterm aborts if Default Settings has SSH packet logging enabled<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 2005-02-04<br>
+<b>fixed-in</b>: 2005-03-16 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e4520ee6c70f38ce598b6be8d1dfd265f83e9f5a">e4520ee6c70f38ce598b6be8d1dfd265f83e9f5a</a> (0.58)<br>
+<p><pre>Setting the logging type to SSH packet logging in Unix PuTTY, then
+invoking pterm and attempting to open the &quot;Change Settings&quot; box gives
+an assertion failure:
+
+pterm: ../dialog.c:476: dlg_stdradiobutton_handler: Assertion `button &lt; ctrl-&gt;radio.nbuttons&#x27; failed.
+
+This is because pterm doesn&#x27;t have an SSH packet logging mode, so it
+can&#x27;t represent the saved setting in its dialogue box.  The same
+problem affects PuTTYtel, and similar problems may exist for other
+settings.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pterm-logtype-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

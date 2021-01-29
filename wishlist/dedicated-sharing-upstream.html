@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish dedicated-sharing-upstream</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/dedicated-sharing-upstream.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish dedicated-sharing-upstream</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Separate dedicated utility to act as connection sharing upstream<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+The current PuTTY support for connection sharing works on the more or
+less ad-hoc basis that the first PuTTY or Plink to connect to a host
+becomes the 'upstream' (which manages the real SSH connection) and
+accepts connections from other PuTTY tools which automatically become
+'downstreams' (talking to the upstream rather than to the real
+server).
+
+<p>
+A downside of this structure is that whichever PuTTY is first to
+contact a given host has to remain active while it's managing any
+connections from downstreams. This isn't a completely unfamiliar
+phenomenon to power users of SSH – it's exactly analogous to
+what happens when you end the terminal session in a PuTTY which still
+has X11 or port forwardings active – but it would be nicer to
+avoid it if possible, so that all visible PuTTYs behaved more or less
+similarly.
+
+<p>
+To arrange this, we'd have to have the first PuTTY spawn a separate
+process to act as a dedicated upstream. Then the PuTTY itself would
+connect to that, once it was ready, and merely be its first downstream.
+
+<p>
+This is a tricky project, perhaps as much work again as implementing
+connection sharing in the first place. Problems include:
+
+<ul>
+<li>
+How would SSH authentication work, if it needed to be interactive? One
+option would be to delegate the <code>ssh-userauth</code> protocol to
+the primary downstream (and pass it a special protocol message
+containing the cryptographic session ID for use in signatures).
+<li>
+Similarly, what about interactive elements of the transport protocol,
+such as host key verification or warnings about insecure primitives?
+<li>
+How would the user access the dedicated upstream process, to adjust
+its behaviour or emergency-terminate it? An obvious option is to have
+it open a little GUI icon in the system tray, but what if there isn't
+a system tray available (e.g. Unix PuTTY, run in a non-GUI context)?
+There might need to be a control protocol by which downstreams could
+talk to the dedicated upstream and tell it to change things.
+<li>
+What should the new utility be called? (Working title:
+<code>pshare</code>.)
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/dedicated-sharing-upstream;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2013-11-17 14:08:16 +0000)</div>
+
+</BODY></HTML>

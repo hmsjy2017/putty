@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-ech-overflow</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-ech-overflow.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-ech-overflow</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: integer overflow and buffer underrun in terminal emulator&#x27;s ECH handling<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.53b r2425 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=ea5be2db381206798f688cf2bac464a24a2856d9">ea5be2db381206798f688cf2bac464a24a2856d9</a><br>
+<b>present-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8de5682450393513f25d1a231677f7d866c8d9d4">8de5682450393513f25d1a231677f7d866c8d9d4</a> r2426 0.54 0.65<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6056396f77cafc7e40da4d09f1d6212408dcb065">6056396f77cafc7e40da4d09f1d6212408dcb065</a> <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e3fe709a8f6a633647088e9ed7264be5fb740426">e3fe709a8f6a633647088e9ed7264be5fb740426</a> 2015-11-08 0.66<br>
+<p>Versions of PuTTY and pterm between 0.54 and 0.65 inclusive have a
+potentially memory-corrupting integer overflow in the handling of the
+ECH (erase characters) control sequence in the terminal emulator.
+
+<p>To exploit a vulnerability in the terminal emulator, an attacker
+must be able to insert a carefully crafted escape sequence into the
+terminal stream. For a PuTTY SSH session, this must be before
+encryption, so the attacker likely needs access to the server you're
+connecting to. For instance, an attacker on a multi-user machine that
+you connect to could trick you into running <tt>cat</tt> on a file
+they control containing a malicious escape sequence. (Unix
+<tt>write(1)</tt> is not a vector for this, if implemented correctly.)
+
+<p>Only PuTTY, PuTTYtel, and pterm are affected; other PuTTY tools
+do not include the terminal emulator, so cannot be exploited this way.
+
+<p>The purpose of ECH is to erase multiple characters within a single
+line.  To this end, it includes a numeric parameter to specify the
+number of characters to be erased.  PuTTY accumulates this one digit
+at a time in an integer variable.  As part of the processing of ECH,
+the <code>check_boundary</code> function checks whether the start or
+end of the erased range falls in the middle of a double-width
+character (such as a kanji ideograph) so that it can ensure that the
+whole character is erased.  Each character cell in the live terminal
+is held as a structure containing among other things the character
+code and a word of attributes.  A double-width character is recorded
+by having a special value called <code>UCSWIDE</code> as the character
+code in the second cell, and when <code>check_boundary</code> detects
+that value, it resets the character code of both cells to a fixed
+value and copies the attributes from the left one to the right one.
+
+<p>The vulnerability arises because PuTTY uses signed integer
+variables to hold the number of characters to be erased and doesn't
+adequately check for overflow.  This means that by passing a very
+large parameter to ECH, an attacker could cause
+<code>check_boundary</code> to inspect memory outside the terminal
+buffer.  Were it to find <code>UCSWIDE</code> there, it would corrupt
+some nearby memory.  This might be exploitable if the attacker could
+arrange for <code>UCSWIDE</code> to be in memory somewhere near a
+sensitive data structure.
+
+<p>This bug was found with the help of
+<a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>
+and has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-5309">CVE-2015-5309</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-ech-overflow;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

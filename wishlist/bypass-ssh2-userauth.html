@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish bypass-ssh2-userauth</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/bypass-ssh2-userauth.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish bypass-ssh2-userauth</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Ability to bypass user authentication in SSH-2<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2005-05-06 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=b099456c8769ded59e3900ea84a3503d1b72e347">b099456c8769ded59e3900ea84a3503d1b72e347</a> (0.59)<br>
+<p>
+In principle, it should be possible in SSH-2 to bypass the user
+authentication stage entirely, and ask for the <tt>ssh-connection</tt>
+service (which provides shells, port-forwarding and so on) directly,
+rather than through the <tt>ssh-userauth</tt> service.
+
+<p>
+Currently, PuTTY is hardcoded to try <tt>ssh-userauth</tt>, and will
+bomb out if that is not supported. It should be trivial to add an
+option to try <tt>ssh-connection</tt> instead. (Perhaps we should also
+try it if <tt>ssh-userauth</tt> is refused?)
+
+<p>
+We probably won't add this unless someone asks for it. (At least
+<a href="http://groups.google.com/groups?as_umsgid=K72Xd.57385%24EL5.23278%40trnddc05">one person</a>
+has expressed an interest in using SSH purely for transport.)
+
+<p>
+(This isn't relevant to SSH-1, which doesn't have the modularity of
+SSH-2.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/bypass-ssh2-userauth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

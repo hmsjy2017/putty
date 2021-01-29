@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug ssh2-kex-repeat</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-kex-repeat.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug ssh2-kex-repeat</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Ability to initiate SSH-2 key re-exchange<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <a href="ssh2-kex-data.html">ssh2-kex-data</a><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-11-28 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=812870d1b304d8f22633614f59c6690c05fcc029">812870d1b304d8f22633614f59c6690c05fcc029</a> (0.58)<br>
+<p>
+Either side of an SSH-2 connection may initiate a key re-exchange.
+Not all servers bother to do this, although I suspect most are happy
+to accept a re-exchange initiated by the client.
+
+<p>
+PuTTY currently never initiates a re-exchange; it relies on the
+server to do so, and responds to it when it does. This doesn't
+always happen - at least some versions of the OpenSSH server follow
+the same policy, which means a re-exchange never occurs. We
+<a href="http://www.ietf.org/internet-drafts/draft-ietf-secsh-newmodes-01.txt">really ought</a>
+to initiate re-exchange ourselves if the server doesn't.
+
+<p>
+Before this can be done, we need to fix
+<a href="ssh2-kex-data.html">ssh2-kex-data</a>, since otherwise the
+chances of receiving a data packet from the server just after
+sending our KEXINIT would be unacceptably high.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-kex-repeat;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

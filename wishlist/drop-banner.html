@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug drop-banner</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/drop-banner.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug drop-banner</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY drops USERAUTH_BANNER when awaiting username input<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>present-in</b>: 0.53b<br>
+<b>fixed-in</b>: 2005-05-13 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=aa43d817d2dac6abaa68757d9bd65c9ff547c3de">aa43d817d2dac6abaa68757d9bd65c9ff547c3de</a> (0.59)<br>
+<p>
+Someone on comp.security.ssh <a href="http://groups.google.com/groups?selm=9b67156e.0311171247.2b0bf982%40posting.google.com">said</a> their login banner did not appear
+when PuTTY prompted for a username, but did appear when they
+specified the username ahead of time in the configuration.
+
+<p>
+This looks worryingly plausible, in fact: the loop on
+<code>process_userpass_input()</code> appears to be throwing away
+all incoming SSH messages, presumably because I didn't expect to be
+receiving any; and that includes USERAUTH_BANNER. I didn't notice
+this before because I tested against OpenSSH, which appears to delay
+sending the banner until after the first (usually null)
+USERAUTH_REQUEST. However, the poster was using WinSSHD, which sends
+the banner as soon as the userauth protocol commences (which seems a
+lot more sensible in retrospect!).
+
+<p>
+So in order to fix this in PuTTY I would have to spot
+USERAUTH_BANNER during username input, and respond to it by doing
+something thoroughly unpleasant, such as erasing the username input
+line from the terminal, printing the banner, and redisplaying the
+username input line after that. This is nasty, but it would have the
+nice feature that if the banner was sent immediately, it would be
+displayed <em>before</em> the user finished entering their username.
+
+<p>
+I've labelled this bug "tricky" because I'm not sure what to do
+about Plink. Plink will call ssh_get_line and ignore ssh.c's own
+username/password input function, which means that on the one hand
+the banner won't be dropped on the floor in the current version, but
+on the other hand it would be hard to display it ahead of the
+username prompt in the fixed version.
+
+<p>
+If only the working group had listened to my suggestion of having a
+ping message I could send during userauth and expect a reply. Then I
+could send the ping, get a reply back, and if the banner had been
+sent immediately on commencement of userauth then it would appear
+before the ping response, and so I'd know whether there was a banner
+to be displayed <em>before</em> beginning username input. Bah.
+
+<p>
+An alternative solution that would also work with Plink would be to
+collect all banner messages seen while the user was typing a username,
+and spit them out immediately afterward. The user wouldn't of course
+see the banner before they'd entered a username, but the protocol
+design is such that that can't be guaranteed anyway; and at least the
+banner wouldn't be dropped on the floor, which might be important for
+things like legal notices.
+
+<p>
+<em>Update:</em> this should now be fixed (using the "alternative
+solution" above). Our original correspondent (using the
+<a href="http://www.bitvise.com/winsshd.html">WinSSHD</a> server)
+has confirmed the fix.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/drop-banner;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

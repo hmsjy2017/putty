@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug assert-line-not-null</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/assert-line-not-null.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug assert-line-not-null</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Bombs out with line==NULL in terminal.c<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.56 0.58 0.59<br>
+<p>
+We receive occasional reports of PuTTY crashing out with
+<code>line==NULL</code> in <code>terminal.c:lineptr()</code>.
+However, we haven't been able to reproduce the problem ourselves.
+
+<p>
+In recent versions of PuTTY (0.58 and up), the error takes the form
+of one or more error boxes saying "line==NULL in terminal.c" and
+giving some diagnostic information, along with an exhortation to
+contact us.
+
+<p>
+In versions of PuTTY before snapshot 2005-03-07, the error
+is instead a failure of an assertion in <code>terminal.c</code>
+that <code>line != NULL</code> (the precise line number has changed
+a lot due to the extensive terminal re-engineering since 0.56).
+
+<p>
+We've had one report since we added diagnostics which indicates that
+<tt>screen</tt> doesn't contain enough entries. However, we haven't
+thought of a plausible mechanism for <tt>screen</tt> or
+<tt>alt_screen</tt> to end up undersized.
+
+<p>
+(Possibly related, although we've no hard evidence for this:
+<a href="assert-fail-newsavelines.html">assert-fail-newsavelines</a>.)
+
+<p>
+There seem to be a lot of reports of this error from people using the serial
+backend in 0.59, which suggests that it can be a symptom of
+<a href="win-handle-double-free.html">win-handle-double-free</a>
+(fixed in 0.60).
+
+<p>
+In fact, in general, we suspect this is a symptom of some sort of
+memory corruption to which this assertion is particularly sensitive,
+rather than evidence of a direct logical error.
+
+<ul>
+<li><tt>Pine.0410290832480.79579@mozart.musicbox.net</tt>
+  <br>0.56 on WinME and 2K; terminal.c:159
+<li><tt>2164FF46E100024E87C4F72442B267050393955A@mail02.ad.telekom.lv</tt>
+  <br>0.56 on W2KSP2; terminal.c:159
+<li><tt>BB8EDCA75DA7624F9A8B446F68A56C70438A89@PKDWB06C.ad.sprint.com</tt>
+  <br>0.56 on Win2K; terminal.c:159
+  <br>"disable switching to alternate screen" enabled
+<li><tt>f37cdb910503291851a052bd9@mail.gmail.com</tt>
+  <br>with diagnostic info
+<li><tt>20051013140345.GA9964@dot.oreally.co.uk</tt>
+  <br>0.58 on Win2K+SP4
+  <br><pre>
+line==NULL in terminal.c
+lineno=5376 y=65 w=182 h=65
+count(scrollback=00890758)=2
+count(screen=008BE508)=65
+count(alt=00890768)=65 alt_sblines=64
+whichtree=008BE508 treeindex=65
+</pre>
+<li><tt>D4EFE24E74186242BCFA48FB1BC47C2802E6681D@ore-mail2.ne.ad.ner.capgemini.com</tt>
+  <br>0.59, using a serial port
+  <br><pre>
+line==NULL in terminal.c
+lineno=4754 y=51 w=153 h=56
+count(scrollback=003F1BF0)=382
+count(screen=003F1C00)=56
+count(alt=00B620C8)=56 alt_sblines=0
+whichtree=003F1C00 treeindex=51
+</pre>
+<li><tt>FA37BC94952941AC89BFF98CD9997327@jamesPC</tt>
+  <br>Also a serial connection
+  <br><pre>
+line==NULL in terminal.c
+lineno=4754 y=18 w=89 h=47
+count(scrollback=011E1AA8)=200
+count(screen=011E1AB8)=47
+count(alt=011F9BF0)=47 alt_sblines=0
+whichtree=011E1AB8 treeindex=18
+</pre>
+<li><tt>53b8f8fe0703261035q65cafd48i4f2f2387996a07d9@mail.gmail.com</tt>
+  <br>Using a serial port, so presumably 0.59
+  <br><pre>
+linux==NULL in terminal.c
+lineno=4754 y=10 w=80 h=24
+count(scrollback=003A1C60)=200
+count(screen=003A1C70)=24
+count(alt=003A1F90)=24 alt_sblines=0
+whichtree=003A1C70 treeindex=10
+</pre>
+</ul>
+
+<p>
+One user (1124367194.23192.240954800@webmail.messagingengine.com)
+reported a failure of the same assertion with PuTTY 0.58. However, as
+their screen is apparently zero rows high (presumably due to their
+window manager), this pathological case is a problem that's now
+protected against via
+<a href="zero-rows-cols-crash.html">zero-rows-cols-crash</a>.
+<blockquote>
+<p>I am using bblean blackbox for windows as a shell on windows XP SP2, and
+whenever I rollup a maximized putty window the following fatal error
+results:
+<pre>
+line==NULL in terminal.c
+lineno=4621 y=0 w=93 h=0
+count(scrollback=003B0F60)=200
+count(screen=00CFA2B8)=0
+count(alt=003B0F70)=0 alt_sblines=0
+whichtree=00CFA2B8 treeindex=0
+</pre>
+</blockquote>
+<p>
+Perhaps an unrelated bug that's already been fixed:
+<ul>
+<li><tt>000d01c4b1c7$ca506090$4296a8c0@nadine</tt>
+  <br>2004-10-14; terminal.c:662; connecting to SunOS
+  <br>reportedly fixed in 2004-10-15, although since other reports
+  indicate the failure is intermittent, perhaps not
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/assert-line-not-null;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

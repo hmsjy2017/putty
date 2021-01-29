@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish cooked-printer</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/cooked-printer.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish cooked-printer</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Feature-rich printer support with formatting control<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <em><a href="mdpi.html">mdpi</a></em><br>
+<b>blocks</b>: <em><a href="print-screen.html">print-screen</a></em><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Improved ANSI printer control support. Squirting raw data out to a
+random printer is all very well for people who already have their
+remote application configured with a driver for their specific
+printer, but not ideal if you just want to send a text file and have
+it print in a sensible sort of way. I'd like an alternative printing
+mode using the Windows graphical printing API (where the printing
+application has to draw on the page like a canvas), doing the layout
+myself. Advantages include being able to guarantee the right number
+of columns and rows per page, being able to let the user select
+portrait/landscape, and possibly also doing some escape-sequence
+parsing on the input data stream to handle a variety of simple
+control codes (DEC/ANSI and PCL both spring to mind, and I think the
+simple ones of these could both be supported at once without clashes
+requiring user-level configuration).
+
+<p>
+This is certainly going to be a large piece of code, so if it
+happens at all it will want to be a plugin DLL using the plugin
+interface.
+
+<p>
+In the meantime, if you have something which will emulate your
+favourite printer language (e.g. Ghostscript for Postscript), you can
+try bolting it on to PuTTY with something like
+<a href="http://www.cs.wisc.edu/~ghost/redmon/">RedMon</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/cooked-printer;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2002-05-10 00:29:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish many-sessions</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/many-sessions.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish many-sessions</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Make life easier for people with lots of saved sessions<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+PuTTY's saved sessions list box is fine for people with only a few
+saved sessions, but some people (such as sysadmins) might plausibly
+have a much larger number of them and might find the list box
+unwieldy.
+
+<p>
+One solution to this is to invent a means of categorising saved
+sessions, perhaps by introducing a hierarchical directory structure
+within the saved-sessions list. (Some list entries would be
+directories, which you could click on to go down a level; in any
+non-root directory there would be a `back up a level' item you could
+click on to go back up.)
+
+<p>
+A smaller and simpler alternative would be simply to allow the PuTTY
+config box to be resized - and grow the saved sessions list box as
+the window grows. We've been deliberately keeping the config box
+small for the benefit of people with 640x480 screens, but if a
+particular user were to want to expand their own config box there'd
+be no reason to prevent them. For this to be really useful I suppose
+PuTTY would have to remember the size of its config box...
+
+<p>
+Another possibility would be to 
+<a href="reorder-sessions.html">sort the sessions</a> based on most
+recent access time.  I'm not sure how users would cope with their
+sessions' being shuffled all the time, though.
+
+<p>
+It's not impossible that we might want to do all of these things,
+or something else entirely. Some design is required.
+
+<p>
+There are various third-party forks and tools which try to address
+this problem on our <a href="../links.html">Links page</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/many-sessions;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish osc</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/osc.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish osc</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Escape sequence to execute command on the client side<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>never:</i> We don&#x27;t ever intend to fix this.<br>
+<p>
+People occasionally ask for an escape sequence which will execute an
+arbitrary local command, à la ECMA-48 OSC (Operating system
+command).
+
+<p>
+This feature is horrendously insecure, and PuTTY will not be
+implementing it unless someone comes up with some plausible way of
+dealing with the security issues outlined below.
+
+<p>
+If your terminal is willing to receive an escape sequence which
+directs it to run a local program, and will uncomplainingly do it,
+then for a start you've just put your client machine completely at the
+mercy of your server - so I do hope you <em>never</em> make a
+connection to a machine whose sysadmin is less than a close and
+trusted friend of yours! What would stop the server sending a
+remote-command escape such as <code>del *.*</code>, or (perhaps even
+worse) one which read sensitive files on your disk and sent them out
+to somewhere the malicious server admin could recover them? And even
+if your server admin is trustworthy, his machine could be cracked, and
+then your client box is at the mercy of the cracker.
+
+<p>
+Furthermore, applications such as Unix `write' often don't filter
+escape sequences out of their output, so if you <em>ever</em> have
+messages enabled then you've handed control of your local machine to
+any user of the same server who might want it.
+
+<p>
+In general, your terminal stream should be considered untrusted for
+these purposes. Users don't normally feel nervous about running `cat'
+on unknown files just to see what's in them; they tend to feel that
+the worst that can happen as a result is that they screw up their
+terminal state and have to reset it - and many users don't even expect
+<em>that</em>, and come and complain to us when it happens (see
+<a href="../faq.html#faq-puttyputty">the FAQ</a>).
+If your terminal is willing to run arbitrary local commands when
+told to by an escape sequence, then you have to adopt a whole new
+level of paranoia, where (for example) any file not trusted by you is
+viewed using `cat -v' rather than `cat', and only when you're certain
+that it's clean of malicious escape sequences do you progress to
+`cat'.
+
+<p>
+An alternative remote-execution solution with authentication is
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/doit/">DoIt</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/osc;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-05-07 16:29:13 +0100)</div>
+
+</BODY></HTML>

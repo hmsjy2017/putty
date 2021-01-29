@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug portfwd-corrupt</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portfwd-corrupt.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug portfwd-corrupt</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Reports of port forwarding corruption<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.53b 2003-06-29 0.54 0.58<br>
+<p>
+We've had several reports of data corruption in port-forwarded connections.
+Some (possibly all) of these are due to data loss. The PuTTY client (as
+opposed to others) appears to be correlated with the data loss, although
+it's unclear whether the data is actually being lost before or after PuTTY
+is dealing with it.
+
+<p>
+Problems have been reported with both directions of tunneling, both directions
+of data transfer, and both SSH protocols (SSH-1 and SSH-2).
+
+<p>
+<em>Update, 2005-06-15:</em> I (JTN) have reproduced loss of trailing
+data with a remote-to-local SSH-2 port forwarding, where a burst data
+is sent from remote to local followed immediately by EOF. I suspect
+that PuTTY's <a href="half-closed.html">lack of support for
+half-closed connections</a> is to blame in at least this case.
+<em>Update, 2011-09-13</em>: I (SGT) have just (hopefully) fixed the
+half-closed issue, so perhaps that will be improved now.
+
+<p>
+The reports below may correspond to several different bugs, as a range of
+symptoms are reported.
+
+<ul>
+<li><code><a href="http://groups.google.com/groups?selm=2821c598.0306222343.8ea8a79%40posting.google.com">2821c598.0306222343.8ea8a79@posting.google.com</a></code>
+<br>(also <code>3F031766.BC09B85A@uni-mb.si</code>)
+<br>Server: <code>SSH-1.5-OSU_1.4alpha3</code> on OpenVMS V7.3-1
+<br>Protocol: SSH-1
+<br>local-to-remote tunnel of POP3/SMTP
+<br>Problems with sending messages (dialogue or attachments corrupted)
+<br>Apparently the first port-forwarded connection in a session will lose
+some quantity of the data sent from PuTTY to the server from the start
+of the connection.
+<br>SSH packet log makes it look like data is being lost by the server (or
+possibly after PuTTY does the logging), but other clients (e.g., OpenSSH,
+recent F-Secure) don't show this behaviour.
+
+<li><code>20040209143157.89534.qmail@web14102.mail.yahoo.com</code>
+<br>0.53b + (2004-02-02?) + (2004-02-09?)
+<br>Various Red Hat 7.x servers. One is SSH-1.99-OpenSSH_3.1p1.
+<br>Protocol: SSH-1 and SSH-2
+<br>HTTP tunnel (local-to-remote?)
+<br>Result of GET truncated (incomplete)?
+<br>Looks to be correlated with slow consumer (web browser)
+<br>Same person has same problem with TeraTerm SSH ("Error 10058: Cannot
+send after socket shutdown.").
+<br>PuTTY sometimes hangs?
+<br>Includes SSH packet log; this shows SSH-2 local-to-remote forwarding, with PuTTY apparently receiving all the data. Maybe it fails to pass it on to the HTTP client?
+
+<li><code>002101c45ee8$ff761990$6801a8c0@carmani600m</code>
+<br>"SMTP tunneling corrupts attachments"
+<br>It looks like something other than PuTTY was modifying the attachments
+(possibly in addition to PuTTY), so we aren't able to extract useful
+information from this report.
+
+<li><code>1090249727.4682.55.camel@oberon.tremagi.org.uk</code>
+<br>Win2KSP3 + PuTTY 0.54 (and 0.53b)
+<br>Fedora Core 2 (unpatched) + OpenSSH (openssh-server-3.6.1p2-34)
+<br>Remote tunnel for "yum" over HTTP: "yum" pulling data
+(i.e. outbound from PuTTY)
+
+<li><code>D9304F864F1759059287F365@[192.168.0.10]</code>
+<br>0.53b, 0.58, 2005-06-12:r5952 to OpenSSH 3.9p1
+<br>Using SOCKS dynamic forwarding to forward FTP, upload corrupts files
+(resulting file is shorter than expected); FTP progress bar goes suspiciously
+fast for first 1-200k of a 500k file
+<br>Other SOCKS servers behave fine; `get' is fine; static port
+forwarding is fine
+
+<li><code>6.0.0.22.2.20050614193231.01fda408@195.70.37.56</code>
+<br>0.58 to Debian OpenSSH
+<br>Remote-to-local tunnel for JetDirect (local printer port 9100)
+<br>Files under 8k: OK
+<br>Files over 8k: all data in PuTTY's log, but not all gets to the
+printer
+<br>Logs available
+
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portfwd-corrupt;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

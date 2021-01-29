@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ssh1-bad-passphrase-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh1-bad-passphrase-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ssh1-bad-passphrase-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Entering wrong SSH-1 key passphrase causes PuTTY crash<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.57<br>
+<b>present-in</b>: 0.58<br>
+<b>fixed-in</b>: 2005-10-31 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8719f92c1426609de7ead4a490a15d1d18875f53">8719f92c1426609de7ead4a490a15d1d18875f53</a> (0.59)<br>
+<p>
+When using public-key authentication in SSH-1, entering an incorrect
+passphrase in the PuTTY window will cause PuTTY to crash. Correct
+passphrases or Pageant authentication are fine, as is SSH-2.
+
+<p>
+I believe this is caused by <code>do_ssh1_login()</code> using its
+argument <code>pktin</code> in the auth loop condition. When prompting
+for a password in GUI PuTTY, that argument can become
+<code>NULL</code> due to coroutine mechanics. Prior to 0.58 we didn't
+use the argument. If so, this was probably introduced around r4898,
+and won't affect Plink/PSCP/PSFTP.
+
+<p>
+This looks similar to a problem blocking
+<a href="ssh2-password-expiry.html">ssh2-password-expiry</a>, so
+should probably be looked into at the same time.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh1-bad-passphrase-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

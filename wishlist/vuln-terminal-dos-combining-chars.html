@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-terminal-dos-combining-chars</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-terminal-dos-combining-chars.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-terminal-dos-combining-chars</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: DoS if many Unicode combining characters are written to the terminal<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.57<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=da1c8f15b1bc14c855f0027cf06ba7f1a9c36f3c">da1c8f15b1bc14c855f0027cf06ba7f1a9c36f3c</a> 0.71<br>
+<p>
+Up to and including version 0.70, PuTTY's terminal emulator supports
+remembering an unlimited number of combining characters in each
+character cell of the terminal. They may not be displayed very
+clearly, but PuTTY will at least <em>try</em> to display them, and
+will remember them for copy and paste purposes.
+
+<p>
+Unfortunately, this means that sending a long unbroken string of
+combining characters to the terminal causes it to allocate potentially
+unlimited amounts of memory. Moreover, the combining characters are
+stored as a linked list, leading to quadratic-time behaviour, so the
+terminal will slow down to the point of unusability as well.
+
+<p>
+In other words, any process that can arrange to write Unicode text output
+to your terminal – even if it consists of printable characters only –
+can perform a denial-of-service attack. This could be as simple as
+leaving a text file somewhere for you to <code>cat</code>.
+
+<p>
+As of 0.71, this is fixed by limiting each character cell to at most
+32 combining characters. After that, the contents of the cell become
+U+FFFD REPLACEMENT CHARACTER with no combining characters at all.
+
+<p>
+CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9897">CVE-2019-9897</a> has been assigned for the collection
+of terminal DoS attacks fixed in 0.71, including this,
+<a href="vuln-terminal-dos-combining-chars-double-width-gtk.html">vuln-terminal-dos-combining-chars-double-width-gtk</a> and
+<a href="vuln-terminal-dos-one-column-cjk.html">vuln-terminal-dos-one-column-cjk</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-terminal-dos-combining-chars;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-24 11:38:13 +0000)</div>
+
+</BODY></HTML>

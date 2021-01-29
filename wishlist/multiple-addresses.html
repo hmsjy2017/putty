@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug multiple-addresses</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/multiple-addresses.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug multiple-addresses</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY mishandles machines with multiple addresses<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2005-01-17 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=f70efc5cc6ae0e86b3354ec4ef71ea04bd0d84d9">f70efc5cc6ae0e86b3354ec4ef71ea04bd0d84d9</a> (0.58)<br>
+<p>At present, if a host has multiple addresses, PuTTY merely connects to the
+first one it gets.  This is arguably incorrect behaviour, and PuTTY should
+try each address in turn until it gets one that works.  My feeling is that a
+Socket_Addr should be able to contain multiple addresses, and sk_new should
+handle the retries, but I haven't thought out how proxying would work.
+
+<p>Ref: <3E1AE612.6060308@magdalen.oxford.ac.uk>
+
+<p><a href="ftp://ftp.rfc-editor.org/in-notes/rfc1123.txt">RFC 1123</a>
+has this to say on the subject:
+
+<blockquote>
+<p>   When the remote host is multihomed, the name-to-address
+      translation will return a list of alternative IP addresses.  As
+      specified in Section 6.1.3.4, this list should be in order of
+      decreasing preference.  Application protocol implementations
+      SHOULD be prepared to try multiple addresses from the list until
+      success is obtained.  More specific requirements for SMTP are
+      given in Section 5.3.4.
+</blockquote>
+
+<b>SGT, 2005-01-16</b>: This is much more important in an
+IPv6-supporting world, since there's the possibility that your DNS
+lookup will return you an IPv6 and an IPv4 address in that order,
+and if you can't route to the former then you <em>must</em> fall
+back to the latter or else the introduction of IPv6 support has made
+matters worse for you. Hence, done.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/multiple-addresses;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

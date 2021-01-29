@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish handle-unimplemented</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/handle-unimplemented.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish handle-unimplemented</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Handle SSH2_MSG_UNIMPLEMENTED more usefully<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+If an SSH server sends us <code>SSH2_MSG_UNIMPLEMENTED</code>, we
+currently report it as "Strange packet received: type 3" and close
+the connection. It would at the very least be better if we reported
+it as SSH2_MSG_UNIMPLEMENTED, and ideally also gave some idea of
+<em>what</em> the server had claimed not to understand.
+
+<p>
+It's not completely clear to me how far we can sensibly take this
+sort of error reporting, but we could usefully at least be prepared
+to deal with common cases. For instance, servers which don't support
+rekeying: when we initiate a rekey, we could remember the sequence
+number of the SSH2_MSG_KEXINIT we send out, and if we subsequently
+see SSH2_MSG_UNIMPLEMENTED citing that sequence number then we could
+give an error message which actually suggested a corrective measure
+to the user ("try manually enabling 'Handles SSH-2 key re-exchange
+badly' in the Connection > SSH > Bugs panel").
+
+<p>
+(In that particular case, it might even be possible to abandon the
+rekey and proceed with the rest of the connection – see
+<a href="kexinit-unimplemented.html">kexinit-unimplemented</a>
+– although I don't know if servers would in general even cope
+with that, and also I think it would be a bad idea not to at least
+warn the user of the drop in security.)
+
+<p>
+If we felt enthusiastic, we could try being more ambitious: it might
+be feasible, for instance, to keep track of <em>all</em> the message
+type codes for messages we've recently sent out. Whenever we see any
+message we can identify as the reply to some specific thing we sent,
+we can delete that and everything before it from our queue; then for
+any <code>SSH2_MSG_UNIMPLEMENTED</code>, we'll always be able to
+specify exactly what type of message the server didn't understand.
+
+<p>
+All of this, of course, assumes the server is sending out
+<code>SSH2_MSG_UNIMPLEMENTED</code> messages containing a correct
+packet sequence number. Some servers (in violation of the SSH spec) do
+not bother, and just put zero in the sequence number field when they
+send <code>SSH2_MSG_UNIMPLEMENTED</code>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/handle-unimplemented;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

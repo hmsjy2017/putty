@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-indirect-dll-hijack</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-indirect-dll-hijack.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-indirect-dll-hijack</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Potential malicious code execution via indirect DLL hijacking<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=9398d230339d5bfaa94093af89a17abf33b5dfad">9398d230339d5bfaa94093af89a17abf33b5dfad</a> 2016-07-19 (0.68)<br>
+<p>
+On some versions of Windows, all versions of the PuTTY tools up to and
+including 0.67 <strong>[BUT NOT ONLY THOSE – see below]</strong>
+can end up loading DLLs from the local directory which contains the
+PuTTY executables.
+
+<p>
+<strong>2017-04-28</strong>: further problems of this form came to
+light after 0.68 was released, so 0.68 is <strong>STILL
+VULNERABLE</strong>. See <a href="vuln-indirect-dll-hijack-2.html">vuln-indirect-dll-hijack-2</a> for
+documentation of the additional problems.
+
+<p>
+This can be a problem if that is an uncontrolled location, such as a
+browser download directory. If an attacker tricked a user into
+downloading a malicious DLL and then the user then ran any PuTTY tool
+directly from their download directory, code in the attacker's DLL
+could run in the PuTTY process. (This is more likely than it sounds
+because at least some versions of some browsers have allowed websites
+to drop files into download directories without asking, as described in
+<a href="https://textslashplain.com/2015/12/18/dll-hijacking-just-wont-die/">this blog post</a>.)
+
+<p>
+We have verified this behaviour ourselves on Windows 7 and
+Windows 2008.
+
+<p>
+This isn't an issue when the PuTTY tools have been installed properly,
+as attackers should not have the opportunity to get their DLLs into
+the Program Files directory or elsewhere on the search path (or
+rather, if they can, you probably have bigger problems).
+
+<p>
+However, the PuTTY <em>installer</em> .exe itself
+suffered from the same vulnerability up to and including 0.67, so
+running <em>that</em> directly from a browser download directory could
+also have led to compromise.
+The <a href="msi-installer.html">MSI installer</a>, which debuted with
+0.67, does not have this problem, and 0.68's .exe installer does not
+either.
+
+<p>
+This bug in the PuTTY executables was reported by Sachin Wagh and has
+been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-6167">CVE-2016-6167</a>.
+The equivalent vulnerability in the PuTTY .exe installer was reported
+to us by Stefan Kanthak.
+
+<p>
+<em>Vulnerability and mitigation details:</em>
+While PuTTY had already been somewhat careful about where it
+explicitly loaded DLLs from since 0.61
+(<a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=9f274bed919de23335499926f4abbea45e0e495b">r8993</a>,
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=406e62f77b3603f3efd2827930513b8c92e83dae">r9003</a>)
+after
+<a href="https://isc.sans.edu/diary/DLL+hijacking+vulnerabilities/9445">the last time this came up</a>,
+that doesn't help when those DLLs themselves load DLLs, which is the
+weakness here. The demonstration used the DLL names UxTheme.dll /
+ntmarta.dll, which are apparently sought by standard bits of Windows.
+
+<p>
+This has been remedied in the PuTTY executables by calling the
+<a href="https://msdn.microsoft.com/en-us/library/windows/desktop/hh310515(v=vs.85).aspx">SetDefaultDllDirectories()</a>
+function, on versions of Windows where that is available; that is
+fully-patched Windows Vista and up (the Microsoft security update
+<a href="https://support.microsoft.com/en-us/help/2533623/microsoft-security-advisory-insecure-library-loading-could-allow-remote-code-execution">KB2533623</a>
+from 2014 is required on Vista, 7, and 2008). The mitigation is not
+available on unpatched or older versions of Windows, for which the
+only remedy is not to run the PuTTY tools from untrusted locations.
+
+<p>
+The fix for the .exe installer's version of this vulnerability was to
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d29d33e165fe83497109dea2fafab4451e2607c3">upgrade</a>
+our copy of Inno Setup to 5.5.9, which contains
+<a href="https://github.com/jrsoftware/issrc/issues/188">their similar mitigation</a>.
+
+<p>
+Microsoft has
+<a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ff919712(v=vs.85).aspx">some guidance</a>
+about this class of vulnerability.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-indirect-dll-hijack;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish installer-addpath</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/installer-addpath.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish installer-addpath</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Add path to PuTTY programs to PATH in Windows installer<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 0.67 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5c5879b99d2a0785095a384f48a2d934e1b2d4c5">5c5879b99d2a0785095a384f48a2d934e1b2d4c5</a><br>
+<p>
+We occasionally get asked to add an option in the Windows installer
+package to add the command-line programs such as PSCP and Plink to the
+system <tt>PATH</tt>.
+
+<ul>
+
+<li>
+On Win95/98/Me, this probably involves automatically modifying
+<tt>AUTOEXEC.BAT</tt>, which is probably not something we want to go
+anywhere near.
+
+<li>
+On NT-class systems, it's a bit better, as we can do this by
+modifying a Registry entry, and even prod running programs to pick
+it up. However, it's probably not possible to do this in a
+reversible way, so it would probably stay on the <tt>PATH</tt>
+even after uninstallation, which is bad. (We haven't actually
+<em>tried</em> this yet.)
+
+</ul>
+
+<p>
+One suggested solution is to use
+<a href="http://marcobari.altervista.org/add_path.html">add_path</a>.
+
+<p>
+<em>Update, 2016-03:</em> the MSI-format installer available starting
+with 0.67 has an option for this.
+
+<p>
+(The git commit id listed in Fixed-in is actually <em>after</em> 0.67,
+even though 0.67 has an MSI installer. That's not an error; I prepared
+the 0.67 MSI ad-hoc, after 0.67 itself was released.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/installer-addpath;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

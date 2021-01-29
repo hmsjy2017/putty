@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish key-formats</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/key-formats.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish key-formats</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for OpenSSH and ssh.com SSH-2 private key formats<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2002-06-15 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=802aeb2d5ee1f322dcfb007b38af6852b386804e">802aeb2d5ee1f322dcfb007b38af6852b386804e</a> 0.53<br>
+<p>
+Although PuTTY shares the same SSH-1 private key file format as
+OpenSSH and ssh.com's product, all the SSH-2 formats are different.
+Of course, we believe PuTTY's is the best, because it shows the
+public key unencrypted (so it's easy to check by eye that a
+particular private key matches a particular public key) and because
+it's fully tamperproofed to protect against any attacks that involve
+tampering with the key to reveal information about it.
+
+<p>
+However, a lot of people want to be able to use their OpenSSH or
+ssh.com private keys (usually OpenSSH) with PuTTY. So we probably
+need at least PuTTYgen to be able to load and save those formats. (I
+think if we build the conversion capability into PuTTYgen, there
+will be no need to bloat PuTTY itself with the same code.)
+
+<p>
+<em>Update:</em>
+As of 2002-06-15, PuTTYgen supports import/export of both OpenSSH and
+ssh.com key formats. (We still don't support using them without the
+import step, though; see <a href="key-formats-natively.html">key-formats-natively</a> for that.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/key-formats;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-18 22:50:45 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug unclean-close-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/unclean-close-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug unclean-close-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Reports of crashes on unclean close (related to port forwarding?)<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>present-in</b>: 0.55 0.56 2004-11-29 2005-01-16 2005-01-24 2009-02-10<br>
+<p>
+We are getting persistent reports of PuTTY crashing when a session is
+closed uncleanly, for instance by a network error such as "software
+caused connection abort". This limits the usefulness of the ability to
+<a href="reuse-windows.html">restart dead sessions</a> that was
+introduced in recent releases.
+
+<p>
+(Some people are apparently in the habit of hibernating their machines
+with active PuTTY connections. When the machines come back up, the
+network connections are likely to be invalid, so PuTTY throws a
+network error and gives the same problem.)
+
+<p>
+Many (all?) of the reports indicate that port-forwarding is in use.
+We've not yet been able to reproduce it.
+
+<p>
+See also <a href="unclean-close-hang.html">unclean-close-hang</a>,
+which seems more or less specific to Windows Vista and Windows 7, and
+definitely doesn't require port forwarding to be active.
+
+<p>
+Reports:
+
+<ul>
+
+<li>OF9474F5EC.6EF0B984-ON80256E55.00617997-80256E55.0061B13F@plasmon.co.uk
+<br>0.53b; pfd; NULL ptr ref?
+
+<li>4073CD52.8090404@attunity.co.il
+<br>0.53+(0.53b, 0.54?); pfd; SCCA
+<br><em>debug info</em> -- apparent use of bogus <code>ssh</code>
+
+<li>6.1.2.0.2.20040922120006.01a98a18@imap.hut.fi
+<br>0.55; pfd; network error; sending on port causes crash
+
+<li>20041117185616.1516.qmail@web41502.mail.yahoo.com
+<br>0.56; pfd; SCCA; PuTTY using excessive CPU
+
+<li>E1CYwFK-0003zT-00@ixion.tartarus.org
+<br>0.56, r4918(2004-11-29); pfd; SCCA
+<br>also assertion ssh.c:3365 ssh->state == SSH_STATE_CLOSED
+
+<li>200501090053.j090roW0028426@q7.q7.com
+<br>0.56, 2005-01-16; pfd; SCCA; tunnels still open; <em>Dr Watson</em>
+
+<li>41F4C327.20905@hybrid.fi
+<br>0.56 and 2005-01-24; pfd; SCCA; <em>stack backtrace</em>
+(apparent use of bogus <tt>ssh</tt>)
+<br>also sees assertion ssh.c:3365 ssh->state == SSH_STATE_CLOSED with 0.56
+
+<li>20050128171423.GB719@firebyte.bytnar.net
+<br>0.55/0.56; pfd; SCCA
+<br>also SOCKS connections not killed (fixed in 2005-02-18)
+
+<li>200411010710.iA17AJAW014641@smtp.hispeed.ch
+<br>0.56; XPSP1; SSH server disconnect ("connection timed out" is fine!)
+
+<li>141902151.20090211120208@kilgus.net
+<br>2009-02-10; <em>evidence of use of freed memory</em> (this one fixed in
+r9069)
+
+</ul>
+
+<p>
+Possibly related code activity:
+<ul>
+<li>access of freed ssh->channels fixed r4946, s/s 2004-12-03
+<li>leaving channels/listening sockets lying around fixed r5325, s/s
+2005-02-18
+<li>not properly closing port-forwardings in CHAN_SOCKDATA_DORMANT state,
+fixed r9069, s/s 2011-01-04
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/unclean-close-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

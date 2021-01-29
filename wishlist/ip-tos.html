@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ip-tos</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ip-tos.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ip-tos</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Use of IP type-of-service field<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+We've had a very few requests for the PuTTY suite to make use of the
+IP type-of-service (ToS) field - apparently it does make a practical
+difference to a few people using traffic shapers to sort
+interactive/bulk traffic.
+
+<p>
+Some thought needs to be given to this: PuTTY terminal sessions are
+obviously `interactive' traffic, PSCP/PSFTP are `bulk', but Plink
+could be either depending on usage, as could random port-forwardings.
+Also, we may not <em>want</em> to leak that sort of information about
+an encrypted connection. So it would probably need to be configurable,
+and off by default.
+
+<p>
+Useful references: MS KB
+<a href="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q196358">Q196358</a> and
+<a href="http://support.microsoft.com/default.aspx?scid=kb;EN-US;q248611">Q248611</a>
+(which indicates that on Win2K, a registry entry needs to be set to
+allow user programs to set the ToS).
+
+<p>
+This probably can't be set on Windows <2000.
+
+<p>
+Need to make sure we understand how one is supposed to use this field
+in today's world; I've a feeling that several sets of semantics may
+have come and gone over the years.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ip-tos;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-10-12 17:49:25 +0000)</div>
+
+</BODY></HTML>

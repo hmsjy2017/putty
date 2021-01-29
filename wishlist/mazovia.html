@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish mazovia</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/mazovia.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish mazovia</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for Mazovia character set<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2004-08-06 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=c7648cd296c82cfecfda2a7370719750fc824478">c7648cd296c82cfecfda2a7370719750fc824478</a> (0.56)<br>
+<p>
+We've had a few requests to add a Polish character set called
+"Mazovia" to the available translations.
+
+<p>
+It's also known as CP620, but Polish versions of Windows don't appear
+to recognise this, so we'll have to add native support to PuTTY.
+
+<p>
+Most of the translation table from Mazovia to Unicode is based on
+the <code>mazovia</code> translation table that was available in
+<a href="http://mikolajj.republika.pl/files/ConvertCharset/Full_ConvertCharset.zip">this ZIP file</a>, but
+there were a couple of questionable code points:
+
+<ul>
+
+<li>Code point <code>0x9B</code>: corresponds to Polish currency
+zloty, symbol "zł", for which a single code point does not
+exist in Unicode. Mapped this to U+FFFD REPLACEMENT CHARACTER
+(we're assured it's not very important).
+
+<li>Code point <code>0xA8</code>: the character table above indicates
+it's U+00BF INVERTED QUESTION MARK, but another table we've seen shows
+a glyph like U+00A7 SECTION SIGN. Someone from <tt>.pl</tt>tells us the
+former is correct.
+
+</ul>
+
+<p>
+More info: <a href="http://www.jastra.com.pl/klub/ogonki.htm">http://www.jastra.com.pl/klub/ogonki.htm</a>
+
+<p>
+References:
+<ul>
+<li>4090B793.9090502@talex.pl
+<li>000a01c3f0a9$3d701240$4501a8c0@waza.com.pl
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/mazovia;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug short-rsa2-key-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/short-rsa2-key-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug short-rsa2-key-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Short RSA2 key causes PuTTY crash<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.53b 2003-11-03<br>
+<p><pre>&quot;If I create a really short RSA2 key (I used 256 bits) it is generated and
+accepted OK, but the PuTTY code (CVS head, 22:00 GMT yesterday) segfaults.&quot;
+
+More detail: &lt;20031101102009.GA29907@chiark.greenend.org.uk&gt;
+(includes suspected root cause)
+
+(I&#x27;ve tested that DSA and RSA1 keys don&#x27;t suffer from the same problem.)
+
+-----
+More analysis:
+
+&gt; Looking at rsa2_sign(), if the RSA modulus of the key is too small, we
+&gt; can&#x27;t fit in the padding, ASN1 goop and hash, but the loop is merrily
+&gt; attempting to cram it all in anyway, overrunning the malloced block and
+&gt; (apparently) causing fruity stack badness.
+
+*nods* Yes, I managed to trace that much myself. The trouble is not
+that I don&#x27;t know the cause of the problem, but more that I don&#x27;t
+know how best to fix it.
+
+[...] the plausible options are (a) reject the key when PuTTY attempts
+to load it, or (b) return failure and a useful error message from
+the sign operation. I&#x27;m undecided between those two; (a) is nice
+from the point of view of detecting and reporting any error
+condition at the earliest possible moment, but (b) feels a little
+more robust since the check can be performed in the _same_ code that
+will then go and use the buffer space - so rather than having to
+keep two pieces of similar-looking code in sync, there&#x27;s just one
+piece of code which is likely to keep naturally in sync with itself.
+Either one, however, requires some infrastructure change to support,
+which is why I didn&#x27;t fix it before the 0.54 release.
+
+(Quite why anyone&#x27;s using 256-bit keys _anyway_ is beyond me, but
+these days no weird user behaviour is a surprise to me.)
+
+BJH21: I&#x27;ve added an assert() to the code so that the explosion when trying
+       to use a too-short key is more controlled. The signature of the
+       assertion failure looks something like this:
+
+         Assertion failed!
+
+         Program: putty.exe
+         File: ..\sshrsa.c
+         Line: 793
+         
+         Expression: 1 &lt;= nbytes - 20 - ASN1_LEN
+
+       It occurs to me that PuTTYgen really should warn (and maybe fail)
+       when asked to generate an ssh-rsa key that can&#x27;t possibly be used.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/short-rsa2-key-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-21 16:52:17 +0000)</div>
+
+</BODY></HTML>

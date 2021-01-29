@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish triple-click-wrap</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/triple-click-wrap.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish triple-click-wrap</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Perhaps triple-click select should take account of wrapped lines<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p><pre>&gt; But: while copying a word (double clicking) just at the wrapping edge
+&gt; really selects the complete wrapped word, copying a whole line (triple
+&gt; clicking) only selects a screen line and omits the part wrapped to next
+&gt; screen line ...
+
+Hmm. I&#x27;d call that a semi-bug at worst -- I don&#x27;t think there&#x27;s any
+pressing need for the triple-click selection to be a superset of the
+double-click selection. (When I ask for full lines that&#x27;s what I want,
+so I wouldn&#x27;t want the end of a wrapped word tacked on -- not that you
+were suggesting that.)
+
+However, the closest we have to a spec is xterm, and the xterm I
+have[1] will select multiple lines at once when wrapped, preserving
+the superset property. (I.e., if I have something wrapped over three
+physical lines, the triple-click mode will select either all three
+lines, or none of them.)
+
+Personally I&#x27;m not sure I have a strong opinion either way.
+
+    [1] RH XFree86 4.0.3-5, from Red Hat Linux 7.1
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/triple-click-wrap;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-21 16:52:17 +0000)</div>
+
+</BODY></HTML>

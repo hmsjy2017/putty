@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug scp-newline</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/scp-newline.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug scp-newline</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PSCP in SCP mode can try to write filenames containing newlines<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.70<br>
+<b>present-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d07d7d66f662b670a94c58e68a083f512e57e7a8">d07d7d66f662b670a94c58e68a083f512e57e7a8</a> 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=1d8b48fd22dbfd613e25eb20a3c29acb6f2abe88">1d8b48fd22dbfd613e25eb20a3c29acb6f2abe88</a> (0.72)<br>
+<p>
+PSCP, when it is using the SCP protocol (which is rare), can attempt
+to create filenames containing spurious newline characters, or
+wrongly complain that the server is requesting this. (This error was
+introduced shortly before 0.71 was released, and fixed shortly
+afterward.)
+
+<p>
+In most circumstances, PSCP will use the more modern SFTP protocol,
+which does not have this problem. The SCP protocol will only be used
+if the server doesn't appear to support SFTP (rare), or if the user
+explicitly specified the <tt>-scp</tt> option on the command line.
+
+<p>
+For instance, you might see this when copying a single file:
+
+<pre>$ ./pscp -scp remotehost:stoat .
+Keyboard-interactive authentication prompts from server:
+| Password:
+End of keyboard-interactive prompts from server
+warning: remote host tried to write  to a file called 'stoat
+'
+         when we requested a file called 'stoat'.
+         If this is a wildcard, consider upgrading to SSH-2 or using
+         the '-unsafe' option. Renaming of this file has been disallowed.
+stoat                     | 0 kB |   0.0 kB/s | ETA: 00:00:00 | 100%</pre>
+
+<p>
+Note the quote mark on a line on its own -- that shows a newline
+character is in the filename. In this case, PSCP knows the intended
+filename from the command line, so it grumbles and the local file is
+written out with a sensible filename. (The warning is spurious; the
+bug is that PSCP briefly forgot how the SCP protocol worked.)
+
+<p>
+It's worse when copying whole directories:
+
+<pre>$ ./pscp -r -scp remotehost:dir .
+Keyboard-interactive authentication prompts from server:
+| Password:
+End of keyboard-interactive prompts from server
+warning: remote host tried to write  to a file called 'dir
+'
+         when we requested a file called 'dir'.
+         If this is a wildcard, consider upgrading to SSH-2 or using
+         the '-unsafe' option. Renaming of this file has been disallowed.
+stoat
+                    | 0 kB |   0.0 kB/s | ETA: 00:00:00 | 100%</pre>
+
+<p>
+Here it's created a directory called <tt>dir</tt> (without a newline),
+but in this Unix example, the file(s) inside it have been created with
+a newline in the actual filename. This is an unusual thing to have in
+a filename, and might confuse other tools or be difficult to delete.
+
+<p>
+In the same case on Windows, the operating system simply refuses to
+create a file whose name contains a newline character:
+
+<pre>pscp: .\dir\stoat
+: Cannot create file</pre>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/scp-newline;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-22 20:55:50 +0000)</div>
+
+</BODY></HTML>

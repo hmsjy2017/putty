@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish key-mapping</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/key-mapping.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish key-mapping</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Generic key mapping facility<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <em><a href="portable-keyboard.html">portable-keyboard</a></em><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+We've resisted introducing generalised key remapping for some time,
+on the grounds that it's just too horrible, and also on the grounds
+that if we introduce a scripting language then key remapping could
+appear as a side benefit of that.
+
+<p>
+However, since scripting now looks likely to be a DLL plugin if
+it even happens at all, and since more and more people have written
+to tell us that there are more configurations in use for the
+<a href="function-keys.html">function keys</a> than we could possibly have dreamed of, I think we're
+eventually going to have to get round to doing a proper key
+remapping facility.
+
+<p>
+The major difficulty in this is that we want PuTTY to remain
+portable to other operating systems. So we're somehow going to have
+to split the keyboard processing down the middle, so that we have a
+platform-dependent half which converts Windows keyboard messages
+into a set of PuTTY standard key and modifier names, and then a
+platform-generic half which maps our standard key names into actual
+character sequences to be sent to the host.
+(See <a href="portable-keyboard.html">portable-keyboard</a> for
+further discussion of this problem.)
+
+<p>
+<b>SGT, 2006-05-24</b>: A user suggests that it would be nice when
+using some server-side applications (<code>irssi</code> in
+particular) to be able to configure the mouse scroll wheel to send
+scroll-up and scroll-down keypresses to the server. This seems to me
+to be best implemented by having a general key remapping layer and
+making it able to remap mouse events as well as key events. (This
+would also allow users to disable or reconfigure the normal mouse
+button behaviour as well if they disliked the default.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/key-mapping;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

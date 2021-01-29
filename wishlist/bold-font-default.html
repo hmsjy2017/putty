@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug bold-font-default</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/bold-font-default.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug bold-font-default</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Default bold text display accidentally changed, rendering &#x27;bold black&#x27; invisible<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: r9557 2012-06-09<br>
+<b>present-in</b>: r9559 2012-06-10 0.63<br>
+<b>fixed-in</b>: r10008 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=c0b6e0b9626baecab20ba6946dc26a75f187e2cf">c0b6e0b9626baecab20ba6946dc26a75f187e2cf</a> 2013-08-08 (0.64)<br>
+<p>
+In 0.63, the default behaviour for bold text was inadvertently changed
+from changing the colour to changing the font. This change takes
+effect only when not using a session saved with a previous version of
+PuTTY.
+
+<p>
+It can easily be changed back by selecting 'Indicate bolded text by
+changing: The colour' on the Colours panel. Any sessions saved with
+0.63 may need this adjustment.
+
+<p>
+Some server applications rely on 'bold black' text being
+distinguishable from a black background; so one consequence of this
+bug is that such text is rendered entirely invisible.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/bold-font-default;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

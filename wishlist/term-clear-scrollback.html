@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish term-clear-scrollback</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/term-clear-scrollback.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish term-clear-scrollback</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Server-controlled clearing of the scrollback<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: r6847 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=9c954238bdfe001e418085f3fc9f4c741e29f910">9c954238bdfe001e418085f3fc9f4c741e29f910</a> 2006-09-06 (0.59)<br>
+<p>
+It would sometimes be nice to be able to clear PuTTY's scrollback from
+the server (via an escape sequence). Example applications:
+<ul>
+<li>Terminal locking software (e.g. <tt>screen</tt>'s C-a C-x) could
+issue this escape sequence.</li>
+<li>If a lot of output is generated it makes use of the scrollback as
+a poor man's <tt>less</tt> easier.</li>
+</ul>
+
+<p>Recent versions of <code>xterm</code> use an extension to ED to do
+this, in the form of CSI <code>3</code> <code>J</code>.  We could do
+the same.
+<ul>
+<li>For avoidance of doubt, this sequence <em>only</em> clears the
+scrollback in xterm - it doesn't have any other effect.
+(It was added to Thomas Dickey's <code>xterm</code> in
+<a href="http://dickey.his.com/xterm/xterm.log.html#xterm_107">patch 107</a>;
+it is documented in <code>ctlseqs.ms</code> as "Erase Saved Lines
+(xterm)".)
+<li><em>Update, 2006-09-06:</em> this sequence is implemented in
+PuTTY as of today's snapshot.
+</ul>
+
+<p>
+It's been suggested that screen clears could do this. If so, it would
+have to be configurable, and disabled by default.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/term-clear-scrollback;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

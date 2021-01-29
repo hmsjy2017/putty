@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug kbdint-failure</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/kbdint-failure.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug kbdint-failure</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Keyboard-interactive authentication only permits one try<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.56<br>
+<b>fixed-in</b>: 2005-01-08 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=550f7b37cb7dbe0dcd68d2ac2c3b529e643599b3">550f7b37cb7dbe0dcd68d2ac2c3b529e643599b3</a> (0.58)<br>
+<p>
+It's been observed that SSH-2 "keyboard-interactive" authentication in
+PuTTY only permits one attempt at authentication before falling back
+to other forms of authentication, such as password-based. If no other
+methods are supported by the server, PuTTY will bomb out with the
+message "No supported authentication methods left to try!".
+
+<p>
+This has been exacerbated recently as several distributions are
+configuring OpenSSH to use k-i for even basic password authentication
+these days, and not enabling PasswordAuthentication at all by default.
+
+<p>
+As of 2005-01-08, PuTTY will continue to attempt keyboard-interactive
+authentication as long as the server continues to offer it, in
+preference to password authentication, unless the server refuses it
+outright. (If you need to get past k-i, you can disable attempts to
+use keyboard-interactive entirely on the "Auth" panel.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/kbdint-failure;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

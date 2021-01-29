@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug xp-wont-run</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/xp-wont-run.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug xp-wont-run</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Fails to run on some versions of Windows XP<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.57<br>
+<b>present-in</b>: 0.58<br>
+<b>fixed-in</b>: 2005-04-07 r5604 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=a53aa4051a4ad9310ff474414d4ca86c2009e337">a53aa4051a4ad9310ff474414d4ca86c2009e337</a> (0.59)<br>
+<p>
+PuTTY 0.58 utterly fails to run on some
+(but not all) versions of Windows XP, with the following error
+message:
+
+<blockquote>
+The application has failed to start because the
+application configuration is incorrect. Reinstalling the
+application may fix this problem.
+</blockquote>
+
+<p>or (in German):
+
+<blockquote>
+Diese Anwendung konnte nicht gestartet werden, weil die Anwenungskonfiguration 
+nicht korrekt ist. Zur Problembehebung sollten Sie die Anwendung neu
+installieren.
+</blockquote>
+
+(the word 'Anwenungskonfiguration' is apparently a misspelling which
+occurs in the original error message; it should apparently be
+'Anwen<b>d</b>ungskonfiguration'.)
+
+<p>or (in Dutch):
+
+<blockquote>
+De toepassing kan niet worden gestart omdat de configuratie van de
+toepassing onjuist is. Het opnieuw installeren van de toepassing kan die
+probleem oplossen.
+</blockquote>
+
+<p>or (in Portuguese):
+
+<blockquote>
+Falha na inicialização do aplicativo devido a configuração
+incorreta. A reinstalação do aplicativo pode resolver o problema.
+</blockquote>
+
+<p>
+(Reinstalling PuTTY does not fix the problem.)
+
+<p>
+As far as we can tell, this problem only affects Windows XP systems that
+don't have Service Pack 2 installed.  In particular, we've had reports
+that installing SP2 solves the problem.
+
+<p>
+This is due to a trim I (JTN) made to the
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sbscs/setup/application_manifests.asp">application manifests</a>;
+the trimmed version conformed to Microsoft's specifications, and
+we tested it on one XP install (SP1), but it seems not all XP installs
+are born equal in this regard.
+
+<p>
+It affects only the graphical utilities (PuTTY, PuTTYtel,
+PuTTYgen, and Pageant).
+
+<p>
+If you run into this, we recommend upgrading to PuTTY 0.59 or
+later, which do not suffer from this problem.
+
+<p>
+If you really <em>must</em> use 0.58, you can still fix the problem
+with a separate manifest file. If you download the following files,
+rename them as indicated, and put them in the same directory as the
+relevant 0.58 executable, they should override the application
+manifests and allow them to run.
+<ul>
+<li><tt><a href="https://git.tartarus.org/?p=simon/putty.git;a=blob_plain;f=windows/putty.mft;hb=a53aa4051a4ad9310ff474414d4ca86c2009e337">putty.mft</a></tt>:
+rename to <tt>putty.exe.manifest</tt> (or
+<tt>puttytel.exe.manifest</tt>)
+<li><tt><a href="https://git.tartarus.org/?p=simon/putty.git;a=blob_plain;f=windows/puttygen.mft;hb=a53aa4051a4ad9310ff474414d4ca86c2009e337">puttygen.mft</a></tt>:
+rename to <tt>puttygen.exe.manifest</tt>
+<li><tt><a href="https://git.tartarus.org/?p=simon/putty.git;a=blob_plain;f=windows/pageant.mft;hb=a53aa4051a4ad9310ff474414d4ca86c2009e337">pageant.mft</a></tt>:
+rename to <tt>pageant.exe.manifest</tt>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/xp-wont-run;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

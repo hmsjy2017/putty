@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish rsa-verify-failed</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/rsa-verify-failed.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish rsa-verify-failed</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Occasional `Access denied&#x27; / `RSA_verify failed&#x27; (OpenSSH bug)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>fixed-in</b>: 2002-06-01 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=858441ba81ee4cd7945f116f8734fd727a83595a">858441ba81ee4cd7945f116f8734fd727a83595a</a> 0.53<br>
+<p>
+With SSH-2, OpenSSH (various versions), RSA public key, key
+authentication has been reported to occasionally and randomly fail
+with an `Access denied' message. A message like the following is
+written in the server's log:
+
+<pre>error: ssh_rsa_verify: RSA_verify failed:
+    error:04077077:lib(4):func(119):reason(119)</pre>
+
+<p>
+which apparently resolves to "the <tt>RSA_verify()</tt> function in
+SSL telling [us] <tt>RSA_R_WRONG_SIGNATURE_LENGTH</tt>".
+
+<p>
+<b>SGT, 2002-05-30</b>:
+This is in fact not a complex bignum bug in PuTTY, but is a simple
+disagreement between PuTTY and OpenSSH about the correct way to pad
+RSA signatures in SSH-2. It appears that the draft RFC is on our
+side, so this is a bug in OpenSSH, apparently caused by their
+RSA-for-SSH-2 implementation being done before the specification was
+finalised. They say they'll fix it for OpenSSH 3.3.
+
+<p>
+As of 2002 Jun 1, PuTTY will detect OpenSSH versions which have the
+bug and pad its signatures appropriately for those versions.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/rsa-verify-failed;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

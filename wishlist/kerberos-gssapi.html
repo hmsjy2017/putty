@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish kerberos-gssapi</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/kerberos-gssapi.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish kerberos-gssapi</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for GSSAPI (for Kerberos, GSI, etc)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: r8952 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=99fffd6ed357d25a228637be173e8187746b6b77">99fffd6ed357d25a228637be173e8187746b6b77</a> 2010-05-20 (0.61)<br>
+<p>
+We occasionally get requests for Kerberos and/or GSSAPI support.
+
+<p>
+This looks complicated and messy.
+
+<p>
+Any proposed solution should take into account our
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixD.html">design guidelines</a>
+to be even considered for inclusion. In particular, some submissions
+have not taken into account PuTTY's cross-platform nature.
+
+<p>
+In SSH-2, Kerberos is supported through
+<a href="http://www.faqs.org/faqs/kerberos-faq/general/section-84.html">
+GSSAPI</a>;
+<a href="http://www.ietf.org/rfc/rfc4462.txt">RFC 4462</a>
+(formerly <tt><a href="http://tools.ietf.org/wg/secsh/draft-ietf-secsh-gsskeyex/">draft-ietf-secsh-gsskeyex</a></tt>)
+describes GSSAPI key exchange and user authentication in SSH-2.
+(Some of the patches here appear to be based
+on earlier versions of this specification, for instance the userauth
+method "gssapi".)
+
+<p>
+It appears that Globus <a href="http://www.globus.org/security/overview.html">
+GSI</a> authentication also uses GSSAPI, though for some reason needs
+a different client implementation (and yet a third if you want to support
+both).
+
+<p>Patches we've seen (links are on our <a href="../links.html">Links page</a>):
+
+<ul>
+
+<li>Certified Security Solutions have a patched
+version of PuTTY which supports Kerberos 5 in SSH-1 and GSSAPI key
+exchange and user authentication in SSH-2. For GSSAPI, Win9x/NT
+require the 
+<a href="http://web.mit.edu/kerberos/www/dist/index.html">MIT Kerberos library</a>;
+Win2K/XP can use Microsoft SSPI.
+
+<li>
+Another patch (unreviewed): <tt>1067597353.3fa23e29bf70c@webmail.technion.ac.il</tt>
+<br>User authentication; <tt>secur32.lib</tt> (Windows) /
+<tt>krb5-config</tt> (Unix)
+
+<li>
+Another patch from sweb.cz adds support
+for GSSAPI user authentication using the MIT Kerberos library. (A
+previous version of this patch has been reviewed and found wanting.)
+
+<li>
+Yet another patch: Quest PuTTY (formerly Vintela PuTTY)
+<br>3-term BSD licence; GSSAPI (Kerberos-specific?) user
+authentication using MS SSPI; not thoroughly reviewed but doesn't look
+hopeful
+
+</ul>
+
+<p>
+Binary-only versions:
+
+<ul>
+
+<li>
+Centrify provide a
+<a href="http://www.centrify.com/resources/putty.asp">modified version of PuTTY</a>
+which uses the Windows SSPI for GSSAPI support. It includes features
+specific to their other products.
+
+</ul>
+
+<hr>
+
+<em>Update:</em> some forms of Kerberos support are now implemented:
+
+<ul>
+<li>As of 2008-08-10, r8138: support for Kerberos user authentication in
+  SSH-2 using a single library (SSPI in Windows, build-time choice on Unix);
+<li>As of 2010-05-20, r8952: support for multiple libraries with choice
+  at run time; Windows builds now support
+  <a href="http://web.mit.edu/Kerberos/">MIT Kerberos</a> in addition to SSPI.
+</ul>
+  
+Things not done:
+
+<ul>
+<li>GSSAPI key exchange <i>[implemented much later, see <a href="gss-key-exchange.html">gss-key-exchange</a>]</i>;
+<li>Any authentication protocol other than Kerberos;
+<li>SSH-1 support (we are very unlikely to do anything about this; SSH-1
+is obsolete).
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/kerberos-gssapi;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2018-05-20 14:07:14 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug msproxy-denied</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/msproxy-denied.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug msproxy-denied</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Connections through MS Proxy Server (HTTP) are spuriously denied<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.53b 2002-12-30<br>
+<b>fixed-in</b>: 2003-03-19 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=7f84c9f2da8bdf600b11f330d4cae6de2913d7eb">7f84c9f2da8bdf600b11f330d4cae6de2913d7eb</a> (0.54)<br>
+<p>Original report (<007801c2b108$5ad5a200$33db8ad8@alexin.ca>):
+<p>
+<pre>
+I believe I have found a bug in Win32 putty .53b. (found in Win2000,
+also tested current dev binary).  I am connection to a NetBSD server 1.6
+running OpenSSH 3.4 on port 443, but had the same problem on an OpenBSD
+server with OpenSSH 3.4.
+
+I am connecting through an authenticated Microsoft Proxy server v2 on
+Windows 2000, using HTTP proxy services.
+
+
+Using Putty, the connection conversation is: 
+
+ CONNECT 216.138.219.54:443 HTTP/1.1
+ Host: 216.138.219.54:443
+ Proxy-Authorization: basic YW1leeljYXNcc3RldmVfYmFya2V5OmluZXNzMTA=
+
+ HTTP/1.1 407 Proxy Access Denied
+ Server: Microsoft-IIS/5.0
+ Date: Tue, 31 Dec 2002 19:32:43 GMT
+ Connection: close
+ Proxy-Authenticate: Negotiate
+ Proxy-Authenticate: NTLM
+ Proxy-Authenticate: Basic realm="53.244.73.245"
+
+And the connection fails with putty event log: 
+"2002-12-31 14:48:08    Connecting to 216.138.219.54 port 443
+2002-12-31 14:48:08     Proxy error: 407 Proxy Access Denied"
+
+
+Using MindTerm 2.0 (an inferior java ssh client), the connection
+conversation is:
+
+ CONNECT 216.138.219.54:443 HTTP/1.0
+ proxy-connection: Keep-Alive
+ pragma: No-Cache
+ user-agent: MindTerm/$Name:  $
+
+ HTTP/1.1 407 Proxy Access Denied
+ Server: Microsoft-IIS/5.0
+ Date: Tue, 31 Dec 2002 19:33:05 GMT
+ Proxy-Authenticate: Negotiate
+ Proxy-Authenticate: NTLM
+ Proxy-Authenticate: Basic realm="53.244.73.245"
+
+----------- and then -----------
+
+ CONNECT 216.138.219.54:443 HTTP/1.0
+ proxy-authorization: Basic YW1leeljYXNcc3RldmVfYmFya2V5OmluZXNzMTA=
+
+ proxy-connection: Keep-Alive
+ pragma: No-Cache user-agent: MindTerm/$Name:  $
+
+ HTTP/1.1  200 Connection established
+ Via: 1.1 YYZXPROXY01
+
+ SSH-1.99-OpenSSH_3.4 NetBSD_Secure_Shell-20020626
+ SSH-2.0-MindTerm_2.0 2.0 (non-commercial)
+ 
+... encrypted, successful connection ....
+</pre>
+
+<p>Another user has experimented with this, and concluded that the problem is
+that the proxy insists that the authentication scheme be "<code>Basic</code>"
+rather than "<code>basic</code>".
+<a href="ftp://ftp.rfc-editor.org/in-notes/rfc2617.txt">RFC 2617</a>
+states that the scheme token is case-insensitive, but in the interests of
+being conservative in what we send, PuTTY should probably use
+"<code>Basic</code>".
+<p>This bug should be fixed as of proxy.c rev 1.27.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/msproxy-denied;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug assert-fail-newsavelines</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/assert-fail-newsavelines.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug assert-fail-newsavelines</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Failed assertion: count234(term-&gt;scrollback) &lt;= newsavelines<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.55 0.58<br>
+<p>
+We've had occasional reports of the failure of the following assertion:
+
+<p>terminal.c:559 (0.55), :454 (0.58)
+<br>count234(term->scrollback) <= newsavelines
+
+<p>
+Most of the reports we've had seem to also include a CPU-intensive delay at
+connection startup (possibly at other times too).
+
+<p>
+The only way we've found to reproduce this assertion failure is by configuring
+a <em>negative</em> number of lines in the scrollback. If the magnitude of
+the negative number is large, we see the delay at startup too.
+
+<p>
+On some platforms (including Windows), a very large <em>positive</em>
+scrollback setting can end up treated as a negative one, triggering this.
+This can happen for scrollback sizes of 2<sup>31</sup> (2147483648) or
+greater. (You'd probably run out of physical memory before filling up
+such a ridiculously large scrollback buffer!) So don't do that, then.
+
+<p>
+We should probably be robust against silly configurations like this.
+
+<p>
+(Possibly related, although we've no hard evidence for this:
+<a href="assert-line-not-null.html">assert-line-not-null</a>.)
+
+<ul>
+
+<li><tt>OFA8A74C15.A4B5BE13-ON65256EF4.00210ED6-80256EF4.003C2FE1@in.ibm.com</tt>
+<br>Telnet
+
+<li><tt>2872.66.167.58.15.1094144958.squirrel@66.167.58.15</tt>
+<br>0.55, "09-02-2004"; SSH
+
+<li><tt>F0652A9934B81649B13293685D1945E90199B261@WHQNT60.AAM.NET</tt>
+<br>0.58, SSH, very large scrollback setting
+
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/assert-fail-newsavelines;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

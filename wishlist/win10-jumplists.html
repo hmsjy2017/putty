@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win10-jumplists</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win10-jumplists.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win10-jumplists</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Pinned/Recent Sessions UI feature doesn&#x27;t work on Windows 10<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>present-in</b>: 0.63 0.64 0.65<br>
+<b>fixed-in</b>: 2015-08-07 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8bf5c1b31f1a1449d694e3604e293b0831eb2657">8bf5c1b31f1a1449d694e3604e293b0831eb2657</a> 0.66<br>
+<p>
+We've had several reports (since before the release of Windows 10) that
+the <a href="win7-jumplists.html">"jump lists"</a> UI feature
+(Pinned/Recent Sessions available from the taskbar button) doesn't work
+on Windows 10. The list is present, but selecting an item from it
+reportedly launches the PuTTY configuration dialog rather than the
+desired session.
+
+<p>
+We've
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8bf5c1b31f1a1449d694e3604e293b0831eb2657">applied a workaround discovered by a correspondent</a>
+to the post-0.65 development snapshots, but we don't know why this works.
+
+<p>
+We don't currently have access to Windows 10 to debug this ourselves.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win10-jumplists;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

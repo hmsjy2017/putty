@@ -1,0 +1,730 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>Download PuTTY: release 0.71</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/releases/0.71.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>Download PuTTY: release 0.71</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="../wishlist/">Wishlist</a>
+</p>
+
+
+<p>
+This page contains
+download links for
+PuTTY release 0.71.
+
+<p>
+0.71, released on 2019-03-16, is <em>not</em> the latest release.
+See the
+<a href="../latest.html">Latest Release page</a>
+for the most up-to-date release (currently 0.74).
+
+
+<p>
+Past releases of PuTTY are versions we thought were reasonably likely
+to work well, at the time they were released. However, later releases
+will almost always have fixed bugs and/or added new features. If you
+have a problem with this release, please try
+the <a href="../latest.html">latest release</a>,
+to see if the problem has already been fixed.
+
+
+<h2 class="securityboxtop">SECURITY WARNING</h2>
+<div class="securityboxbottom">
+<p class="securityboxbottomfirst">
+This release has known security vulnerabilities.
+Consider using a later release instead, such as the <a href="../latest.html">latest version, 0.74</a>.
+</p>
+<p>
+The known vulnerabilities in this release are:
+<ul class="securityboxbottomlast"><li><a href="../wishlist/vuln-agent-keylist-used-after-free.html">vuln-agent-keylist-used-after-free</a> (fixed in release 0.74)
+<li><a href="../wishlist/vuln-dynamic-hostkey-info-leak.html">vuln-dynamic-hostkey-info-leak</a> (fixed in release 0.74)
+<li><a href="../wishlist/vuln-ssh1-buffer-length-underflow.html">vuln-ssh1-buffer-length-underflow</a> (fixed in release 0.72)
+<li><a href="../wishlist/vuln-ssh1-short-rsa-keys.html">vuln-ssh1-short-rsa-keys</a> (fixed in release 0.72)
+<li><a href="../wishlist/vuln-win-exclusiveaddruse.html">vuln-win-exclusiveaddruse</a> (fixed in release 0.73)
+<li><a href="../wishlist/vuln-win-pageant-client-missing-length-check.html">vuln-win-pageant-client-missing-length-check</a> (fixed in release 0.72)
+</ul>
+</div>
+
+<h2 class="
+downloadtop downloadinsecuretopcolour
+">Package files</h2>
+<div class="
+downloadbottom downloadinsecurebotcolour
+">
+
+<p>You probably want one of these. They include versions of all the
+PuTTY utilities.
+
+
+<p>(Not sure whether you want the 32-bit or the 64-bit version? Read the
+<a href="../faq.html#faq-32bit-64bit">FAQ entry</a>.)</p>
+
+
+<div class="downloadheading">MSI (&lsquo;Windows Installer&rsquo;)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/putty-0.71-installer.msi"><code>putty-0.71-installer.msi</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/putty-0.71-installer.msi">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/putty-0.71-installer.msi.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/putty-64bit-0.71-installer.msi"><code>putty-64bit-0.71-installer.msi</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/putty-64bit-0.71-installer.msi">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/putty-64bit-0.71-installer.msi.gpg">(signature)</a></span>
+</div>
+
+
+
+<div class="downloadheading">Unix source archive</div>
+
+
+
+<div class="downloadrow">
+<span class="downloadname"><code>.tar.gz</code>:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty-0.71.tar.gz"><code>putty-0.71.tar.gz</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/putty-0.71.tar.gz">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty-0.71.tar.gz.gpg">(signature)</a></span>
+</div>
+
+
+</div>
+
+
+<h2 class="
+downloadtop downloadinsecuretopcolour
+">Alternative binary files</h2>
+<div class="
+downloadbottom downloadinsecurebotcolour
+">
+
+<p>The installer packages above will provide versions of all of these
+(except PuTTYtel), but you can download standalone binaries one
+by one if you prefer.</p>
+
+<p>(Not sure whether you want the 32-bit or the 64-bit version? Read the
+<a href="../faq.html#faq-32bit-64bit">FAQ entry</a>.)</p>
+
+
+<div class="downloadheading"><code>putty.exe</code> (the SSH and Telnet client itself)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/putty.exe"><code>putty.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/putty.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/putty.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/putty.exe"><code>putty.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/putty.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/putty.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>pscp.exe</code> (an SCP client, i.e. command-line secure file copy)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/pscp.exe"><code>pscp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/pscp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/pscp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/pscp.exe"><code>pscp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/pscp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/pscp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>psftp.exe</code> (an SFTP client, i.e. general file transfer sessions much like FTP)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/psftp.exe"><code>psftp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/psftp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/psftp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/psftp.exe"><code>psftp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/psftp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/psftp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>puttytel.exe</code> (a Telnet-only client)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/puttytel.exe"><code>puttytel.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/puttytel.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/puttytel.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/puttytel.exe"><code>puttytel.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/puttytel.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/puttytel.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>plink.exe</code> (a command-line interface to the PuTTY back ends)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/plink.exe"><code>plink.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/plink.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/plink.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/plink.exe"><code>plink.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/plink.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/plink.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>pageant.exe</code> (an SSH authentication agent for PuTTY, PSCP, PSFTP, and Plink)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/pageant.exe"><code>pageant.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/pageant.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/pageant.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/pageant.exe"><code>pageant.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/pageant.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/pageant.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>puttygen.exe</code> (a RSA and DSA key generation utility)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/puttygen.exe"><code>puttygen.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/puttygen.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/puttygen.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/puttygen.exe"><code>puttygen.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/puttygen.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/puttygen.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading"><code>putty.zip</code> (a .ZIP archive of all the above)</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/putty.zip"><code>putty.zip</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w32/putty.zip">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w32/putty.zip.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/putty.zip"><code>putty.zip</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/w64/putty.zip">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/w64/putty.zip.gpg">(signature)</a></span>
+</div>
+
+
+</div>
+
+
+<h2 class="
+downloadtop downloadinsecuretopcolour
+">Documentation</h2>
+<div class="
+downloadbottom downloadinsecurebotcolour
+">
+
+
+<div class="downloadheading">Browse the documentation on the web</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">HTML:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/htmldoc/">Contents page</a></span>
+</div>
+
+
+<div class="downloadheading">Downloadable documentation</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">Zipped HTML:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/puttydoc.zip"><code>puttydoc.zip</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/puttydoc.zip">(or by FTP)</a>
+</span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">Plain text:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/puttydoc.txt"><code>puttydoc.txt</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/puttydoc.txt">(or by FTP)</a>
+</span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">Windows HTML Help:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty.chm"><code>putty.chm</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/putty.chm">(or by FTP)</a>
+</span>
+</div>
+
+
+</div>
+
+
+<h2 class="
+downloadtop downloadinsecuretopcolour
+">Source code</h2>
+<div class="
+downloadbottom downloadinsecurebotcolour
+">
+
+
+<div class="downloadheading">Unix source archive</div>
+
+
+<div class="downloadrow">
+<span class="downloadname"><code>.tar.gz</code>:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty-0.71.tar.gz"><code>putty-0.71.tar.gz</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/putty-0.71.tar.gz">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty-0.71.tar.gz.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading">Windows source archive</div>
+
+
+<div class="downloadrow">
+<span class="downloadname"><code>.zip</code>:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty-src.zip"><code>putty-src.zip</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/putty-src.zip">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/putty-src.zip.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadheading">git repository</div>
+
+<div class="downloadrow">
+<span class="downloadname">Clone:</span>
+<span class="downloadgitlink"><code>https://git.tartarus.org/simon/putty.git</code></span>
+</div>
+<div class="downloadrow">
+<span class="downloadname">gitweb:</span>
+<span class="downloadgitlink"><a href="https://git.tartarus.org/?p=simon/putty.git">main</a>
+| <a href="https://git.tartarus.org/?p=simon/putty.git;a=commit;h=refs/tags/0.71"><code>0.71</code> release tag</a>
+</span>
+</div>
+
+</div>
+
+<h2 class="
+downloadtop downloadinsecuretopcolour
+">Downloads for Windows on Arm</h2>
+
+<div class="
+downloadbottom downloadinsecurebotcolour
+">
+
+<p>Compiled executable files for Windows on Arm. These are believed to
+work, but as yet, they have had minimal testing.
+
+
+<div class="downloadheading">Windows on Arm installers</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/putty-arm64-0.71-installer.msi"><code>putty-arm64-0.71-installer.msi</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/putty-arm64-0.71-installer.msi">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/putty-arm64-0.71-installer.msi.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/putty-arm32-0.71-installer.msi"><code>putty-arm32-0.71-installer.msi</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/putty-arm32-0.71-installer.msi">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/putty-arm32-0.71-installer.msi.gpg">(signature)</a></span>
+</div>
+
+
+
+<div class="downloadheading">Windows on Arm individual executables</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/putty.exe"><code>putty.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/putty.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/putty.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/pscp.exe"><code>pscp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/pscp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/pscp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/psftp.exe"><code>psftp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/psftp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/psftp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/puttytel.exe"><code>puttytel.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/puttytel.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/puttytel.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/plink.exe"><code>plink.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/plink.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/plink.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/pageant.exe"><code>pageant.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/pageant.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/pageant.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/puttygen.exe"><code>puttygen.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/puttygen.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/puttygen.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/putty.exe"><code>putty.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/putty.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/putty.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/pscp.exe"><code>pscp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/pscp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/pscp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/psftp.exe"><code>psftp.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/psftp.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/psftp.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/puttytel.exe"><code>puttytel.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/puttytel.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/puttytel.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/plink.exe"><code>plink.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/plink.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/plink.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/pageant.exe"><code>pageant.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/pageant.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/pageant.exe.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/puttygen.exe"><code>puttygen.exe</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/puttygen.exe">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/puttygen.exe.gpg">(signature)</a></span>
+</div>
+
+
+
+<div class="downloadheading">Zip file of all Windows on Arm executables</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">64-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/putty.zip"><code>putty.zip</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa64/putty.zip">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa64/putty.zip.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">32-bit Arm:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/putty.zip"><code>putty.zip</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/wa32/putty.zip">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/wa32/putty.zip.gpg">(signature)</a></span>
+</div>
+
+
+</div>
+
+
+
+
+
+<h2 class="
+downloadtop downloadinsecuretopcolour
+">Checksum files</h2>
+<div class="
+downloadbottom downloadinsecurebotcolour
+">
+
+
+<div class="downloadheading">Cryptographic checksums for all the above files</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">MD5:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/md5sums"><code>md5sums</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/md5sums">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/md5sums.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">SHA-1:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/sha1sums"><code>sha1sums</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/sha1sums">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/sha1sums.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">SHA-256:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/sha256sums"><code>sha256sums</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/sha256sums">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/sha256sums.gpg">(signature)</a></span>
+</div>
+
+
+<div class="downloadrow">
+<span class="downloadname">SHA-512:</span>
+<span class="downloadfile"><a href="https://the.earth.li/~sgtatham/putty/0.71/sha512sums"><code>sha512sums</code></a></span>
+<span class="downloadftp">
+<a href="ftp://ftp.chiark.greenend.org.uk/users/sgtatham/putty-0.71/sha512sums">(or by FTP)</a>
+</span>
+<span class="downloadsig"><a href="https://the.earth.li/~sgtatham/putty/0.71/sha512sums.gpg">(signature)</a></span>
+</div>
+
+
+</div>
+
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+(last modified on <!--LASTMOD-->Sun Nov 22 22:29:06 2020<!--END-->)
+</BODY></HTML>

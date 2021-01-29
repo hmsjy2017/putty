@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug flow-control</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/flow-control.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug flow-control</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Be cleverer with SSH-2 flow control to improve bulk throughput<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2007-09-25 r7735 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=22f9618deb4f7ad93e1204f669900d84b45f30c8">22f9618deb4f7ad93e1204f669900d84b45f30c8</a> (0.61)<br>
+<p>
+(This wish applies to SSH-2; SSH-1 doesn't provide flow control above
+TCP's.)
+
+<p>As Peter Gutmann has
+<a href="http://www.cs.auckland.ac.nz/~pgut001/pubs/app_sec.pdf">observed</a>,
+naive implementations of the SSH-2 sliding window protocol place an arbitrary
+limit on the throughput of each channel, limiting it to the product of the
+window size and the round-trip time (the so-called "SSH-2 handbrake").
+PuTTY is one such naive implementation (it uses a fixed channel window size
+of 16k).
+
+<p>There are various things that could be done to work around this.  In an
+ideal world, PuTTY would measure the bandwidth-delay product of the link it's
+running over and use that to set the window so as to fully use the available
+bandwidth without completely breaking flow control.  A rather simpler approach
+is possible where a connection only has (and only ever will have) one channel
+running over it, since in that case PuTTY can open the window fully and leave
+flow control to TCP.  This is covered by
+<a href="flow-control-filexfer.html">flow-control-filexfer</a>.
+
+<p>
+Of course, things become more complicated if multiple channels were to be used
+(e.g., port-forwarding of bulk transfers, or some of the wilder excesses of
+<a href="ssh2-generality.html">SSH-2 generality</a>).
+
+<p>As of 2007-09-25, PuTTY has much improved window handling.  From the
+commit message:
+
+<blockquote>
+<p>The basic idea is that when the connection isn't being limited by our ability
+to process data, we want to ensure that the window size <em>as seen by the server</em>
+never drops to zero.  Measuring the server's view of the window size is done
+by arranging for it to acknowledge every SSH_MSG_CHANNEL_WINDOW_ADJUST, or 
+rather an SSH_MSG_CHANNEL_REQUEST
+[<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixF.html#sshnames-channel">winadj@putty.projects.tartarus.org</a>]
+sent just before it.  That way we can tell
+when it its outgoing data stream it recieved the window adjustment, and
+thus how small the server's view of the window got.
+
+<p>At present, we only ever increase the window size.  In theory, we could
+arrange to reduce it again if the server's view of it seemed to be persistently
+too large, but my experiments suggest that getting this right will be tricky.
+</blockquote>
+
+<p>
+Knock-on effects of this change:
+<ul>
+<li>The new channel requests emitted by PuTTY as part of this change
+can cause a lot of noise in the logs of the OpenSSH server -- 
+"<tt>sshd[6386]: session_input_channel_req: no session 1 req
+winadj@putty.projects.tartarus.org</tt>". This should be mitigated as of
+<a href="https://bugzilla.mindrot.org/show_bug.cgi?id=1395">OpenSSH 5.1</a>.
+</li>
+<li>The frequent new channel requests exposed a bug in the
+<a href="http://matt.ucc.asn.au/dropbear/dropbear.html">Dropbear</a>
+SSH server, leading to PuTTY terminating sessions with a "Received
+SSH2_MSG_CHANNEL_FAILURE for nonexistent channel" message. This bug
+has been fixed in new versions of Dropbear (probably
+<a href="http://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2008q4/000831.html">0.52</a>
+onwards).</li>
+</ul>
+
+<p>
+Another approach (not taken): the Pittsburgh Supercomputing Center
+<a href="http://www.psc.edu/networking/hpn-ssh/">suggest</a>
+that basing the SSH window size on the TCP window size from the
+underlying OS can help in some circumstances.  This would only
+be valid where the SSH and TCP connections are coterminous, with no
+tunnelling taking place.
+
+<p>
+If this is done, some higher-level protocols could probably benefit
+from similar adaptation -- notably SFTP, which since it was
+<a href="sftp-slow.html">sped up</a> has also used a 16k "window size"
+of its own for bulk transfers. We've had improvement reported from
+tweaking this and the SSH-2 channel window size on a 100Mbit network
+(ref <tt>41A6366F.9030909@enriva.com</tt>).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/flow-control;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish session-icon</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/session-icon.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish session-icon</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Custom, per-session configurable icons<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Yet another means of distinguishing multiple PuTTY sessions: replacing
+the normal PuTTY window/taskbar icon with a different one, on a
+per-session basis.
+
+<p>
+Technically, the hardest bit of this I see is implementing an icon
+chooser. As far as I know there's no convenient icon chooser in Common
+Controls or Common Dialogs that we could use. Implementing one
+ourselves seems like a lot of work and would also bloat PuTTY.
+
+<p>
+An alternative would be to only allow a file to be picked, and take
+the first icon in the file, but that's a bit naff.
+
+<ul>
+<li><em>Update:</em> There is an interface (only
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnapiover/html/api-overview.asp">recently documented</a>)
+to get at Windows' icon chooser from <code>SHELL32.DLL</code>, called
+<a href="http://www.codeproject.com/shell/selecticon.asp"><code>PickIconDlg</code></a>;
+there's some faff involved but it does appear to be
+<a href="http://www.partware.com/ebooks/api/ref/p/pickicondlg.html">available
+across a wide range of Windows versions</a>. (Not sure about Win32s.)
+</ul>
+
+<p>
+<a href="http://putty.dwalin.ru">TuTTY</a> implements something like this.
+
+<p>
+Also, we already have various means of distinguishing sessions, and we
+keep getting asked for more. If we added them all, PuTTY would
+balloon.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/session-icon;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2005-10-08 19:32:48 +0000)</div>
+
+</BODY></HTML>

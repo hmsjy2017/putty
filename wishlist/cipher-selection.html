@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish cipher-selection</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/cipher-selection.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish cipher-selection</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Cipher selection UI is messy and irrational<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>present-in</b>: 0.60<br>
+<p><pre>NB: These are largely BJH&#x27;s thoughts.
+
+The current UI for selecting crypto algorithms for SSH is a mess, and
+neither permits nor encourages the user to make rational choices between
+algorithms.  Amongst other failings:
+
+* Algorithms of widely differing strengths are grouped together, so AES-128
+  and AES-256 are treated precisely the same.
+* The requested group size for DH GEX is fixed.
+* The selections for the various types of algorithm are entirely independent.
+* There&#x27;s no choice of MAC algorithm at all.
+
+To my mind, the important aspect of cipher selection is how much security
+the user wants, and how much speed they&#x27;re willing to lose to get it.
+I&#x27;d thus suggest having two basic controls:
+
+1: desired security level, in bits.
+2: option of preferring security over speed, or vice versa.
+
+In the case where the user prefers security, PuTTY would simply list all
+of its algorithms in order of decreasing security and warn if one below
+the threshold was used.  Where the user prefers speed, PuTTY would list
+algorithms that match the security level in order of speed first, and then
+the rest in order of security, again warning if the requested level was
+not met.
+
+DH GEX parameters can be chosen either based on the user&#x27;s selections or,
+more usefully, based on the algorithms actually negotiated.
+
+NIST Special Publication 800-57 provides convenient mapping between
+symmetric and asymmetric strengths.  It suggests:
+
+ 80 bits ==  1024-bit RSA/DSA/DH
+112 bits ==  2048-bit RSA/DSA/DH
+128 bits ==  3072-bit RSA/DSA/DH
+192 bits ==  7680-bit RSA/DSA/DH
+256 bits == 15360-bit RSA/DSA/DH
+
+In SSH-2, hashes are generally only required to be preimage-resistant,
+so they can be treated as having their full rated strength.
+
+Thus, we get the following strengths for the various algorithms:
+
+diffie-hellman-group-exchange-sha256   &lt;= 256 (tunable)
+diffie-hellman-group-exchange-sha1     &lt;= 160 (tunable)
+rsa2048-sha256                            112 (&lt;= 256 for longer keys)
+diffie-hellman-group14-sha1               112
+rsa1024-sha1                               80 (&lt;= 160 for longer keys)
+diffie-hellman-group1-sha1                 80
+
+aes256-{cbc,ctr}                          256
+arcfour256                                256 (but warn anyway)
+aes192-{cbc,ctr}                          192
+blowfish-{cbc,ctr}                        128
+aes128-{cbc,ctr}                          128
+arcfour128                                128 (but warn anyway)
+3des-{cbc,ctr}                            112
+des-cbc@ssh.com                            56
+
+hmac-sha1{,-96}                           160
+hmac-md5{,-96}                            128
+
+I think a reasonable default would be a minumum strength of 112 bits,
+since that can be fulfilled with only REQUIRED algorithms.  Given
+PuTTY&#x27;s historic tendancy towards AES-256, I&#x27;d also suggest preferring
+security over speed.
+
+TODO: How does the strength of the host key affect all this?
+
+TODO: Do we care about the difference between the strength against on-line
+attacks (MAC, hostkey) vs off-line attacks (KEX, cipher)?
+
+The NIST document provides security lifetimes for various strengths of
+algorithm, so a really high-level interface would be to ask the user how
+long they want their data kept secure for, check the current date, and
+use appropriate algorithms.  I&#x27;m not sure making cipher selection
+date-sensitive is really wise, though, and NIST think 112 bits are
+enough until 2030 anyway.
+
+TODO: We probably need some finer options for control freaks (and new
+attacks).
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/cipher-selection;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2007-05-06 23:52:22 +0000)</div>
+
+</BODY></HTML>

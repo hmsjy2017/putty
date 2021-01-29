@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug dup-sessions-dont-close</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/dup-sessions-dont-close.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug dup-sessions-dont-close</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: On Windows, parent session doesn&#x27;t close until child does<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>present-in</b>: 0.57 0.58 2005-07-11 2005-08-04<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4455604dbce2d175ce1d601d51472bb1b0a535d8">4455604dbce2d175ce1d601d51472bb1b0a535d8</a> (0.69)<br>
+<p>
+On Win2K/XP, if a session B is started via "Duplicate Session" from
+a previous session A, the connection associated with A doesn't go away
+on the server until session B is closed (the TCP connection remains up
+as seen by <tt>netstat</tt> on both client and server). This can cause
+processes to hang around, especially if session A is closed rudely
+(with Alt-F4, for example).
+
+<p>
+This isn't observed on Win98.
+
+<p>
+This is presumably the sort of inheritance of handles/sockets that
+r5468 was supposed to deal with. In 0.57 (prior to that change),
+the same occurs with "New Session" too, which lends support to that
+theory. (I didn't observe this with 0.58, although there is a
+<a href="http://groups.google.com/groups?selm=1118856270.523545.40240%40g14g2000cwa.googlegroups.com">report</a>
+of it happening even there with 0.58 on XP.)
+
+<p>
+We might want to make all our sockets non-inheritable with
+<code>DuplicateHandle()</code>/<code>CloseHandle()</code>. (I haven't
+found documentation of how you get a handle from a socket, but I've
+been assured that a socket <em>is</em> a handle, and can just be
+passed in with appropriate casts.)
+
+<p>
+When <a href="config-struct.html">config-struct</a> is implemented,
+it might be possible to avoid passing strange handles about entirely,
+which might avoid this sort of problem.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/dup-sessions-dont-close;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

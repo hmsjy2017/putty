@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug kexinit-unimplemented</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/kexinit-unimplemented.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug kexinit-unimplemented</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SSH_MSG_UNIMPLEMENTED in response to SSH_MSG_KEXINIT is ignored<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 2005-01-11<br>
+<b>fixed-in</b>: r9609 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8e0ab8be5938c930c744e2cd624a4c7e88e5f64c">8e0ab8be5938c930c744e2cd624a4c7e88e5f64c</a> (0.63)<br>
+<p><pre>---------------------------------------------------[Tue Jan 11 15:08:58 2005]--
+From: Not ordinarily borrowable.  (bjh:1)
+To: anakin:8
+
+Curious:  If I use PuTTY to connect to wraith.csi.cam.ac.uk, and request key
+re-exchange before typing the user name, the packet log shows PuTTY getting an
+SSH2_MSG_UNIMPLEMENTED, but PuTTY doesn&#x27;t bombout((&quot;expected key exchange
+packet from server&quot;)) as I&#x27;d expect.  Of course, it also doesn&#x27;t give up on the
+key exchange, which it perhaps should.
+
+---------------------------------------------------[Tue Jan 11 15:13:37 2005]--
+From: `Wombling *freely*&#x27;, dammit!  (anakin:8)
+To: bjh:1
+
+&gt; Curious:  If I use PuTTY to connect to wraith.csi.cam.ac.uk, and request key
+&gt; re-exchange before typing the user name, the packet log shows PuTTY getting a
+&gt; SSH2_MSG_UNIMPLEMENTED, but PuTTY doesn&#x27;t bombout((&quot;expected key exchange
+&gt; packet from server&quot;)) as I&#x27;d expect.
+
+Well, UNIMPLEMENTED won&#x27;t be going to do_ssh2_transport(), because it&#x27;s not in
+the transport layer range of message numbers [20,50). So I suppose it&#x27;d go to
+do_ssh2_authconn().
+
+My guess is that it&#x27;s being swallowed in the crWaitUntilV(!pktin) at line 6076,
+which I suppose ought to be fixed somehow.
+
+Responding to the UNIMPLEMENTED by abandoning that particular key exchange
+sounds above the call of duty to me, I have to say, when the fault is obviously
+OpenSSH&#x27;s.
+
+---------------------------------------------------[Tue Jan 11 15:25:54 2005]--
+From: Not ordinarily borrowable.  (bjh:1)
+To: anakin:8
+
+&gt; Well, UNIMPLEMENTED won&#x27;t be going to do_ssh2_transport(), because it&#x27;s not i
+&gt; the transport layer range of message numbers [20,50). So I suppose it&#x27;d go to
+&gt; do_ssh2_authconn().
+
+Ah.  That would explain my confusion.
+
+&gt; Responding to the UNIMPLEMENTED by abandoning that particular key exchange
+&gt; sounds above the call of duty to me, I have to say, when the fault is obvious
+&gt; OpenSSH&#x27;s.
+
+I suppose so.  It&#x27;s not as if we&#x27;re likely to do an automatic re-exchange
+before authentication is complete, so exiting with an error at that stage would
+be reasonable.  I&#x27;ll add a wishlist item, since that code scares me.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/kexinit-unimplemented;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

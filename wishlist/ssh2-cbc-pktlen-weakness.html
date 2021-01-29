@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug ssh2-cbc-pktlen-weakness</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-cbc-pktlen-weakness.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug ssh2-cbc-pktlen-weakness</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: In CBC modes, decrypting the packet length can leak information<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.49<br>
+<b>present-in</b>: 2008-11-25<br>
+<b>fixed-in</b>: 2008-11-27 r8334 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=86c183f8e884f32ae3b1a6091e9043acfd43df94">86c183f8e884f32ae3b1a6091e9043acfd43df94</a> (0.61)<br>
+<p>There is an attack against the CBC-mode ciphers of SSH-2 that can
+allow an attacker to extract small parts of plaintext.  The attack
+works by inserting a bogus block into the ciphertext stream such that
+it gets decrypted into a packet length and then seeing how much data
+the target consumes before reporting a MAC error.
+
+<p>PuTTY is intrinsically slightly more resistant to this attack than
+OpenSSH, as it has tighter restrictions on the packet lengths it will
+accept.  As a result, against PuTTY, the attack has only a 2^-20 or
+2^-21 probability of working.  To put it another way, if the attacker
+can guess a certain 20 or 21 bits of a plaintext block, they can have
+that guess verified and extract a certain other 11 or 12 bits.
+
+<p>SDCTR-mode ciphers are not vulnerable to this attack.  Since <a href="ssh2-ctr-modes.html">implementing them</a>, PuTTY has preferred them
+to CBC, and hence has only used CBC when talking to a server that was
+incapable of SDCTR.
+
+<p>PuTTY now also makes a deliberate effort to counter this problem
+by only trusting the packet length once the MAC on the packet has been
+verified.  This causes extra work (since the MAC has to be checked for every
+possible packet length), and makes detection of genuine MAC errors slower,
+so it's only enabled when using a CBC cipher.  In any case, it only defends
+the data sent by the server to the client.  Client-to-server data need to be
+protected by similar action by the server.
+
+<p>This problem corresponds with
+<a href="http://www.kb.cert.org/vuls/id/958563">US-CERT VU#958563</a>.  It
+is distinct from the previous
+<a href="ssh2-cbc-weakness.html">ssh2-cbc-weakness</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-cbc-pktlen-weakness;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish portfwd-dynamic-remote</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portfwd-dynamic-remote.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish portfwd-dynamic-remote</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Remote-to-local SOCKS-based dynamic port forwarding<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>PuTTY doesn't currently support the remote-to-local direction of
+dynamic port forwarding, i.e. opening a listening port on the SSH
+<em>server</em> which functions as a SOCKS server, and responds to
+requests by making network connections on the client side.
+
+<p>This wouldn't be too difficult to implement in principle. The PuTTY
+code base already contains all the necessary pieces.
+
+<p>What worries me about it is that there are surely a lot of use
+cases that don't really want to expose <em>all</em> of the SSH
+client's local network to the SSH server. SSH servers are often
+multiuser machines, and a client user's LAN is likely to contain all
+kinds of poorly secured internal services, and probably in many cases
+you didn't really want to give all the other users on the server
+machine access to all those insecure endpoints. So I feel as if, for
+many uses of this kind of feature, you'd want some kind of
+passlist/blocklist system that lets you configure <em>what</em>
+destinations the SOCKS server is willing to let its clients connect
+to.
+
+<p>That's not too hard in implementation terms, but it's a lot of
+design effort, because there are so many ways you might want to
+specify individual passlist/blocklist entries or ranges of them:
+<ul>
+<li>by exact match or range match on the destination IP address
+<li>by exact match or wildcard match on the <em>input</em> hostname
+sent down the SOCKS connection (if the server sends one in place of a
+numeric address)
+<li>by exact match or wildcard match on the <em>canonical</em>
+hostname obtained from a DNS lookup of the provided address or name
+<li>a bunch of Boolean logic to specify how to combine those
+host-based criteria with port numbers, or with each other
+</ul>
+and so many ways you might organise the whole collection of individual
+entries:
+<ul>
+<li>pure passlist-based system (list of acceptable destinations)
+<li>pure blocklist-based system (list of forbidden destinations)
+<li>multiple rule types, with a priority order defined explicitly in
+the config file
+<li>multiple rule types, with an implicit ‘most specific wins’ rule to
+decide which entries take priority
+<ul>
+<li>… but what counts as more specific, out of an IP range and a
+canonical-hostname wildcard, which could easily match nontrivially
+overlapping sets of hosts and the system doesn't know how large those
+sets are?
+</ul>
+</ul>
+By the time you have a full-featured system that can specify all of
+those things, you've probably written an almost Turing-complete
+configuration language, which is used solely for this one niche
+feature of an SSH client. On the other hand, if you leave out any of
+this stuff, Murphy's Law guarantees that the next user will
+desperately need whichever part you didn't bother with!
+
+<p>So when I've thought about this in the past I've tended to feel
+that a more flexible solution is to run a separate SOCKS server on the
+client machine, and point an ordinary remote port forwarding at that.
+A dedicated SOCKS server program is likely to have some kind of
+configuration system <em>already</em> for this kind of thing, so PuTTY
+wouldn't have to make up its own from scratch. And there would be
+nothing tying this solution to a <em>particular</em> SOCKS server –
+you'd be free to use whatever SOCKS server you liked the feature set
+of best, instead of being constrained to use only the provided one
+with its limited range of configuration.
+
+<p>(Of course, you could have made the same argument about the
+existing local-to-remote dynamic forwarding! In the most typical use
+case of SSH, running a login session on a remote Unix machine where
+you have a full-featured shell account that can run programs of your
+choice, there's no reason you couldn't implement <em>that</em>
+forwarding mode in exactly the same way, by running a SOCKS server on
+the remote machine and forwarding an ordinary port to it. But the
+difference is that if you're <em>not</em> in that most typical use
+case of SSH – e.g. because your access to the server machine is locked
+down, or perhaps it's a special-purpose device in the first place
+which can't run arbitrary programs – then you may not have the freedom
+to run a SOCKS server remotely. So, in that case, local dynamic
+forwarding really is giving you something you couldn't achieve any
+other way. Whereas if you're able to run PuTTY on your client machine
+then you're probably also able to run a SOCKS server on the
+<em>same</em> machine.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portfwd-dynamic-remote;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-01-14 09:28:04 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish port-mac</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/port-mac.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish port-mac</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Port to Mac OS X<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <a href="remove-statics.html">remove-statics</a> <a href="port-unix-gtk3.html">port-unix-gtk3</a><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+There is a port of PuTTY and pterm to Mac OS X in progress, by means
+of compiling the GTK front end against the OS X Quartz version of GTK
+3.
+
+<p>
+Its state, as of 2016-03-25, is that it's just about usable in a
+development context (SGT can just about use the pterm app in place of
+OS X's standard Terminal.app) but has far too many bugs and missing
+features to call a finished product yet. So for the moment you can
+build it from source if you check out the PuTTY repository, but it's
+not distributed in binary form.
+
+<p>
+(In 2005 there was an attempt to write a <em>native</em> OS X port,
+directly using the Cocoa API, but that ran into problems and was never
+finished. The GTK version will look less perfectly Mac-native, but has
+a greater chance of getting somewhere, and also the ongoing
+maintenance advantage that it can automatically inherit bug fixes and
+features with the ordinary Unix GTK code.)
+
+<p>
+Possibly useful links:
+<ul>
+<li><a href="https://git.tartarus.org/?p=simon/putty.git;a=blob;f=unix/gtkapp.c;h=46b3873327568624f3eeba0cdd09e6291e019319;hb=HEAD">gtkapp.c</a>, the main source file for the OS X application version of PuTTY/pterm. There's a large comment at the top containing the list of things that still need to be done, and another comment explaining how to build it.
+<li>the <a href="../faq.html#faq-mac-port">FAQ entry</a>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/port-mac;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-20 17:30:51 +0000)</div>
+
+</BODY></HTML>

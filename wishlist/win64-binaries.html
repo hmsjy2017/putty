@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish win64-binaries</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win64-binaries.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish win64-binaries</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Provide 64-bit Windows executables<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <a href="win64.html">win64</a><br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5985bb7ea0afd73407bc894fd32633a4f0cadad4">5985bb7ea0afd73407bc894fd32633a4f0cadad4</a> 2017-01-22 (0.68)<br>
+<p>
+For a long time, while it's been more or less <a href="win64.html">possible</a>
+to build PuTTY as a 64-bit Windows executable, we haven't been doing
+so ourselves.
+ 
+<p>
+For a long time we didn't bother since there didn't seem to be any
+advantages that would outweigh the faff and the resulting confusion.
+Now we do plan to provide native 64-bit executables, for a couple of
+reasons:
+
+<ul>
+<li>As of
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commit;h=84cd309295c12e7a8a3a7bc37280f8d7859b4a8b">84cd3092</a>,
+our cryptographic code can now take advantage of the 64-bit
+operations to improve performance.</li>
+<li>PuTTY can use external DLLs (for instance for Kerberos/GSSAPI);
+with the ubiquity of 64-bit machines these days, these may only be
+available in 64-bit versions, so a 64-bit PuTTY is needed for
+compatibility. (For the same reason, we will need to continue to
+provide 32-bit binaries, and so will need to mitigate the resulting
+confusion about which one to download from our website.)</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win64-binaries;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

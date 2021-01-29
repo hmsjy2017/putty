@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug portfwd-invalid-origin</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portfwd-invalid-origin.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug portfwd-invalid-origin</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Some servers reject SSH-2 tunnels due to invalid originator IP address<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>present-in</b>: 0.58<br>
+<b>fixed-in</b>: r6477 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5d5abbf8d42723b26f9c02fc98ede438cc8c6454">5d5abbf8d42723b26f9c02fc98ede438cc8c6454</a> 2005-12-08 (0.59)<br>
+<p>
+In SSH-2, the local-to-remote port-forwarding request is defined by
+<a href="http://tools.ietf.org/wg/secsh/draft-ietf-secsh-connect/">secsh-connect</a>
+to contain an "originator IP address" and "originator port", which
+identify to the server where the connection the client received came
+from.
+
+<p>
+PuTTY has always taken the view that this is none of the server's
+business, and sent the bogus IP address <tt>client-side-connection</tt>
+and port 0.
+
+<p>
+Apparently, some servers take exception to this (with some
+justification) and refuse the forwarding. Specifically, a problem
+has reported with
+<a href="http://www.ssh.com/products/tectia/server/">SSH Tectia Server (T)</a>
+for Windows, version 5.0.0-844, and also with F-Secure SSH for Unix,
+version 3.1.0. Using <tt>0.0.0.0</tt> instead appears
+to mollify these servers.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portfwd-invalid-origin;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

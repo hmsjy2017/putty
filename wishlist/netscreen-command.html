@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY artifact netscreen-command</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/netscreen-command.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY artifact netscreen-command</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Trouble with netscreen firewalls and remote command<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>present-in</b>: 0.53b 2003-04-02<br>
+<p>
+Apparently when plink or PuTTY connects to a netscreen firewall with
+a remote command such as "save", the session hangs after "Started
+session".
+
+<p>
+Interactive connections with no command (with both plink and PuTTY)
+work fine.
+
+<p>
+Some other clients (e.g. SecureCRT) are fine, but OpenSSH also has
+trouble:
+
+<p><pre>bash-2.05a# ssh 256.256.256.256 -l netscreen -v -v -v save
+OpenSSH_2.9 FreeBSD localisations 20011202, SSH protocols 1.5/2.0, OpenSSL 0x0090601f
+...
+netscreen@257.257.257.257's password:
+debug3: clear hostkey 0
+debug3: clear hostkey 1
+debug1: Sending command: save
+debug1: Entering interactive session.
+Disconnecting: protocol error: rcvd type 15
+debug1: Calling cleanup 0x8059d60(0x0)</pre>
+
+<p>
+(These firewalls claim a version string of
+<tt>SSH-1.5-SSH Protocol Compatible Server SCS 2.0</tt>. All
+connections are therefore SSH-1.)
+
+<p>
+Reports:
+<ul>
+<li><code>EJEBKMGDPLHDFAOHCFBBEEFDCNAA.han@prolink.com.tr</code></li>
+<li><code>001701c32ed0$95efc5a0$9501a8c0@adcom</code></li>
+</ul>
+
+<p>
+We've had one report that this applies to Netscreen 4.x and previous,
+but that it works fine in newer versions (as well as SSH-2).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/netscreen-command;hb=refs/heads/main">Audit trail</a> for this artifact.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2005-02-16 23:54:10 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish clipboard-generality</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/clipboard-generality.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish clipboard-generality</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Revamp copy/paste UI and handle multiple clipboards<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=018aa5764505634e86df7c6eff6aae4ce98f6fe4">018aa5764505634e86df7c6eff6aae4ce98f6fe4</a> (0.71)<br>
+<p>
+PuTTY's handling of copy and paste has two related problems.
+
+<h3>No way to separate select from copy operation</h3>
+
+<p>
+PuTTY insists on copying to the clipboard as soon as you select text,
+without waiting for any subsequent UI action meaning 'copy'.
+
+<p>
+That was a deliberate design decision early in development, because
+the original Windows PuTTY was primarily aimed at users who would
+prefer to be using Unix/X11 desktops but were forced to use Windows
+instead; I expected that such users would see the X-style copy/paste
+UI as a breath of fresh air and a nice reminder of home.
+
+<p>
+But these days, by no means all PuTTY users fall into that category.
+So people can find PuTTY's unusual copy/paste UI surprising, since
+it's unlike all the other applications they use; also, it can be
+outright inconvenient, because sometimes (depending on details of
+mouse setup) it can be annoyingly easy to select text in the PuTTY
+window <em>by mistake</em>, which wipes out the previous clipboard
+contents, which you might well have been about to use for something.
+
+<h3>No support for multiple clipboards/selections</h3>
+
+<p>
+PuTTY assumes, on all platforms, that there is exactly one clipboard;
+it has just one copy operation, which writes to that clipboard, and
+one paste operation which reads from it.
+
+<p>
+But in modern X11-based desktop environments, this is a wrong
+assumption. In principle, an X server supports an open-ended set of
+'selections', each given an identifying name; in practice, there are
+two in common use. One, called <code>PRIMARY</code>, is typically
+accessed by the old-school X11 user interface that Windows PuTTY
+mimics: just select some text, and middle-click to paste it elsewhere.
+The other, <code>CLIPBOARD</code>, follows the more Windowsy UI
+tradition of having explicit Copy and Paste commands in menus, or
+pairs of keyboard shortcuts along the lines of ^C/^V or
+Shift-Ins/Ctrl-Ins.
+
+<p>
+I have to suppose that the point of this system was to make both
+old-school X users and migrants from Windows each feel at home, by
+supporting each one's preferred UI without the other one confusing it.
+But once you realise that the two UI mechanisms access different
+clipboards, that can be useful in its own right, because you can
+develop usage habits that make use of both of them at once – for
+example, you can use the less easily
+overwritten <code>CLIPBOARD</code> to store one piece of text, then
+repeatedly use <code>PRIMARY</code> for a sequence of select-paste
+operations, and finally use the other paste command to retrieve what
+you left in <code>CLIPBOARD</code>.
+
+<p>
+Except that in Unix PuTTY, you can't, because it currently doesn't
+support reading or writing <code>CLIPBOARD</code> at all.
+
+<p>
+Even one-clipboard systems have occasionally been known to mimic a
+double clipboard. The standard OS X Terminal application, for example,
+doesn't access the real inter-application system clipboard except by
+explicit user action (Command-{C,V}, or menu items) – but
+nonetheless it also supports a select-and-middle-click mode of
+operation, which as far as I can tell uses a 'clipboard' which exists
+solely in the imagination of Terminal itself and can't communicate
+with any other application.
+
+<h3>Technical discussion</h3>
+
+<p>
+At a technical level, all of this is easily enough fixed.
+
+<p>
+At present, text selected in the terminal window is passed immediately
+to a frontend <code>write_clip()</code> function, which need not
+retain a copy of the text at all – on Windows, it just shoves it
+straight into the system clipboard and forgets about it. (On X11, it
+does have to retain a copy, because the selection system requires the
+selection owner to physically send the data to each application
+requesting a paste.)
+
+<p>
+So it wouldn't be hard at all to arrange a bit more flexibility in the
+code, whereby the act of selecting text caused it to be copied into an
+internal buffer to be remembered (and optionally also written out to
+some system clipboard or other), and then a subsequent UI action could
+be made to copy the text again from that buffer into a different
+clipboard.
+
+<p>
+The only question, at the code-structure level, is to what extent this
+can sensibly be centralised into the cross-platform code. I think
+probably the ideal is that each front end would define a set of
+numeric ids indicating distinct system clipboards; the
+existing <code>write_clip()</code> and <code>request_paste()</code>
+functions would grow an extra id argument indicating which clipboard
+was being accessed; and <code>terminal.c</code> would take care of
+stashing the selected text in a buffer, and provide an extra function
+'now please copy the last-selected text to a new clipboard', which
+front ends could call in response to explicit Copy UI actions, and
+which would respond by passing that buffer back
+to <code>write_clip()</code> with a different id.
+
+<p>
+(There's one other small thing, which is that front ends currently
+call <code>term_deselect()</code> to visually unmark the selection,
+when they detect that they're no longer the clipboard owner. Probably
+the right answer would be to instead notify the terminal driver that
+it had lost ownership of <em>a</em> clipboard, along the lines
+of <code>term_lost_clipboard(id)</code>; then the terminal driver
+could decide for itself what it wanted to do to the display in
+response.)
+
+<h3>User interface and generality</h3>
+
+<p>
+So the reason this isn't a trivial job is the user interface.
+
+<p>
+On single-clipboard systems, there are several things you might
+plausibly want to configure:
+<ul>
+<li>Automatic copy on selection: on/off.
+<li>Middle-click paste: on/off. (Or perhaps not – it's just a guess that people who don't want X-like selection might actively prefer to get rid of middle-click paste, if for some reason they find it a bit hair-trigger.)
+<li>Imaginary second clipboard, in OS X Terminal style: on/off.
+</ul>
+But the last of those complicates the UI already, because if you turn
+that on, then it overrides the auto-copy and middle-click-paste
+options, because surely those have to access the imaginary clipboard.
+So this already isn't a nice orthogonal set of checkboxes.
+
+<p>
+On X11, with its multiple system clipboards, things <em>ought</em> to
+be nice and simple: you'd like to think that no configurability is
+needed at all, because you just have selection and middle-click write
+and read <code>PRIMARY</code>, and explicit keyboard or menu
+copy/paste commands talk to <code>CLIPBOARD</code>, and then you're
+just like any other modern X app and that's the end of it. Except that
+there are two remaining issues:
+<ul>
+<li>Legacy UI: in current X PuTTY, Shift-Ins pastes
+from <code>PRIMARY</code>, and changing that would
+undoubtedly <a href="https://xkcd.com/1172/">break someone's
+workflow</a>.
+<li>Further clipboards. As mentioned above, X in principle supports an
+open-ended set of selections, and at least one
+(<code>SECONDARY</code>) has been used in history. So as long as we're
+reworking this area anyway, it would be nice to arrange that
+there's <em>some</em> way to access extra clipboards.
+</ul>
+
+<p>
+So perhaps it would be better to come up with a fully general
+interface for configuring this whole area, so that you could
+independently configure <em>which</em> clipboard was accessed by
+various pairs of copy-and-paste keyboard actions
+({Shift,Ctrl}-Ins, <code>gnome-terminal</code> style Ctrl-Shift-{C,V},
+Command-{C,V} on OS X), which one (if any) PuTTY would auto-copy to on
+selection, and which one(s) there were menu items to talk to. The set
+of available clipboards could be configured by a combo box on X11 (so
+you could manually enter the name of a nonstandard clipboard if you
+had a use for one) and by a drop-down list elsewhere; and if we provided a
+<code>Terminal.app</code> style imaginary internal clipboard, then
+that could just appear in the same list.
+
+<p>
+That highly general system would let everybody have what they want
+– except for the people who wanted to configure <em>one of the
+two obvious options</em> with a single button press, and not have to
+deal with a piece of GUI looking like the instrument panel of a major
+airliner.
+
+<p>
+So I'd prefer a configuration UI which makes simple things simple
+<em>and</em> difficult things possible, and I haven't thought one up
+yet!
+
+<p>
+<b>2017-12-17</b>: now done, with a medium-level compromise UI, not
+<em>too</em> complicated but not 100% fully general either. But it
+should support most things that anyone sensible will want :-)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/clipboard-generality;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-12-17 18:51:02 +0000)</div>
+
+</BODY></HTML>

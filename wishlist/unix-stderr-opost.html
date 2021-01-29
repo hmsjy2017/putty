@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug unix-stderr-opost</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/unix-stderr-opost.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug unix-stderr-opost</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: When stdout and stderr are ttys, plink&#x27;s messages stair-step<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>absent-in</b>: 0.58<br>
+<b>present-in</b>: 2005-04-27<br>
+<b>fixed-in</b>: r7745 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=faa6e26d38317d1495e47b27012746331942bfaa">faa6e26d38317d1495e47b27012746331942bfaa</a> 2007-09-30 (0.61)<br>
+<p><pre>When running in a terminal and requesting a pty on the server, the
+Unix port of Plink turns off OPOST.  It does this to ensure that if an
+application on the server turns off OPOST in its pty and sends a bare
+LF, that will make it all the way to Plink&#x27;s terminal.  This, though,
+causes the problem that if Plink&#x27;s stderr goes to the same terminal as
+its stout (the usual situation), Plink&#x27;s own messages, sent to stderr,
+won&#x27;t get their &#x27;\n&#x27;s translated to CRLF.
+
+The fix for this is to turn on OPOST around any internally-generated
+writes to stderr.  This is easier said than done since there are many
+writes to stderr in uxcons.c, and at least one in logging.c.  In
+addition, the writes from (e.g.) ssh.c of application data should
+probably not be affected.
+
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/unix-stderr-opost;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

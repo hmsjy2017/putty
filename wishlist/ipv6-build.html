@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ipv6-build</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ipv6-build.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ipv6-build</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: We should provide IPv6-enabled binaries.<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-12-31 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6daf6faede46bd8aa3a39cbe59d34c987b2ea114">6daf6faede46bd8aa3a39cbe59d34c987b2ea114</a> (0.58)<br>
+<p>
+PuTTY has IPv6 support in the codebase, but it's not compiled in to
+the binaries we release. We don't currently have the headers and
+libraries needed to compile with IPv6 support, and haven't yet got
+round to getting hold of them. (Therefore, we don't test the IPv6
+support, either.)  It's suggested that we could get them
+<a href="http://research.microsoft.com/msripv6/msripv6.htm">here</a>.
+
+<p>
+In the meantime,
+<a href="http://unfix.org/projects/ipv6/">unfix.org</a> makes
+available some binaries compiled with -DIPV6. But note that we haven't
+personally checked them, and can't vouch for their trustworthiness.
+
+<p>
+<b>SGT, 2004-12-30</b>: Now that a kind and helpful user has donated
+a more up-to-date compiler with up-to-date headers, I have
+integrated unfix.org's latest patch, polished it a bit, and enabled
+it by default in the nightly builds.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ipv6-build;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

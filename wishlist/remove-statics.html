@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish remove-statics</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/remove-statics.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish remove-statics</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Remove static variables to allow multiple or sequential connections<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <em><a href="dll-frontend.html">dll-frontend</a></em> <em><a href="multiple-connections.html">multiple-connections</a></em> <em><a href="port-mac.html">port-mac</a></em> <a href="reuse-windows.html">reuse-windows</a><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2003-01-15 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=f6cc852c5d1c215489ccf364e581cf40fe69d9fc">f6cc852c5d1c215489ccf364e581cf40fe69d9fc</a> (0.54)<br>
+<p>
+For several reasons it would be handy to be able to run multiple
+connections in a single process. This will require removing most (or
+all) of PuTTY's static and global variables, and replacing them with
+fields in dynamically allocated structures.
+
+<p>
+This is a code cleanup which we should probably do anyway.
+
+<p>
+
+<b>SGT, 2003-01-14</b>: After much pain and upheaval, I think this
+is now as done as it'll ever be. The Unicode module was particularly
+unpleasant (and wants a substantial rewrite really), and there are a
+few remaining globals which are genuinely global (applying to all
+sessions) so I've left them in; but I think everything pertaining to
+a particular session is now non-global, at least in the portable
+parts of the code. (The Windows front end still has many static
+variables, but they will probably never go away.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/remove-statics;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

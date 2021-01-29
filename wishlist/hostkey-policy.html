@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish hostkey-policy</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/hostkey-policy.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish hostkey-policy</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Enhanced flexibility in SSH host key selection policy<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=940a82fd377757ffb792648f561dfa70d8d99b01">940a82fd377757ffb792648f561dfa70d8d99b01</a> 2016-03-28 (0.68)<br>
+<p>
+PuTTY's SSH-2 host key selection policy for new hosts currently involves a fixed
+preference order of RSA then DSA. I occasionally think it would be
+good to add a preference list to tweak the policy, either to put DSA
+first (if you're really mad) or to move DSA to below the "warn below
+this line" line.
+
+<p>
+When a new host key prompt is given, PuTTY should
+mention if it already has host keys for a host in other formats -
+particularly important when the <a href="ssh2-default.html">default
+protocol changes to SSH-2</a>.
+
+<p>
+<b>Update, March 2016:</b> we've finally implemented a preference list.
+We also sometimes list better algorithms in the host key prompt, but
+only in the specific case where we're using an algorithm below the
+"warn below this line" line due to
+<a href="hostkey-prefer-cached.html">hostkey-prefer-cached</a>.
+
+<p>
+(We still don't mention SSH-1 keys when showing an SSH-2 key prompt.
+SSH-2 became the default over a decade ago, so that ship has sailed.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/hostkey-policy;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

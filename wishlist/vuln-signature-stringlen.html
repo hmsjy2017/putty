@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-signature-stringlen</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-signature-stringlen.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-signature-stringlen</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: negative string length in public-key signatures can cause integer overflow and overwrite all of memory<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: r968<br>
+<b>present-in</b>: 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62<br>
+<b>fixed-in</b>: r9896 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8b6a8b617f0720d8c17cc2a505ca1371286ada58">8b6a8b617f0720d8c17cc2a505ca1371286ada58</a> 2013-07-09 0.63<br>
+<p>
+Many versions of PuTTY prior to 0.63 have an integer overflow
+vulnerability in their treatment of string length fields in public-key
+signatures.
+
+<p>
+An RSA signature blob contains a multiprecision integer stored as an
+SSH-2 string, i.e. with a 4-byte length field at the front. Setting
+this length field to 0xFFFFFFFF (-1) is mistakenly permitted by the
+signature decoding code due to a missing bounds check, and the effect
+is that PuTTY allocates zero memory to store the integer in (because
+it adds one to the length first) and then tries to write zeroes over
+4Gb of memory starting from that location.
+
+<p>
+This bug applies to any RSA signature received by PuTTY, including
+during the initial key exchange phase. Therefore, this bug can be
+exploited by a malicious server, <em>before</em> the client has
+received and verified a host key signature. So this attack can be
+performed by a man-in-the-middle between the SSH client and server,
+and the normal host key protections against MITM attacks are bypassed.
+Even if you trust the server you <em>think</em> you are connecting to,
+you are not safe.
+
+<p>
+We are unaware of any way in which this can lead to remote code
+execution, since it will typically overwrite the entire heap with
+zeroes and PuTTY is expected to crash almost immediately.
+
+<p>
+This bug does not affect DSA keys.
+
+<p>
+This bug was discovered by <a href="http://www.search-lab.hu/">SEARCH-LAB</a>
+and documented in
+<a href="http://www.search-lab.hu/advisories/secadv-20130722">their advisory</a>.
+It has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4852">CVE-2013-4852</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-signature-stringlen;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

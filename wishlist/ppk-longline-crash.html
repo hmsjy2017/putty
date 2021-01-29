@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ppk-longline-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ppk-longline-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ppk-longline-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Long lines in PPK files (e.g. long key comments) can cause crash<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 2005-03-01<br>
+<b>fixed-in</b>: 2005-03-02 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=ec76c24084e544a850785eb1d74c7a82189eea3f">ec76c24084e544a850785eb1d74c7a82189eea3f</a> (0.58)<br>
+<p>
+Long lines in PuTTY SSH-2 private key (.PPK) files could cause a
+one-byte buffer overflow, potentially leading to a crash. ("Long" here
+means header values or other lines of 128 characters or more.)
+
+<p>
+In practice, this is most likely to occur if a very long comment field
+is specified - I don't think there are any other circumstances under
+which PuTTYgen will generate keys with lines that long.
+
+<p>
+Although this fault has been present ever since SSH-2 public-key
+support was added to PuTTY, the report that led to its discovery
+indicated that it only failed in 0.57. This may be down to a change in
+the compiler version we used between 0.56 and 0.57.
+
+<p>
+Until the next release, if you want to continue to use release
+versions of the PuTTY tools, a workaround is to load any affected key
+into a snapshot version of PuTTYgen, trim the key comment, and then
+save the key back out - it should then work with 0.57 tools. (The key
+format hasn't changed since 0.57.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ppk-longline-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

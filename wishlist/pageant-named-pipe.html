@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish pageant-named-pipe</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pageant-named-pipe.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish pageant-named-pipe</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Replace Windows Pageant&#x27;s IPC with named pipes<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <em><a href="pageant-deferred-decrypt.html">pageant-deferred-decrypt</a></em> <em><a href="pageant-forwarding-path.html">pageant-forwarding-path</a></em> <em><a href="pageant-key-confirm.html">pageant-key-confirm</a></em><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=98538caa39d20f3efe8de307fa5169e9fb0787d2">98538caa39d20f3efe8de307fa5169e9fb0787d2</a> 2019-01-26<br>
+<p>
+Windows Pageant's method of communicating with clients, using
+<code>WM_COPYDATA</code> and a piece of shared memory, is absolutely
+horrible. It dates from early in Win32's history, before more sensible
+IPC systems were widespread.
+
+<p>
+It would be good to begin the process of replacing it with a sensible
+mechanism based on Windows named pipes, the same IPC mechanism that
+connection-sharing instances of PuTTY use to talk to each other.
+
+<p>
+Apart from the purely aesthetic 'not being disgusting' sorts of
+advantages, this IPC system would be an improvement on the current
+Pageant one in several ways:
+<ul>
+<li><b>Independent of Windows messages</b>: Pageant would no longer be
+constrained by the structure of the Windows message loop to respond to
+agent requests before it can resume GUI activity. This opens the way
+to implement features such as
+<a href="pageant-deferred-decrypt.html">pageant-deferred-decrypt</a>.
+<li><b>Unbounded</b>: there would no longer be a need to impose a
+strict upper limit on the length of a Pageant request or response.
+(The current implementation has an arbitrary limit of 8kbyte, and
+so breaks ungracefully when you have a large number of keys in
+Pageant.)
+<li><b>Stateful</b>: it permits Pageant to know which sequences of
+requests it receives are part of the same connection from the same
+client, which unblocks blue-sky possibilities such as
+<a href="pageant-forwarding-path.html">pageant-forwarding-path</a>.
+</ul>
+
+<p>
+Of course, we would have to continue <em>supporting</em> the old
+<code>WM_COPYDATA</code> system in parallel for (at least) a long
+time, because an unknown number of third-party clients use it. So any
+new features that depend on the new IPC (as discussed above) would
+have to be implemented in such a way that <code>WM_COPYDATA</code>
+clients would cope somehow.
+
+<p>
+Actually setting up the named pipe system itself should be reasonably
+easy these days: named pipe IPC is fully implemented (including the
+right security setup) for connection sharing, and the Pageant code has
+already been restructured to involve a Plug data structure suitable
+for passing straight to <code>new_named_pipe_listener()</code> (though
+of course we'd also have to endow Windows Pageant with the same kind
+of main event loop PuTTY has). The client side shouldn't be any
+harder.
+
+<p>
+The more interesting question would be how to support both IPC systems
+in one program, in the most helpful possible way. One thought I've
+been considering runs along the following lines:
+<ul>
+<li>Divide Windows Pageant into two threads.
+<li>The main thread runs both the visible GUI and the named-pipe
+listener, and has a main event loop that selects between its Windows
+message queue and a set of event objects from <code>winhandl.c</code>,
+more or less exactly like PuTTY's event loop.
+<li>The secondary thread creates the invisible window that
+<code>WM_COPYDATA</code> clients will send their request messages to.
+This should (if I've correctly understood how message queues, windows
+and threads interact) cause the secondary thread to receive those
+agent requests, and the main thread to receive all other GUI activity.
+<li>The secondary thread handles each <code>WM_COPYDATA</code> request
+by opening a connection to the named pipe, just as if it was a client
+in a separate process. It waits for the response before replying to
+the message.
+</ul>
+Doing it this way might well manage to get round some of the
+limitations of the Windows-message IPC system: in particular, it might
+still be possible to provide deferred key decryption to
+<code>WM_COPYDATA</code> clients, because the Windows message activity
+required to present the passphrase prompt would all happen in one
+thread, while the other thread was still blocked waiting to reply to
+the <code>WM_COPYDATA</code>.
+
+<p>
+But if that turns out not to work (e.g. perhaps there's a time limit
+on how long you can delay responding to a <code>SendMessage</code>, or
+perhaps I've misunderstood how multiple threads' message queues
+interact), then the fallback position would be to simply not present
+any key to <code>WM_COPYDATA</code> clients that isn't immediately
+usable without user interaction.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-named-pipe;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-02-03 01:04:15 +0000)</div>
+
+</BODY></HTML>

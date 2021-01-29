@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug cmdline-nc-garbage</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/cmdline-nc-garbage.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug cmdline-nc-garbage</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: -nc on the command line mangles the host name<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>present-in</b>: r7683<br>
+<b>fixed-in</b>: r7685 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=be8818b4bcf3a802850c99ee68731a9a8663c94b">be8818b4bcf3a802850c99ee68731a9a8663c94b</a> 2007-08-08 (0.61)<br>
+<p><pre>From the original report:
+
+I just have a quick bug report and patch for you.  I wasn&#x27;t having any
+success getting plink to work as a local proxy for putty, so I tried plink
+verbosely on the command line.  The troublesome output was something like:
+
+&gt; plink host1 -v -nc host2:22
+[...]
+Access granted
+Opening direct-tcpip channel to host2####:22 in place of session
+Server refused to open a direct-tcpip channel
+FATAL ERROR: Server refused to open a direct-tcpip channel
+
+... where &quot;####&quot; was a bunch of garbage characters.  It turns out that after
+the strncpy to ssh_nc_host, a &#x27;\0&#x27; is being written at the end of the entire
+array, rather than at the end of the hostname.  A simple patch is attached,
+against putty SVN r7683.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/cmdline-nc-garbage;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

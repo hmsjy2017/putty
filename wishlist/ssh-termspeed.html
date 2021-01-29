@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh-termspeed</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh-termspeed.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh-termspeed</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Send terminal speeds in SSH<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-04-25 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=3867e5956e775135dc7ca02c237a123b9528c2f4">3867e5956e775135dc7ca02c237a123b9528c2f4</a> (0.55)<br>
+<p>
+We've had a couple of requests for PuTTY to transmit a terminal speed
+in SSH, as it already does for Telnet and Rlogin protocols.
+
+<p>
+Apparently server defaults in the absence of information from PuTTY
+aren't always helpful; in particular, OpenSSH on HP-UX ends up at 300
+baud(!), and this causes <code>vi</code> and <code>emacs</code> to
+invoke various emergency procedures (e.g., <code>vi</code> uses a
+5-line display, and <code>emacs</code> runs terribly slow to avoid
+overloading the terminal).
+
+<p>
+As of 2004-04-25, PuTTY will send terminal speeds in SSH based on the
+same terminal-speed string as for other protocols (which has been
+moved to the Connection panel in the UI).
+
+<p>
+Currently there's no way to turn <em>off</em> the sending of terminal
+speeds in SSH (speeds are <em>always</em> sent). If anyone complains,
+we can change this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-termspeed;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

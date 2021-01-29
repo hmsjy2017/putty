@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win-canonical-hostname</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-canonical-hostname.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win-canonical-hostname</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Canonical hostname (in title bar) uses reverse lookup on Windows<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>absent-in</b>: 0.57<br>
+<b>present-in</b>: 0.58<br>
+<b>fixed-in</b>: r5614 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=b33d9e4a446bea00878433fc1ead9353bd9b2da1">b33d9e4a446bea00878433fc1ead9353bd9b2da1</a> 2005-04-08 (0.59)<br>
+<p>
+As a side-effect of <a href="ipv6-build.html">IPv6 support</a>, on
+modern versions of Windows, the hostname displayed in the title bar
+has changed - it is now the result of a forward and reverse lookup,
+whereas before it was whatever the OS regarded as a "canonical name"
+(usually the input hostname resolution of CNAMEs/search paths).
+
+<p>
+This seems overenthusiastic, and bugs some people, so it's been
+reverted to the previous behaviour.
+
+<p>
+The title bar is the main use of the canonical name, so this is
+largely a cosmetic change. (It may also be used for some other things
+such as proxy exclusions.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-canonical-hostname;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

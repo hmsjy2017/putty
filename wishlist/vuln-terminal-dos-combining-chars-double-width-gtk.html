@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-terminal-dos-combining-chars-double-width-gtk</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-terminal-dos-combining-chars-double-width-gtk.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-terminal-dos-combining-chars-double-width-gtk</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: DoS by terminal output involving combining characters, double-width text, an odd number of terminal columns, and GTK<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.57<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=daf91ef8ae9780bb1dfb534afa79e4babb89ba26">daf91ef8ae9780bb1dfb534afa79e4babb89ba26</a> 0.71<br>
+<p>
+Up to and including version 0.70, the GTK front end to PuTTY's
+terminal emulator would fail an assertion in a corner case:
+<ul>
+<li>if the terminal width is an odd number of columns
+<li>and if you use an escape sequence such as <code>ESC # 6</code> to
+make the whole line double-width, leaving an unusable odd character
+cell at the end of the line
+<li>and if you position the cursor on that final odd cell and try to
+display a Unicode character with at least one combining character.
+</ul>
+
+<p>
+All the conditions for this failure can be triggered by remote
+terminal output. (Remote-controlled resizing of the terminal window
+can be turned off in the Features config panel, but it's on by
+default.) So, if a malicious process is able to write escape sequences
+to your terminal, then they can terminate your entire PuTTY session
+uncleanly, making it impossible for you to even recover any important
+information from your terminal scrollback.
+
+<p>
+As of 0.71, this assertion failure is fixed. PuTTY will cleanly handle
+this case by not trying to display anything that confuses it.
+
+<p>
+This vulnerability was found by Brian Carpenter, as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+
+<p>
+CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9897">CVE-2019-9897</a> has been assigned for the collection
+of terminal DoS attacks fixed in 0.71, including this,
+<a href="vuln-terminal-dos-combining-chars.html">vuln-terminal-dos-combining-chars</a> and
+<a href="vuln-terminal-dos-one-column-cjk.html">vuln-terminal-dos-one-column-cjk</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-terminal-dos-combining-chars-double-width-gtk;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-25 20:23:34 +0000)</div>
+
+</BODY></HTML>

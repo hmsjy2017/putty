@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh-fingerprint-formats</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh-fingerprint-formats.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh-fingerprint-formats</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support more SSH public key fingerprint formats <br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+PuTTY currently only supports one format for displaying SSH public key
+fingerprints (used when
+<a href="https://the.earth.li/~sgtatham/putty/latest/htmldoc/Chapter2.html#gs-hostkey">verifying host keys</a>);
+this is the traditional set of hex octets calculated with the MD5 hash
+function specified by section 4 of
+<a href="https://www.ietf.org/rfc/rfc4716.txt">RFC4716</a> (for instance
+<tt>ssh-rsa 1024 7b:e5:6f:a7:f4:f9:81:62:5c:e3:1f:bf:8b:57:6c:5a</tt>).
+
+<p>
+New versions of OpenSSH (from
+<a href="https://www.openssh.com/releasenotes.html#6.8">6.8</a>) default
+to displaying a different, base64-format fingerprint for certain keys, with
+current versions calculated using the SHA-256 hash (for instance
+<tt>SHA256:mVPwvezndPv/ARoIadVY98vAC0g+P/5633yTC4d/wXE</tt>).
+
+<p>
+Since modern OpenSSH takes some persuasion to display fingerprints in
+the old format, and we should be moving away from the weak MD5 hash
+anyway, PuTTY should support displaying fingerprints in this new
+format, as well as continuing to display the old format for backward
+compatibility.
+
+<p>
+We'd have to work out a UI for this. The obvious option is to display
+the fingerprint in all known formats in the host-key verification
+dialog; this will make the dialog even more intimidating, and could
+get unwieldy if we ever have <a href="bubble-babble.html">more than two</a>.
+A more complicated option would be to have a dropdown or buttons or
+something on the host-key dialog to let the user choose among the
+available formats; this probably implies a global setting to set the
+default (and PuTTY isn't currently very good at global settings).
+
+<p>
+(Should you need to get an MD5 fingerprint out of modern OpenSSH in
+the meantime, you need to run a command like
+<pre>ssh-keygen -E md5 -l -f /etc/ssh/ssh_host_ed25519_key.pub</pre>
+on the relevant server.)
+
+<p>
+Some places where key fingerprints are currently used, so that extra
+UI complexity would need to be designed and implemented:
+<ul>
+<li>The GUI dialog box (both Windows and GTK) asking for a host key
+confirmation. Obvious possibilities include a dropdown list of
+fingerprint types, or simply listing all the known ones in a huge
+info-dump.
+<li>The corresponding console message, which can't provide a dropdown
+list. Huge info-dump is one option; something you can type at the
+interactive prompt to provide a different fingerprint format is
+another.
+<li>The readonly edit box displaying the fingerprint in Windows (GUI)
+PuTTYgen. The obvious approach here is to have an option in the menu bar
+that selects the format.
+<li>The GUI key list window in Windows Pageant. That window doesn't
+have a menu bar at the moment, but cluttering the window with a set of
+radio buttons seems a bit intrusive. Perhaps we should add a menu bar.
+<li>The fingerprint output mode in Unix (command-line) PuTTYgen.
+Probably we do this one by making <code>-O fingerprint</code> and its
+synonym <code>-l</code> use the current default fingerprint style, and
+then add extra explicit modes like <code>-O fingerprint-md5-hex</code>
+or <code>-O fingerprint-sha256-base64</code>.
+<li>The fingerprints in the output of <code>pageant -l</code> on Unix.
+A command-line option is the obvious way to select these.
+<li>The idiom on Unix Pageant's client command line that lets you
+select one of the currently loaded keys by typing a prefix of its
+fingerprint.
+<li>The configuration option in PuTTY itself which allows you to enter
+the fingerprint of a host key you want PuTTY to accept. We'd have to
+accept fingerprints in all formats, and do it in some way that ensured
+they were unambiguous (no fingerprint intended to be type X should be
+accepted on the grounds that it matched some key's type-Y
+fingerprint).
+<li>The diagnostic message in PuTTY's Event Log. That's text-only (and
+also goes to log files), so once a fingerprint has been written into
+it, it's too late to rewrite it in a different style. Perhaps that one
+should just print all available fingerprint types.
+<li>Diagnostic messages in Unix Pageant (only relevant in debug mode,
+so not vital).
+</ul>
+
+<hr>
+
+<p>
+We have been dragging our feet about this, as the new OpenSSH scheme
+has some disadvantages, principally that it is harder to compare by
+hand and read out over the phone, as it makes no concession to the
+possibility of confusing homographs (letter-<tt>l</tt> versus
+number-<tt>1</tt>, <tt>O</tt>-vs-<tt>0</tt> etc).
+
+<p>
+We did half-work-out an alternative scheme based on the
+the Uniform Data Fingerprint (UDF) scheme described in
+<a href="https://datatracker.ietf.org/doc/draft-hallambaker-udf/">draft-hallambaker-udf</a>.
+That scheme has been designed for readability while remaining relatively
+compact, to minimise the risk of ambiguity, and to allow easy
+migration to new hash algorithms (the first character encodes the
+algorithm); it would give fingerprints of the form
+<tt>MBQPX-76TZY-NXTKU-WJZIM-LH4T2-IYQU6</tt>.
+Our effort got as far as a half-written spec and some minimal
+proof-of-concept code, both unpublished. (However, the opportune
+moment to push this as a replacement for OpenSSH's scheme has
+clearly passed.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-fingerprint-formats;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-12-20 12:10:01 +0000)</div>
+
+</BODY></HTML>

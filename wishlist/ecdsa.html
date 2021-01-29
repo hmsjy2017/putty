@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ecdsa</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ecdsa.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ecdsa</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for ECDSA keys in PuTTY and PuTTYgen<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2014-11-03 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=53ff0ffd55dcefbdc8ddd7a4a4090e5925b95dd5">53ff0ffd55dcefbdc8ddd7a4a4090e5925b95dd5</a> (0.68)<br>
+<p>
+<a href="http://tools.ietf.org/html/rfc5656">RFC 5656</a> defines
+elliptic-curve (ECDSA) key formats (host and user) for use with SSH-2,
+and associated ECDH key exchange methods. OpenSSH has supported these
+since 5.7.
+
+<p>
+PuTTY does not currently support these. It probably should.
+
+<p>
+The only niggle I (OSD) have is that I'm not 100% sure what the patent
+situation is. (Wikipedia has
+<a href="http://en.wikipedia.org/wiki/ECC_patents">some words</a> on
+the subject.)
+
+<p>
+A user reports
+
+that the French government computing security agency
+<a href="http://www.ssi.gouv.fr/">ANSSI</a> has
+<a href="http://www.ssi.gouv.fr/IMG/pdf/NP_OpenSSH_NoteTech.pdf">recommendations</a>
+for configuring OpenSSH that prefer use of ECDSA keys.
+
+<p>
+<em>2014-11:</em> the development snapshots now include support for
+the mandatory parts of RFC5656: that is, ECDSA host and user keys
+and ECDH key exchange, with the curves nistp256, nistp384, and
+nistp521.
+
+<p>
+(This support is not included in PuTTY 0.64; however, a release
+labelled as 0.64 but erroneously built from the wrong source code was
+briefly available. If you have a version of PuTTY claiming to be 0.64
+and to support ECDH/ECDSA, you should download a fresh copy, not least
+because the erroneous version is missing security fixes to unrelated
+code.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ecdsa;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

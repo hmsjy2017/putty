@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish scripting</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/scripting.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish scripting</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Scripting support in PuTTY<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <em><a href="mdpi.html">mdpi</a></em><br>
+<b>blocks</b>: <em><a href="putty-screen-frontend.html">putty-screen-frontend</a></em> <em><a href="url-launching.html">url-launching</a></em><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p> Many people would find it useful for PuTTY to have a general
+scripting mechanism. There are a lot of uses for something like
+this:
+
+<ul>
+<li>
+Automating movement through menu systems on servers.
+<li>
+Assigning common commands to function keys.
+<li>
+For MUD users: being able to set up triggers so that PuTTY
+automatically sends commands when particular events happen on the
+server.
+<li>
+Chaining connections. For example, the recommended way to connect to
+<a href="http://www.mono.org/">Monochrome BBS</a>
+is to make a preliminary Telnet connection to a central server which
+will tell you which of the usable machines has the lowest load, and
+then to make a Telnet or SSH connection to that machine. A scripting
+facility would allow PuTTY to do things like this automatically.
+<li>
+Remembering your password for you. (Obviously we don't recommend you
+do this, on security grounds; but in one or two situations it might
+be helpful.)
+<li>
+Implementing <a href="key-mapping.html">key-mapping</a> fully generally.
+<li>
+Performing arbitrary transformations on clipboard contents.
+</ul>
+
+<p>
+We do have a scripting language half-way written for this purpose,
+though it's unclear when (if) it will ever be finished.
+
+<p>
+A scripting language is liable to be a fairly big piece of code, so
+the language interpreter might end up having to be implemented as a
+DLL plugin. Hence this feature is dependent on us creating a DLL
+plugin interface first.
+
+<p>
+It's been suggested by several people that using the underlying OS's
+built-in scripting mechanisms might help.  A problem with this is that
+it prevents PuTTY scripts being portable between OSes, which in turn
+means that we can't use the scripting language to implement any of PuTTY
+itself.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/scripting;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

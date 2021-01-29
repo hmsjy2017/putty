@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-sshredder</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-sshredder.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-sshredder</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SSHredder test suite vulnerabilities (CERT CA-2002-36)<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.53<br>
+<b>fixed-in</b>: 0.53b 2002-11-09 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=7c95ea19c88fc7a547184ed84276fb3a6e2a5ba1">7c95ea19c88fc7a547184ed84276fb3a6e2a5ba1</a><br>
+<p>
+PuTTY 0.53 and earlier are vulnerable to the attack described in
+CERT advisory
+<a href="http://www.cert.org/advisories/CA-2002-36.html">CA-2002-36</a>
+"Multiple Vulnerabilities in SSH Implementations" (also
+<a href="http://www.kb.cert.org/vuls/id/389665">VU#389665</a>). This
+vulnerability is believed to be fixed in 0.53b (released Nov 12, 2002).
+
+<p>
+Certain well-chosen malformed or unusual packets can lead to
+remote code execution attacks. See the 
+<a href="http://www.rapid7.com/advisories/R7-0009.txt">Rapid7 advisory</a>
+and their 
+<a href="http://www.rapid7.com/perl/DownloadRequest.pl?PackageChoice=666">SSHredder</a>
+test suite for details.
+
+<p>
+I-Proyectos has released a proof-of-concept
+<a href="http://online.securityfocus.com/archive/1/304609">exploit</a>
+to BugTraq.
+
+<p>
+<a href="http://cve.mitre.org/">CVE</a> have assigned the following
+candidate IDs to the vulnerabilities tested for by SSHredder:
+<ul>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-1357">CVE-2002-1357</a>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-1358">CVE-2002-1358</a>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-1359">CVE-2002-1359</a>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2002-1360">CVE-2002-1360</a>
+</ul>
+(I haven't checked which of these PuTTY was actually vulnerable to).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-sshredder;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

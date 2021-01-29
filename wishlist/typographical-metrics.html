@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish typographical-metrics</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/typographical-metrics.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish typographical-metrics</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Make PuTTY use the typographical metrics in TrueType fonts<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+A user reported that the 'Inconsolata' font by Raph Levien works badly
+in Windows PuTTY, because the Windows terminal front end sets the
+terminal's character-cell height based on the obvious font metrics
+provided by the Windows text rendering API (<code>usWinAscent</code>
+and <code>usWinDescent</code>). Those metrics are based on the ink
+extent of the font rather than on the typographically ideal line
+spacing. And Inconsolata recently gained support for Vietnamese text,
+with multiple diacritics which increase the font's ink extent, so the
+lines are now more widely spaced than is desirable.
+
+<p>
+Apparently there's a separate set of metrics called the 'typographical
+metrics', and a flag in the font header to request they be used.
+
+<p>
+Our correspondent forwarded on some useful implementation notes from
+Raph Levien:
+
+<blockquote>
+<p>
+The first step is to use <code>GetFontData</code> to read the relevant
+tables. One is the OS/2 table, which has tag 0x322F534F, and the other
+is head (tag 0x64616568). A good reference for bit-bashing these
+tables btw is <code>sfntly</code>; here's the code for OS/2 and head.
+Both are quite small, OS/2 is typically 96 bytes and head is 54 bytes,
+so the buffers can be stack allocated. I recommend first calling with
+out a buffer to get a size, then calling a second time with
+<code>min(sizeof(stack buffer), </code><i>size
+reported</i><code>)</code>. If the size reported from head is below 54
+or the size of OS/2 is below 74, then bail (the sizes can vary
+somewhat based on table version).
+
+<p>
+From the head table you'll need <code>unitsPerEm</code> (big-endian
+<code>uint16</code> at offset 18), and from OS/2 you'll need
+<code>fsSelection</code> (<code>uint16</code> at 62),
+<code>sTypoAscender</code>, <code>sTypoDescender</code>, and
+<code>sTypoLineGap</code> (<code>int16</code> at 68, 70, and 72). The
+logic goes like this. If bit 7 is set (<code>fsSelection & 0x80 !=
+0</code>), then compute ascent and descent from the typo metrics
+instead. I'd recommend combining line gap and ascender, as this will
+minimize clipping of accented characters. The math goes like this:
+
+<pre>
+round_up(units, font_height, unitsPerEm) = floor((units * font_height + units - 1) / unitsPerEm)
+
+new_ascent = round_up(sTypoAscender + sTypoLineGap, font_height, unitsPerEm)
+new_descent = round_up(-sTypoDescender, font_height, unitsPerEm)
+</pre>
+
+<p>
+The sum of the two is your new height, to be used in place of
+<code>tm.tmHeight</code>. You will also need to subtract
+<code>tm.tmAscent - new_ascent</code> from your y coordinate when
+drawing text (<code>ExtTextOut</code>) to avoid the baseline being too
+low, as these drawing commands use the "top" as a reference point, and
+the GDI understanding of that point is the point above the Vietnamese
+accented characters, which is quite high.
+</blockquote>
+
+<p>
+Some thoughts from our own side:
+<ul>
+<li>
+We're not sure if we should switch to using these typographical
+metrics all the time (if we can retrieve them successfully for a given
+font), or keep using the old metrics in the absence of that flag in
+the font. It's possible that using them unconditionally might be
+better, on the basis that if they're provided then they're probably
+useful, and we have no hard requirement to keep the window layout
+backwards-compatible with older versions of PuTTY (unlike, say, an
+application which would suddenly flow text differently across pages if
+the font handling changed).
+
+<li>
+Also, it sounds to me as if deliberately adopting line spacing smaller
+than the font's ink extents is going to mean that sometimes text falls
+outside the character cell and doesn't get displayed. That's all right
+for people who want to use Inconsolata (or another affected font)
+<em>without</em> displaying Vietnamese text, and just want to avoid
+being inconvenienced by the fact that the font also supports
+Vietnamese. But it might be less useful if the Vietnamese text was the
+whole point! So possibly this might also make it more important to
+revise the font display so as to consistently <em>not</em> throw away
+pieces of characters that fall outside their character cell.
+
+<li>
+If this is a good idea on Windows, it's surely a good idea on GTK too,
+so we should investigate whether Pango is already doing it for us, and
+if not, whether we can persuade it to.
+</ul>
+
+<p>
+Existing worked example: <a href="https://git.libreoffice.org/core/+/34d7602954d4483b3bc9db700e7df2c15348947a%5E%21/">commit 34d7602954d4483b3bc9db700e7df2c15348947a in LibreOffice</a> seems to be doing something relevant to this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/typographical-metrics;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-12-20 12:10:49 +0000)</div>
+
+</BODY></HTML>

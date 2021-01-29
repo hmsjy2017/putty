@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish paste-semantics</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/paste-semantics.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish paste-semantics</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Alternative semantics for copy and paste<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=018aa5764505634e86df7c6eff6aae4ce98f6fe4">018aa5764505634e86df7c6eff6aae4ce98f6fe4</a> (0.71)<br>
+<p>
+Some people don't like the X-style copy/paste semantics in which
+selecting text automatically copies it to the clipboard and clicking
+a mouse button is enough to perform a paste. These semantics make
+copy and paste something of a hair-trigger operation - a misplaced
+click and drag can destroy valuable data from another application
+which you'd had in the clipboard, and equally a misplaced mouse
+action can paste all sorts of weird text into an unsuspecting PuTTY.
+
+<p>
+An alternative would be to adopt conventional Windows-style copy and
+paste keys: selecting text has no direct effect, Ctrl-Ins copies it
+to the clipboard, and Shift-Ins pastes it. (We actually already
+support Shift-Ins to paste.) We could also support ^C and ^V to do
+the same things, although this would be unlikely to be very useful
+since those key combinations are almost always needed to perform
+server-side actions.
+
+<p>
+Another possibility is that perhaps the mouse-clicks-only copy and
+paste could still work within a single PuTTY window, but Shift-Ins
+and Ctrl-Ins would be required in order to interact with the main
+Windows clipboard. This might strike a balance between convenience
+and safety (although it requires the user to keep in mind that there
+are two separate clipboards, so it wouldn't make a good default
+configuration).
+
+<p>
+Other options would be to introduce Copy and Paste entries in the
+System menu (like DOS boxes), or in the toolbar (if we ever add
+one). And if the current mouse-driven pasting is disabled, then that
+would leave the right mouse button free to bring up a context menu
+which could contain Copy and Paste as menu items.
+
+<p>
+These would <em>certainly</em> be configurable options if we do them
+at all - enough people, including the developers, like the copy and
+paste the way it is that we would never consider removing the
+current behaviour.
+
+<p>
+<em>Update:</em> as of 2003-11-21, there is a new mouse-handling
+option whereby the right button brings up a context menu containing
+a Paste option, rather than pasting directly.
+
+<p>
+<b>2017-12-17</b>: most of the above is now possible (except that the
+keys involved are Ctrl-Shift-C/V).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/paste-semantics;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2018-02-04 14:39:57 +0000)</div>
+
+</BODY></HTML>

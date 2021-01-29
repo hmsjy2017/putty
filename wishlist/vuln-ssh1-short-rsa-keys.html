@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-ssh1-short-rsa-keys</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-ssh1-short-rsa-keys.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-ssh1-short-rsa-keys</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: buffer overflow in SSH-1 if server sends two tiny RSA keys<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=c191ff129cd3415af08143fb40c461de5730655d">c191ff129cd3415af08143fb40c461de5730655d</a> (0.72)<br>
+<p>
+All versions of the PuTTY suite prior to 0.72 have a memory corruption
+bug in SSH-1 key exchange, which might lead to a security
+vulnerability.
+
+<p>
+During SSH-1 key exchange, the server sends a packet containing an RSA
+host key and an RSA server key. PuTTY will allocate a buffer the size
+of the larger key, and then write a random 32-byte session id into it,
+before encrypting the session id with both keys in sequence.
+
+<p>
+The bug is triggered if a malicious server sends RSA host and server
+keys which are both shorter than 32 bytes, in which case the allocated
+buffer will also be less than 32 bytes, and the initial writing of the
+session id will overrun the buffer.
+
+<p>
+We have no evidence that this can be exploited to cause remote code
+execution. The data written into the too-small buffer is made up by
+PuTTY, not by the server. But, on the other hand, we don't know that
+it <em>can't</em> allow code execution.
+
+<p>
+The bug occurs before host key verification. (PuTTY verifies the host
+key before performing <em>encryption</em> with it, but unfortunately,
+not before the initial write into the buffer it's going to encrypt
+in.) So a network attacker intercepting your connection could attack
+PuTTY through this vulnerability before being detected as not the real
+server.
+
+<p>
+This bug only affects the obsolete SSH-1 protocol, which is rarely used.
+In PuTTY 0.68 and later, we
+<a href="no-ssh1-fallback.html">no longer support</a>
+automatic fallback to SSH-1 from SSH-2, so any saved session
+configured to the default of SSH-2 will not be vulnerable to this
+issue.
+
+<p>
+This vulnerability was found as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project; see
+<a href="https://hackerone.com/reports/630462">#630642</a> in their
+tracker.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-ssh1-short-rsa-keys;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-01-11 14:47:27 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug flow-control-filexfer</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/flow-control-filexfer.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug flow-control-filexfer</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Be less clever with SSH-2 flow control in PSFTP and PSCP<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: r7679 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=16cbd4f26095627796e2774e0ca43648f9c4c692">16cbd4f26095627796e2774e0ca43648f9c4c692</a> 2007-08-06 (0.61)<br>
+<p>
+(This wish applies to SSH-2; SSH-1 doesn't provide flow control above
+TCP's.)
+
+<p>As Peter Gutmann has
+<a href="http://www.cs.auckland.ac.nz/~pgut001/pubs/app_sec.pdf">observed</a>,
+naive implementations of the SSH-2 sliding window protocol place an arbitrary
+limit on the throughput of each channel, limiting it to the product of the
+window size and the round-trip time (the so-called "SSH-2 handbrake").
+PuTTY is one such naive implementation (it uses a fixed channel window size
+of 16k).
+
+<p>The full generality of this problem is addressed in
+<a href="flow-control.html">flow-control</a>.
+A simple approach
+is possible where a connection only has (and only ever will have) one channel
+running over it, since in that case PuTTY can open the window fully and leave
+flow control to TCP.
+
+<p>As something of an aside, it might also be helpful for PuTTY to indicate
+somehow to the server that it only plans to use a single channel on a
+connection so that the server can open its window fully too.  Otherwise, we
+only get improved download performance.
+
+<p>PSCP and PSFTP do both of these as of r7679, and get decent
+download performance. (We're not aware that any server yet takes any
+notice of our <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixF.html#sshnames-channel"><tt>simple@putty.projects.tartarus.org</tt></a>
+hint, though.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/flow-control-filexfer;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

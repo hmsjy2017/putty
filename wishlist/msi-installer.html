@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish msi-installer</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/msi-installer.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish msi-installer</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: MSI installer for PuTTY on Windows<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <a href="win-silent-uninstall.html">win-silent-uninstall</a><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 0.67 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5c5879b99d2a0785095a384f48a2d934e1b2d4c5">5c5879b99d2a0785095a384f48a2d934e1b2d4c5</a><br>
+<p>
+A few people have expressed a desire for an MSI-based Windows
+installer for PuTTY. Apparently MSI is easier/possible
+to deploy via various software deployment
+mechanisms (Group Policy, SMS, Active Directory), compared to our
+current <a href="http://www.innosetup.com/isinfo.php">Inno Setup</a>
+installer.
+
+<p>
+<a href="http://wix.sourceforge.net/">WiX</a> is a free
+thing that will create MSI-based installers.
+<a href="http://www.installsite.org/pages/en/msi/authoring.htm">This page</a>
+lists some others.
+
+<p>
+<em>Update:</em> we released an MSI installer for 0.67 shortly after
+it was released (so 0.67 is available in both Inno Setup and MSI forms);
+we plan to retire the Inno Setup installer in future.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/msi-installer;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

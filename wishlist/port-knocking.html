@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish port-knocking</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/port-knocking.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish port-knocking</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Port knocking<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>never:</i> We don&#x27;t ever intend to fix this.<br>
+<p>
+We have been asked several times to implement <a
+href="http://www.portknocking.org/">Port Knocking</a>: a mechanism
+for making a running service appear to be a connection-refusing
+closed port unless the right sequence of "knocks" (attempted
+connections to genuinely closed ports) is received before the
+connection attempt.
+
+<p>
+The PuTTY team is collectively unconvinced that this is a good idea.
+For a start, it's not universally usable, because many firewalls
+won't let the knocks through. (Obviously the firewall at the server
+end is precisely what will need to be specifically listening out for
+the knock, but firewalls at the client end or in between are likely
+to cause a lot more trouble. And in particular, if you're connecting
+through an <em>SSH tunnel</em>, you'll have a hard time sending a
+knock.) Also, since the knock is effectively sent in cleartext, it
+doesn't buy you a great deal of security - the only real gain is
+that your service appears to be a closed port to anyone doing a port
+scan, and although that might have advantages it might also cause
+administrators to become more relaxed about the <em>real</em>
+security of their service. It seems like a lot of effort for very
+little gain.
+
+<p>
+Much more importantly, though, we don't like the idea of this
+mechanism having to be implemented separately in <em>every</em>
+network client program - particularly given the hints on the port
+knocking website that more inventive forms of knock may be developed
+in future, which would of course mean we'd have to keep up with
+development. To implement and maintain this in PuTTY and all other
+network utilities would be a huge amount of effort.
+
+<p>
+If this is to be done at all, it should be done in a largely
+client-independent manner. For example:
+
+<ul>
+<li>
+Write a small command-line application which
+performs the port knock, makes the connection, and then gateways the
+connection to its standard input and output: a
+port-knocking enabled equivalent
+of <a
+href="http://www.atstake.com/research/tools/network_utilities/"><code>nc</code>(1)</a>.
+Then invoke that using the "Local" proxy setting in PuTTY (works on both
+Windows and Unix).
+<li>
+Write a SOCKS server which understands your port knocking, and
+performs the appropriate knock before proxying any given connection.
+Point PuTTY at it using our existing SOCKS proxy support.
+<li>
+An even simpler approach: write a script which runs the knock
+program, and <em>then</em> launches PuTTY and tells it to connect to
+the appropriate host. The <a
+href="http://doorman.sourceforge.net/">doorman.sourceforge.net</a>
+client, for example, is intended to be used this way.
+<li>
+(Unix only) Construct a dynamic library which replaces the
+<code>connect</code>(2) system call so that it performs the knock
+first. Then you can use <code>LD_PRELOAD</code> to apply it to
+almost any application.
+</ul>
+
+<p>
+If anyone really wants to see this feature in PuTTY, they should
+probably look into one of the above options.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/port-knocking;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2008-01-08 16:14:59 +0000)</div>
+
+</BODY></HTML>

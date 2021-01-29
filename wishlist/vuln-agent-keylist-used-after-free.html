@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-agent-keylist-used-after-free</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-agent-keylist-used-after-free.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-agent-keylist-used-after-free</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Key list from agent used after free if server rejects signature after PK_OK<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.53<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=45287b627d1b1c4db4c7bd485a5adcc63b8d608a">45287b627d1b1c4db4c7bd485a5adcc63b8d608a</a> 0.74<br>
+<p>
+When PuTTY tries to do public-key SSH authentication using a key held
+in the SSH agent, it retrieves a list of the keys held in the agent,
+and iterates through them one by one to see which one the server will
+accept.
+</p>
+
+<p>
+PuTTY first sends an <em>offer</em> message, containing just the
+public key and no signature. If the server is unwilling to accept that
+key as identifying the target user, it usually sends back a message
+rejecting the offer, which saves the client the trouble of making a
+pointless signature. So normally PuTTY iterates through the keys
+making offers until it finds one (if any) that the server is willing
+to accept, and then it generates a signature, and the server accepts
+that signature.
+</p>
+
+<p>
+However, it's also possible for the server to accept the key in
+principle (replying positively to the initial offer) but then reject
+the actual signature when it is presented. This can happen if the
+client has a bug causing it to generate an invalid signature, or if
+the server has a bug causing it to mistakenly <em>think</em> a
+signature is invalid, or the server can even do it on purpose if it
+wants to (e.g. to avoid allowing unauthorised clients to cheaply query
+what keys are acceptable).
+</p>
+
+<p>
+In this situation, PuTTY has a bug, because it has a single
+<code>agent_response</code> variable storing the most recent response
+sent by the SSH agent, and it leaves the key list in that variable
+while iterating over it. So once the server responds positively to a
+key offer, PuTTY asks the SSH agent to generate a signature, which
+will be stored in the same <code>agent_response</code> variable, whose
+previous contents (the key list) will be freed. Then, if the server
+rejects the signature, PuTTY tries to go back to iterating over the
+key list, failing to notice that it has now been freed.
+</p>
+
+<p>
+We don't know that this can be exploited controllably, but it is
+certainly a bug that can be deliberately triggered by a server (by
+sending the <code>PK_OK</code> acceptance message to all offers, and
+then rejecting all signatures).
+</p>
+
+<p>
+0.74 fixes it, by having PuTTY immediately copy the key list out of
+<code>agent_response</code> to somewhere safer. Then the later use of
+<code>agent_response</code> to retrieve a signature does not collide
+with the key list.
+</p>
+
+<p>
+This vulnerability was discovered by the PuTTY team themselves in the
+course of development.
+</p>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-agent-keylist-used-after-free;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-06-27 08:16:18 +0100)</div>
+
+</BODY></HTML>

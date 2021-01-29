@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-chm-hijack</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-chm-hijack.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-chm-hijack</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Potential malicious code execution via CHM hijacking<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.51<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=67d3791de83569dd55b307b775087815ad0d9002">67d3791de83569dd55b307b775087815ad0d9002</a> 0.71<br>
+<p>
+Up to and including version 0.70, when you launched the online help in
+any of the Windows PuTTY GUI tools, the tool would locate its help
+file by looking alongside its own executable.
+
+<p>
+If you were running PuTTY from a directory that unrelated code could
+arrange to drop files into (for example, running it directly from a
+browser's default download directory), this means that if somebody
+contrived to get a file called <code>putty.chm</code> into that
+directory (for example, by enticing you to click on a download link
+with that name) then PuTTY would believe it was the real help file,
+and feed it to <code>htmlhelp.exe</code>. (This is a similar attack
+vector to the previous <a href="vuln-indirect-dll-hijack.html">vuln-indirect-dll-hijack</a>.)
+
+<p>
+This is a vulnerability because HTML Help files (<code>.chm</code>)
+can arrange in turn to run code of their choice, for example by
+embedding an <code><OBJECT></code> HTML element that is a
+Windows shortcut, plus Javascript to click it. See, for example, this
+<a
+href="https://gist.github.com/mgeeky/cce31c8602a144d8f2172a73d510e0e7">proof
+of concept</a>.
+
+<p>
+As of 0.71, this is fixed by completely changing how the PuTTY tools
+find their help file:
+<ul>
+<li>The standalone executables (i.e. the ones you might download into
+a random directory in the first place) now <em>embed</em> the CHM
+inside themselves as a custom Windows resource, and when you click the
+help button, they write it out to a temporary file. Therefore, the CHM
+is protected against malicious modification by the same Authenticode
+signature that covers the rest of the binary.
+<li>The executables contained in the MSI installer do not have that
+custom resource, because that would waste disk space on multiple
+copies of it. Instead, they consult a Registry entry created by the
+installer itself, which points at the pathname where the installer
+saved <code>putty.chm</code>.
+</ul>
+This means that there are now two versions of <code>putty.exe</code>:
+one with an embedded help file and one without. If you're in doubt,
+the About box tells you which one you're running.
+
+<p>
+Also, we have removed the first-generation Windows Help files
+completely (<code>putty.hlp</code> and the separate contents file
+<code>putty.cnt</code>), since they undoubtedly had the same issue and
+are now obsolete.
+
+<p>
+If you had installed PuTTY via the normal MSI installer, or if you
+were careful in any other way about where you downloaded the
+standalone executable files to, then you should be safe from this
+issue.
+
+<p>
+This vulnerability was found by Dolev Taler, as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+It has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9896">CVE-2019-9896</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-chm-hijack;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-25 20:23:34 +0000)</div>
+
+</BODY></HTML>

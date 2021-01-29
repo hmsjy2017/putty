@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ssh-bug-rekey2-notsaved</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh-bug-rekey2-notsaved.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ssh-bug-rekey2-notsaved</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SSH-2 rekey bug-compatibility setting not saved<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>present-in</b>: 0.58<br>
+<b>fixed-in</b>: r6473 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=67b68bf1450b90d5fea3556e179ac9bc91bc6240">67b68bf1450b90d5fea3556e179ac9bc91bc6240</a> 2005-12-02 (0.59)<br>
+<p>
+In 0.58, a new SSH bug-compatibility mode was added to PuTTY:
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-bug-rekey">"Handles SSH-2 key re-exchange badly"</a>.
+
+<p>
+However, in 0.58, attempts to save any setting other than "Auto" fail
+- the setting stays at "Auto". (Apparently there is some NetApp server
+- "Data ONTAP" - that needs this mode and can't be distinguished by
+our heuristics.) This is fixed in the development snapshots.
+
+<p>
+If the setting is present in the saved settings, 0.58 will happily
+load it, so a workaround for 0.58 users is to use a snapshot just to
+save the setting to the desired value, and then revert to using 0.58.
+(Alternatively, you could edit the setting manually; its name is
+<tt>BugRekey2</tt> with values 0=Auto, 1=Off, 2=On.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-bug-rekey2-notsaved;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

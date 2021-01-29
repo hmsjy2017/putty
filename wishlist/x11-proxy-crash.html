@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug x11-proxy-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/x11-proxy-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug x11-proxy-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Proxy + SSH + X11 forwarding fails and/or crashes<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.53 0.53b 2002-09-29 2002-03-25 2002-12-11<br>
+<b>fixed-in</b>: 2002-12-19 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=8304f4e0dcd9555eb8dceb0402f1faa2738c2777">8304f4e0dcd9555eb8dceb0402f1faa2738c2777</a> (0.54)<br>
+<p>Opening a forwarded X11 connection over an SSH connection that's using a
+proxy fails to work. (Versions of PuTTY before 2002-10-11 may also crash.)
+
+<p>I (JTN) can reproduce this with HTTP proxying.
+
+<p>Appears to be occur regardless of whether there's an X server to connect to.
+When I do have an X server running, it doesn't appear to see any traffic
+when attempting X forwarding through a proxy.
+
+<p>
+Symptom is something like the following:
+<p><pre>X connection to chiark:27.0 broken (explicit kill or server shutdown)</pre>
+
+<p>PuTTY behaves as though the X connection is being opened then slammed shut:
+<p><pre>2002-10-17 18:07:24     Received X11 connect request
+2002-10-17 18:07:24     opening X11 forward connection succeeded
+2002-10-17 18:07:24     Opened X11 forward channel
+2002-10-17 18:07:24     Forwarded X11 connection terminated</pre>
+
+<p>
+A workaround is to add `localhost,127.0.0.1' to the proxy exclusions.
+This implies that our proxying code is being over-enthusiastic and needs
+reining in.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/x11-proxy-crash;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

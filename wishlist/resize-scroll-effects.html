@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug resize-scroll-effects</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/resize-scroll-effects.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug resize-scroll-effects</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Resizing the window does the Wrong Thing to its contents<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: r2923 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e9cc32850132b0ed4bc1279200ef9a432dc8d0f5">e9cc32850132b0ed4bc1279200ef9a432dc8d0f5</a> 2003-03-08 (0.54)<br>
+<p>I (BJH) think that PuTTY's behaviour when the number of lines on the screen
+is changed is currently wrong.  What it currently does is to keep the bottom
+line of the screen in a fixed position relative to the text.  This means that
+if the window is enlarged, lines get pulled out of the scrollback and added
+to the screen, and if the window is shrunk, lines get pushed from the
+screen to the scrollback.  A particularly nasty aspect of this is that if you
+have a large window with a shell prompt at the top and you reduce its size,
+the prompt disappears off the top of the window.  Pulling lines out of the
+scrollback might also get awkward if we start storing the scrollback in a
+compressed format.
+
+<p>So what <em>should</em> we do?  xterm's fix to the disappearing-prompt
+problem seems to be to delete lines from the bottom of the window when it's
+shrunk unless that would delete the line containing the cursor, in which case
+lines are deleted from the top instead.  When enlarging the window, xterm
+pulls lines out of the scrollback just like PuTTY.  I still haven't decided
+whether or not this is evil.  In any case, it should probably be inhibited in
+alternate screen mode, just like copying data into the scrollback is (xterm
+gets this bit wrong).
+
+<p>Another subtlety is what to do about saved cursor positions.  At present in
+PuTTY (and I think in xterm), if you open an 80x24 window, do something to
+put stuff into the scrollback, switch to the alternate screen, enlarge the
+window to the height of the screen and then switch back from the alternate
+screen, you end up with the cursor on line 24, rather than at the bottom of
+the screen with the text that used to be on line 24.  This is clearly wrong.
+Richard Boulton has a patch to fix this.
+
+<p>(cf. <a href="resize-no-truncate.html">resize-no-truncate</a> for the
+case where the number of columns is changed.)
+
+<p><b>SGT, 2003-03-07</b>: Just accepted a patch from Richard
+Boulton which should fix this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/resize-scroll-effects;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

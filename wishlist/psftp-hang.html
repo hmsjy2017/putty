@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug psftp-hang</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/psftp-hang.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug psftp-hang</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PSFTP hangs/consumes 100% CPU when launched from Explorer<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>absent-in</b>: 0.56 0.57 2004-11-27 r4904<br>
+<b>present-in</b>: r4906 2004-11-28 0.58 2005-08-11 2007-01-03<br>
+<b>fixed-in</b>: r7098 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=af38fcbfbce7f0defc8659117c256391fb1a9b56">af38fcbfbce7f0defc8659117c256391fb1a9b56</a> 2007-01-13 (0.59)<br>
+<p><pre>We&#x27;ve had several reports of PSFTP 0.58 hanging or consuming lots
+of CPU. It appears that this only happens when it&#x27;s started from
+Explorer or the Start Menu, rather than the Command Prompt (which
+suggests an obvious workaround).
+
+I wasn&#x27;t able to reproduce this on Win98; however, on Win2K SP4,
+a PSFTP instance started from a shortcut (including from the start menu)
+seems to just sit there and munch CPU when asked to &quot;open &lt;sessname&gt;&quot;,
+whereas the same binary started from cmd.exe, or from Explorer not via
+a shortcut, works fine. No output is seen even if the shortcut invokes
+&quot;psftp -v&quot;. Same problem if the shortcut specifies the session directly.
+(Seen with 0.58 and 2005-08-11:r6183.) Also reproduced on WinXP.
+
+(PSCP actually suffers from the same issue if started from a shortcut
+with a set of arguments that invokes network activity, although
+people are less likely to notice that.)
+
+External reports &amp; sketchy notes:
+
+ * 17762650.1119449356166.JavaMail.root@wamui-cedar.atl.sa.earthlink.net
+   XP Pro, 0.58 
+   run, &quot;open [server]&quot;, username/password
+   then responds sluggish (3mins for &quot;exit&quot;)
+
+ * C22F646F6265F94A919BC05D7726FAAF01228820@CHZHBEXC12.ch.kworld.kpmg.com
+   XP - sometimes - 0.58 (not &quot;older&quot;)
+   only when more than one psftp session?
+
+ * 005e01c5a75e$f590d040$06c8a8c0@PETER
+   0.58, not 0.56
+   consumes CPU for several mins before starting to xfer; thereafter OK
+
+ * F8B9B12641FB6B4FAC761BDEF9D63B040616284E@tlv-ex-01.adprod.bmc.com
+   Win2K SP4 - &quot;several computers&quot; (machine specific?); 0.58
+   start from cmd.exe - OK; from Explorer - hangs
+   hangs after username; sometimes recovers, but slow get/put
+
+ * E1DcmyG-00029Z-00@ixion.tartarus.org
+   0.58 on XP SP2
+   ok from cmd.exe, not from Explorer; hangs between username/password
+
+Possibly related?:
+ * eed4e9ec05062811354a7ba1a8@mail.gmail.com
+   XP SP2; 2005-06-28:r6024
+   hang on bye/exit/quit (command prompt, batch file) from connected
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/psftp-hang;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

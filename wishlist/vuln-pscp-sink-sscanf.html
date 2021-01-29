@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-pscp-sink-sscanf</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-pscp-sink-sscanf.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-pscp-sink-sscanf</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: old-style scp downloads may allow remote code execution<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.66<br>
+<b>fixed-in</b>: 0.67 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=bc6c15ab5f636e05b7e91883f0031a7e06117947">bc6c15ab5f636e05b7e91883f0031a7e06117947</a><br>
+<p>
+Many versions of PSCP prior to 0.67 have a stack corruption
+vulnerability in their treatment of the 'sink' direction (i.e.
+downloading from server to client) of the old-style SCP protocol.
+
+<p>
+In order for this vulnerability to be exploited, the user must connect
+to a malicious server and attempt to download any file.
+
+<p>
+(Note however that the vulnerability kicks in <em>after</em> host key
+verification, so the host key of the server has to have been
+accepted to get this far.)
+
+<p>
+This vulnerability only arises in the old SCP protocol, so you can
+work around it in a vulnerable PSCP by using the <code>-sftp</code>
+option to force the use of the newer SFTP protocol, provided your
+server supports that protocol.
+
+<p>
+This bug was discovered by
+<a href="https://github.com/tintinweb/pub/tree/master/pocs/">tintinweb</a>
+and has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-2563">CVE-2016-2563</a>.
+
+<p>
+<em>Vulnerability details:</em>
+Prior to any download in the SCP sink protocol, the server sends a
+line of text consisting of an octal number encoding Unix file
+permissions, a decimal number encoding the file size, and the file
+name. Since the file size can exceed 2<sup>32</sup> bytes, and in some
+compilation configurations of PuTTY the host platform's largest
+integer type is only 32 bits wide, PuTTY extracts the decimal file
+size into a temporary string variable to send to its own 64-bit
+decimal decoding function. Unfortunately, that extraction was done
+carelessly, using a <code>sscanf</code> with no length limit,
+permitting a buffer overrun.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-pscp-sink-sscanf;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

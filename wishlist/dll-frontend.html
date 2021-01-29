@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish dll-frontend</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/dll-frontend.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish dll-frontend</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SSH client packaged as a DLL for use in other programs<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <a href="remove-statics.html">remove-statics</a><br>
+<b>blocks</b>: <em><a href="vb-control.html">vb-control</a></em><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+A lot of people ask for a DLL that implements an SSH client, so that
+they can include it in their own programs and automatically get
+securely in touch with other systems and issue commands.
+
+<p>
+I'm not entirely sure when (or whether) we'll have the energy to get
+round to this, but I've thought about the design aspects a fair bit,
+and this is what I've come up with.
+
+<p>
+When I hear "DLL for PuTTY" I tend to think of something very much
+like Plink, but using a very simple sort of function-call interface
+rather than reading from stdin and writing to stdout. Something like
+this:
+
+<pre>
+  SSH_Session mysess;
+  SSH_Channel mychan;
+  
+  mysess = puttydll_open("myhost.example.com", 22);
+  mychan = puttydll_start_command(mysess, "cvs server");
+  puttydll_send_data(mychan, cvs_auth_data, len);
+  len = puttydll_read_data(mychan, buffer, sizeof(buffer));
+</pre>
+
+<p>... and so on. So you'd end up with `<code>SSH_Channel</code>'
+handles which worked a little like file handles - you could do a
+blocking read on a particular one of them, for example, or wait
+until one of a selection of them became ready. (If you wanted to
+wait for data from either an SSH channel or a Windows-side object,
+interfacing between this sort of <code>select()</code> and the
+Windows equivalents might be fun, but I'm sure it could be worked
+out. Perhaps an API function which would hand you a Windows event
+object that would get set when one of the channels was active.)
+
+<p>The biggest immediate problems I see with it are:
+
+<ul>
+<li>
+PuTTY needs its own event loop, so that it can respond to server-
+side requests (such as repeat key exchange and server-side pings) in
+the SSH connection it's managing. This might not be easy to
+integrate with whatever kind of event loop the calling program is
+using - if indeed it's using an event loop at all; the kind of code
+I quote above would probably much rather stay sequential than become
+event-driven with explicit state. Hence I think the simplest way to
+arrange this is to have the DLL spawn a thread to manage PuTTY's own
+network event loop, which can then run without interfering with what
+the rest of the program is doing. That way, the calling program
+could call the send-data function, go off and do its own thing for a
+while, and then come back and see if data had come back for it to
+read yet.
+
+<li>
+(On the other hand, if the caller <em>did</em> want to integrate
+PuTTY into their own event loop so that they received immediate
+notification when data came in, that would be another thing we'd
+want to allow them to do. Perhaps allowing them to provide an event
+object which we could set when particular things happened might be a
+useful approach.)
+
+<li>
+The DLL interface would need careful design. In particular, what
+should happen about interactive prompts - passwords, passphrases,
+host key verification, and so on? Should all of those things be
+fatal errors (limiting the DLL to being used in a context where
+unattended login is possible), or what? I think it would be a
+mistake to have this sort of prompt go directly to the user; it
+would probably be better to notify the calling program in some way,
+and leave it to decide how to handle it. (Although perhaps providing
+helper routines that gave standard dialog boxes for these prompts
+might also be an interesting option.)
+
+</ul>
+
+<p> However, none of those issues is insurmountable, and once
+they're taken care of I don't see why a DLL providing an API like
+the one above shouldn't be perfectly possible to write just by
+implementing a single front-end module to replace (say)
+<code>plink.c</code>.
+
+<p>
+There's a third-party DLL encapsulation, W-PuTTY-CD, on our
+<a href="../links.html">Links page</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/dll-frontend;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2008-07-22 14:11:17 +0000)</div>
+
+</BODY></HTML>

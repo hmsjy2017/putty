@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish utf8-plus-vt100</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/utf8-plus-vt100.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish utf8-plus-vt100</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Simultaneous support for UTF-8 and enough ISO-2022 sequences for VT100 line drawing<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6afa955a2ebf017755af134264a9423f54b9351c">6afa955a2ebf017755af134264a9423f54b9351c</a> (0.71)<br>
+<p>
+It's been suggested that it might be nice for PuTTY to support the
+traditional VT100 line drawing behaviour (using ISO-2022 escape
+sequences such as ESC ( B, ESC ) 0, SO and SI) in the same mode as
+also supporting UTF-8. This would allow it to simultaneously support
+legacy applications which ran on a VT100 and hence never output any
+character value above 0x7F, and modern UTF-8-aware applications.
+
+<p> Markus Kuhn <a
+href="http://www.cl.cam.ac.uk/~mgk25/unicode.html#term">thinks this
+is wrong</a> ("While a terminal emulator is in UTF-8 mode, any ISO
+2022 escape sequences [...] are ignored"), and I (SGT) am inclined
+to agree, not least because the lack of easily corruptible ISO 2022
+state is a useful defence against the confusion caused by
+accidentally spewing binary files into your standard output. On the
+other hand, I can see the potential utility of being able to run two
+classes of plausibly common application without needing a mode
+switch or <code>luit</code>. So I think that if we do this at all
+(which isn't clear, hence priority "low"), it should be a
+configurable option.
+
+<p>
+BJH points out that ISO 2022 requires that when we return from
+UTF-8 (by ESC % @) the ISO-2022 state must be the same as when we
+left, so if we did this then we'd have to keep a separate
+pseudo-ISO-2022 state inside the UTF-8 mode (and discard it on ESC %
+@, rather than preserving it until the next ESC % G).
+
+<p><b>SGT, 2018-05-12</b>: a user sent a patch to implement this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/utf8-plus-vt100;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2018-05-12 08:50:18 +0100)</div>
+
+</BODY></HTML>

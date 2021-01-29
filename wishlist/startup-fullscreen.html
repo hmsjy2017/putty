@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish startup-fullscreen</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/startup-fullscreen.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish startup-fullscreen</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Option to start up in full screen mode<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>depends</b>: <em><a href="resize.html">resize</a></em><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+While you can start a PuTTY window maximised by Windows mechanisms,
+currently there's no way to start it full-screen. There should be.
+
+<p>
+While we're at it, we may as have well an option for `maximised', even
+though you can already do that
+<a href="../faq.html#faq-startmax">by other means</a>.
+
+<p>
+If we're going to do this, we should perhaps also propagate
+maximised-ness and full-screen-ness through Duplicate Session
+(duplicate a currently maximised session and the next one comes up
+that way too). Then again, perhaps not; I'm not sure whether it's
+really helpful to have <em>two</em> full-screen PuTTYs open at once.
+At least one user definitely wants it to work this way for maximised
+windows, though.
+
+<p>
+This should perhaps be considered in the context of
+<a href="resize.html">a general overhaul of resize handling</a>.
+
+<p>
+Patch (unreviewed): 40E631F174C41E4DBE52727E137AF927C043E6@EXCHVS1.cs.cornell.edu
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/startup-fullscreen;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

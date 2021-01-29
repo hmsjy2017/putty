@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish pageant-as-service</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pageant-as-service.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish pageant-as-service</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Ability to run Pageant as a Windows Service in NT/2000/etc<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>never:</i> We don&#x27;t ever intend to fix this.<br>
+<p>
+People occasionally ask if it's possible to enable running Pageant as
+a Windows Service.
+
+<p>
+It's not. This is for two reasons:
+
+<ul>
+ <li>Pageant's IPC is pretty ad-hoc, and is done partly through
+     window messages. Hence Pageant needs to have a window open at
+     all times, so it can't run as a persistent service through
+     multiple people's sessions.
+
+ <li>Pageant is designed to be used by a single user of a machine
+     (and it contains security code to enforce this). If it ran as a
+     service, it would have to somehow segregate requests from
+     multiple users, maintain lots of separate key databases, do its
+     own internal access control to work out which requests were
+     allowed to access what, and generally things would get a lot
+     more complicated. It's never seemed worth going to this effort.
+</ul>
+
+<p>
+In any case, I've never been sure of the usefulness of running a
+long-term SSH agent to supply keys to automated scripts. That
+doesn't seem much more secure than just leaving the unencrypted key
+on disk - it might protect you against physical-access attacks in
+which the attacker shuts the machine down, steals the hard disk, and
+then can't recover the unencrypted key, but against the much more
+likely network attack in which the attacker gains access to the
+still-running machine it's no help because it's almost as easy to
+read keys out of the agent's memory as it is to read them off disk.
+
+<p>
+A better solution for automated scripts is to create a dedicated SSH key
+for each automated task, and <em>restrict</em> the capabilities of that key
+on the server side. Then just store the private key unencrypted
+(readable by you only, of course) on the client. That way, if an
+attacker manages to gain access to the key file, then they don't
+gain unrestricted access to the account on the server; instead they
+only gain the specific ability to tamper with the progress of that
+particular automated script. Also I think it makes the scripts more
+reliable, because they only depend on disk files, and they're not
+dependent on the presence of a persistent process that might have
+(for example) unexpectedly segfaulted or been accidentally killed a
+day ago.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-as-service;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-09-03 12:50:34 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug wcwidth-upgrade</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/wcwidth-upgrade.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug wcwidth-upgrade</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Upgrade wcwidth() to Markus Kuhn&#x27;s latest version<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2005-03-24 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=9049f439555b5f4d030a2f25938f15107b0d044c">9049f439555b5f4d030a2f25938f15107b0d044c</a> (0.58)<br>
+<p>
+Inside PuTTY is a function called <code>wcwidth()</code>, which tells
+us the display width of a given <a href="http://www.unicode.org/">Unicode</a>
+code point (e.g., single-width, zero-width/combining, or double-width).
+
+<p>
+The version we use is a freely available implementation from
+Markus Kuhn which dates from 2001-01-12. There is a
+<a href="http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c">newer version</a>
+of Markus Kuhn's implementation available; it appears to be dated
+2003-05-20, be based on Unicode 4.0, and include some code points
+<a href="unicode-more-planes.html">outside the BMP</a>, which our
+version doesn't.
+
+<p>
+The status of some existing code points seems to have changed.
+Therefore, feedback on whether this upgrade is a good or bad idea
+would be much appreciated.
+
+<p>
+Ignoring changes to <code>wcwidth_cjk()</code> output (we've
+<a href="wcwidth-cjk.html">only just started using it</a>, so an
+upgrade won't affect existing users, although it may make the new
+option more or less useful), and U+10000 onwards, the changes are:
+
+<p><pre>/* Combining Diacritical Marks */
+6,9c6,9
+< 0300-034E 0
+< 034F-035F 1
+< 0360-0362 0
+< 0363-0482 1
+---
+> 0300-0357 0
+> 0358-035C 1
+> 035D-036F 0
+> 0370-0482 1
+/* <a href="bidi.html">Arabic</a> */
+25,27c25,31
+< 05C5-064A 1
+< 064B-0655 0
+< 0656-066F 1
+---
+> 05C5-05FF 1
+> 0600-0603 0
+> 0604-060F 1
+> 0610-0615 0
+> 0616-064A 1
+> 064B-0658 0
+> 0659-066F 1
+/* Gurmukhi */
+65,66c69,70
+< 09E4-0A01 1
+< 0A02-0A02 0
+---
+> 09E4-0A00 1
+> 0A01-0A02 0
+/* Gujarati */
+87c91,93
+< 0ACE-0B00 1
+---
+> 0ACE-0AE1 1
+> 0AE2-0AE3 0
+> 0AE4-0B00 1
+/* Kannada */
+113c119,121
+< 0C57-0CBE 1
+---
+> 0C57-0CBB 1
+> 0CBC-0CBC 0
+> 0CBD-0CBE 1
+/* Tagalog, Hanunoo, Buhid, Tagbanwa, Khmer */
+176c184,194
+< 1200-17B6 1
+---
+> 1200-1711 1
+> 1712-1714 0
+> 1715-1731 1
+> 1732-1734 0
+> 1735-1751 1
+> 1752-1753 0
+> 1754-1771 1
+> 1772-1773 0
+> 1774-17B3 1
+> 17B4-17B5 0
+> 17B6-17B6 1
+/* more Khmer, Mongolian */
+182,184c200,204
+< 17D4-180A 1
+< 180B-180E 0
+< 180F-18A8 1
+---
+> 17D4-17DC 1
+> 17DD-17DD 0
+> 17DE-180A 1
+> 180B-180D 0
+> 180E-18A8 1
+/* Limbu */
+186c206,214
+< 18AA-200A 1
+---
+> 18AA-191F 1
+> 1920-1922 0
+> 1923-1926 1
+> 1927-1928 0
+> 1929-1931 1
+> 1932-1932 0
+> 1933-1938 1
+> 1939-193B 0
+> 193C-200A 1
+/* General Punctuation */
+190c218,220
+< 202F-2069 1
+---
+> 202F-205F 1
+> 2060-2063 0
+> 2064-2069 1
+/* Combining Diacritical Marks for Symbols, Miscellaneous Technical, */
+/* CJK Symbols and Punctuation */
+193,199c223,227
+< 20D0-20E3 0
+< 20E4-2E7F 1
+< 2E80-3009 2
+< 300A-300B 1
+< 300C-3019 2
+< 301A-301B 1
+< 301C-3029 2
+---
+> 20D0-20EA 0
+> 20EB-2328 1
+> 2329-232A 2
+> 232B-2E7F 1
+> 2E80-3029 2
+/* Variation Selectors */
+212c240,242
+< FB1F-FE1F 1
+---
+> FB1F-FDFF 1
+> FE00-FE0F 0
+> FE10-FE1F 1
+/* Halfwidth and Fullwidth Forms */
+218,219c248,249
+< FF00-FF5F 2
+< FF60-FFDF 1
+---
+> FF00-FF60 2
+> FF61-FFDF 1</pre>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/wcwidth-upgrade;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-win-pageant-client-missing-length-check</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-win-pageant-client-missing-length-check.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-win-pageant-client-missing-length-check</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: Windows Pageant client code does not check response length field<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.50 0.51 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=b38d47e94cf6848dddeaa7aa50301456130715a9">b38d47e94cf6848dddeaa7aa50301456130715a9</a> (0.72)<br>
+<p>
+On Windows, when a PuTTY SSH client program sends a request to
+Pageant, the code that receives the response from Pageant in a shared
+memory buffer was not doing any range checking on the length field
+stored at the start of that buffer.
+
+<p>
+So if a malicious program is playing the role of Pageant, or has taken
+over an existing Pageant by some method, then it can deliberately send
+an out-of-range response, to attempt to induce uncontrolled memory
+reading or overlarge memory allocation by the client program.
+
+<p>
+This affects all the SSH client tools in the PuTTY suite: PuTTY
+itself, Plink, PSCP and PSFTP.
+
+<p>
+We're not sure to what extent this bug is exploitable.
+
+<p>
+Also, even if it is exploitable, we think this bug is only even worth
+exploiting under unusual circumstances. Normally, Pageant has all the
+most valuable secrets in it, so if someone is in a position to take it
+over then they probably don't need to attack PuTTY through it
+afterwards. But it's just possible that malware that gets on to the
+machine by other means might set itself up to mimic Pageant, if the
+user isn't already running a real one, and then try to attack
+instances of PuTTY when they do their routine check of Pageant. Also,
+if PuTTY (but not Pageant) is running with elevated privilege, then a
+malicious Pageant may be able to escalate its own privilege if it can
+successfully attack the elevated PuTTY.
+
+<p>
+This vulnerability was found as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-win-pageant-client-missing-length-check;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-07-20 07:44:55 +0100)</div>
+
+</BODY></HTML>

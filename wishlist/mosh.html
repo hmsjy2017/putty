@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish mosh</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/mosh.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish mosh</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Compatibility with Mosh (mobile shell)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>Several people have asked us to extend PuTTY to add compatibility
+with <a href="https://mosh.mit.edu/">Mosh</a>, a rather unusual
+remote-terminal application that's particularly suited to use over bad
+networks.  This is a tempting idea in principle, but there are several
+practical problems:
+
+<ul>
+<li>The State Synchronization Protocol used by Mosh doesn't seem to
+have any public documentation.  This makes writing another
+implementation difficult.
+
+<li>Unlike all the protocols currently supported by PuTTY, Mosh
+doesn't transport a terminal stream but updates the screen by other
+means, so it would need hooks into the middle of the current
+monolithic terminal emulator.  That would be a fairly large amount of
+work.
+
+<li>Similarly, Mosh's use of the network is very different from all
+our existing backends, which use small numbers of TCP connections.
+
+<li>On the other hand, Mosh does require an SSH client implementation
+for authentication and key-exchange, so there are some major parts of
+PuTTY that could be re-used.
+
+<li>Mosh uses OCB, which is patented in the USA.  While there are <a
+href="http://web.cs.ucdavis.edu/~rogaway/ocb/license.htm">fairly
+generous licences</a> available for the relevant patents, these are
+not as generous as PuTTY's copyright licence, so they would forbid
+uses of PuTTY's code that are currently allowed (specifically in
+proprietary software in military use).
+</ul>
+
+<p>It's possible that someone could write a patch to add Mosh
+compatibility to PuTTY that we'd be willing to accept, but it's not
+the most likely thing ever.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/mosh;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2015-06-22 09:25:32 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish puttygen-openssh-aes-ctr</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/puttygen-openssh-aes-ctr.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish puttygen-openssh-aes-ctr</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support OpenSSH 7.6+ aes256-ctr-encypted private keys<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=044a9304e3215c1933f6afde35aab594d8631639">044a9304e3215c1933f6afde35aab594d8631639</a> (0.71)<br>
+<p>
+As of <a href="http://www.openssh.com/releasenotes.html#7.6">OpenSSH 7.6</a>,
+ssh-keygen produces its new-format private keys encoded with the
+aes256-ctr cipher, instead of aesctr-cbc.
+(<a href="https://bugzilla.mindrot.org/show_bug.cgi?id=2754">bz#2754</a>)
+
+<p>
+PuTTYgen needs to understand this new (to us) format variant when
+importing private keys. In 0.70 it says "unrecognised cipher name".
+
+<p>
+Also, we changed to outputting new-style OpenSSH keys with this
+cipher mode, unconditionally. (Older versions of OpenSSH seem to
+understand aes256-ctr encrypted keys, so this doesn't seem to be an
+interoperability problem.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/puttygen-openssh-aes-ctr;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-19 00:43:48 +0000)</div>
+
+</BODY></HTML>

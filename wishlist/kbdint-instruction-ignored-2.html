@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug kbdint-instruction-ignored-2</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/kbdint-instruction-ignored-2.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug kbdint-instruction-ignored-2</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SSH keyboard-interactive instructions to user are not displayed<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.70<br>
+<b>present-in</b>: 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=64a9b3ed673a7a56b133d2d2a0be709adcb0f696">64a9b3ed673a7a56b133d2d2a0be709adcb0f696</a> (0.72)<br>
+<p>
+In the <code>keyboard-interactive</code> SSH authentication system,
+each INFO_REQUEST message contains a number of prompts each requesting
+a specific detail from the user, and may also contain an "instruction"
+string which acts as a heading for the whole group of prompts.
+
+<p>
+(For example, suppose a user is logging in using a hardware token
+which presents two separate values. Then the instruction string might
+say something like “Enter code XXXXX into your hardware token and
+enter the displayed information”, and then there might be two separate
+prompts following it asking for value #1 and value #2.)
+
+<p>
+In PuTTY 0.71, the instruction field was ignored, and never displayed
+to the user at all. This was an unintended side effect of code
+restructuring.
+
+<p>
+(See also <a href="kbdint-instruction-ignored.html">kbdint-instruction-ignored</a>, a bug in 0.60 in
+which the instruction field was ignored in the unusual case where it
+was the <em>only</em> thing in the packet – i.e. not accompanied by
+any actual prompts at all. This bug is a superset of that one: in
+0.71, the instruction field is <em>never</em> printed, regardless of
+how sensible the rest of the packet looks.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/kbdint-instruction-ignored-2;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-07-20 07:44:55 +0100)</div>
+
+</BODY></HTML>

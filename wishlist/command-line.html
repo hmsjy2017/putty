@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish command-line</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/command-line.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish command-line</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Better command line options<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: 2002-08-10 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4abd468e14d110f2085f7a693687a9c19e1d47e1">4abd468e14d110f2085f7a693687a9c19e1d47e1</a> 0.53<br>
+<p> The PuTTY tools have a pathetic set of command-line options.
+Among the things we should support but don't are:
+
+<ul>
+<li>
+Unified command-line handling between all the tools, including the
+GUI ones. (This is moderately tricky in itself, because we'd have to
+split up the single command line received by WinMain() into argc and
+argv. Interestingly shell32.dll provides a function called
+CommandLineToArgvW() which does this for Unicode strings, but
+appears to provide no equivalent for ordinary strings.)
+<li>
+Command-line control of at least SSH protocol, compression,
+port forwarding, and public-key authentication. Perhaps more.
+<li>
+As many of these options as possible should be command-line
+compatible with OpenSSH's corresponding options. The last thing we
+want to do is make life deliberately harder for people.
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/command-line;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win7-jumplist-duplicates</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win7-jumplist-duplicates.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win7-jumplist-duplicates</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Windows &quot;jump list&quot; duplicates items between pinned and recent lists<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>present-in</b>: 0.61<br>
+<p>
+Several people have reported that in PuTTY's implementation of the
+Windows <a href="win7-jumplists.html">jump list</a>, when a session is
+"pinned" to the taskbar, it does not disappear from the "Recent
+Sessions" section (so it appears in two places).
+
+<p>
+We've reproduced this, and it's not ideal. Unfortunately it doesn't
+seem to be under our control -- this part of the "jump list" feature
+is managed by Windows. 
+<a href="http://msdn.microsoft.com/en-us/library/dd378396(v=VS.85).aspx">Microsoft's documentation</a>
+says:
+
+<blockquote>
+The user might decide to pin one or more of the destinations provided in
+the custom category to the Jump List. The list of pinned destinations is
+not available to the application, but duplication is prevented by the UI
+so no extra action is required of the application. Visually, a pinned
+item moves to the Pinned section of the Jump List and disappears from
+its original location.
+</blockquote>
+
+<p>
+But Windows seems to be failing to do this here.
+
+<p>
+This aberrant behaviour is not apparent with other applications using
+Jump Lists, such as Notepad and Internet Explorer. Not sure what the
+significant difference is. The other apps are using the standard
+Recent/Frequent categories, whereas PuTTY has a custom "Recent
+Session" category.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win7-jumplist-duplicates;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

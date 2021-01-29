@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug ssh-rportfwd-addr-mismatch</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh-rportfwd-addr-mismatch.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug ssh-rportfwd-addr-mismatch</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Remote port forwarding fails due to address mismatch (Bitvise)<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>absent-in</b>: 0.62<br>
+<b>present-in</b>: 0.64 0.66<br>
+<p>
+From 0.64 (git commit
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commit;h=5ecb7d7f1dd6d66bab2814e9147f5a41896706e7">5ecb7d7</a>),
+PuTTY started distinguishing remote port forwardings by the remote
+address they were bound to as well as the remote port, to better
+support requesting remote port forwardings on just one address of a
+multihomed server.
+
+<p>
+In order to do this, PuTTY assumes that the "address that was
+connected" it will receive from the server in "forwarded-tcpip"
+requests will be textually identical to the "address to bind" PuTTY
+originally sent in its "tcpip-forward" request.
+
+<p>
+That assumption doesn't appear to be true with Bitvise SSHD. The
+behaviour reported to us is that if PuTTY sends "localhost", it gets
+back "127.0.0.1"; if PuTTY sends the empty string (as it does if
+configured to allow remote ports to accept connections from other
+hosts), it gets back "0.0.0.0". The mismatch leads PuTTY to reject the
+tunnel with "Remote port is not recognised", since the remote address
+doesn't match exactly.
+
+<p>
+The relevant spec
+(<a href="http://tools.ietf.org/html/rfc4254#section-7.1">RFC 4254</a>)
+is somewhat vague on this. In general, the client can't be expected to
+be able to translate between names and addresses as seen by the
+server. However, it would be easy enough for us to give special
+treatment to obvious localhost addresses, and RFC 4254 §7.1 could
+easily be argued to justify doing that much.
+
+<p>
+A workaround is to specify the listen address numerically: specify
+something like "127.0.0.1:10080" as the remote port in the "Source
+port" box, or on the command-line, something like
+"<tt>-R 127.0.0.1:10080:foovax:80</tt>".
+
+<p>
+Example of what it looks like in PuTTY's Event Log when this goes
+wrong:
+
+<pre>Requesting remote port 10080 forward to foovax:80
+Remote port forwarding from 10080 enabled
+[...]
+Received remote port 127.0.0.1:10080 open request from 127.0.0.1:50224
+Rejected channel open: Remote port is not recognised</pre>
+
+<p>
+Reported with these server versions:
+
+<ul>
+<li>SSH-2.0-5.36 FlowSsh: Bitvise SSH Server (WinSSHD) 6.43: free only for personal non-commercial use</li>
+<li>SSH-2.0-5.37 FlowSsh: Bitvise SSH Server (WinSSHD) 6.45: free only for personal non-commercial use</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-rportfwd-addr-mismatch;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-20 17:35:23 +0000)</div>
+
+</BODY></HTML>

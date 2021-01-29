@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug trust-sigil-ssh1-rlogin</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/trust-sigil-ssh1-rlogin.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug trust-sigil-ssh1-rlogin</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Terminal window &#x27;trust sigils&#x27; never turned off in SSH-1 or Rlogin<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=128d001c3eebae15fe97fc18dc48d8939ae72e98">128d001c3eebae15fe97fc18dc48d8939ae72e98</a> (0.72)<br>
+<p>
+In 0.71, the fix for <a href="vuln-auth-prompt-spoofing.html">vuln-auth-prompt-spoofing</a> added
+'trust sigils' -- PuTTY icons at the start of locally generated lines
+-- to distinguish them from data sent by the server.
+
+<p>
+In both the SSH-1 and Rlogin protocols, these trust sigils were
+accidentally not turned <em>off</em> at the end of authentication, so
+that all data throughout the session was tagged with a trust sigil.
+
+<p>
+As well as removing the useful distinction between trusted and
+untrusted output, this also meant that 3 columns of the terminal were
+unusable, which would have caused formatting issues in many
+applications.
+
+<p>
+(The commonly used SSH-2 protocol is not affected, only the obsolete
+SSH-1 protocol that is rarely used. In PuTTY 0.68 and later, we
+<a href="no-ssh1-fallback.html">no longer support</a>
+automatic fallback to SSH-1 from SSH-2, so any saved session
+configured to the default of SSH-2 will not suffer from this issue.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/trust-sigil-ssh1-rlogin;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-07-20 07:44:55 +0100)</div>
+
+</BODY></HTML>

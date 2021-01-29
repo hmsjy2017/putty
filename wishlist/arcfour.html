@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish arcfour</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/arcfour.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish arcfour</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: The Arcfour cipher isn&#x27;t supported<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2005-09-04 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=bcf547a069e2436abbea62e1f0d658178394a68b">bcf547a069e2436abbea62e1f0d658178394a68b</a> (0.59)<br>
+<p>
+PuTTY doesn't support the "arcfour" (RC4) cipher in SSH-2.  Arcfour is
+notable for being substantially faster than any cipher that PuTTY
+currently supports.  Unfortunately, the way it's specified for SSH-2,
+without discarding the first 1024 bytes of keystream, it's rather
+weaker than it could be (though not dangerously so).  On the other
+hand, not being a CBC-mode block cipher, it doesn't suffer from the
+problems described in <a href="ssh2-cbc-weakness.html">ssh2-cbc-weakness</a>.
+
+<p>
+Using arcfour (or any other stream cipher) in SSH-1 would be a very bad
+idea.  The lack of a MAC makes it very easy for an attacker to modify
+the data stream.
+
+<p>
+<b>Update:</b> Ben Harris has written an Internet-Draft
+(draft-harris-ssh-arcfour-fixes, now
+<a href="http://www.ietf.org/rfc/rfc4345.txt">RFC 4345</a>)
+describing a way of using Arcfour reasonably securely with SSH-2, and
+PuTTY now implements this. Note that this document defines the
+"arcfour256" and "arcfour128" ciphers; PuTTY still does not support
+the less secure "arcfour" cipher, and we have no plans to make it
+do so.
+
+<p>
+(Support was first added in 2005-04-22, but uonly under private
+names defined in an earlier draft:
+"arcfour256-draft-00@putty.projects.tartarus.org" and so on.
+Only from 2005-09-04 do we support the IETF names, which also
+appear in OpenSSH from 4.2.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/arcfour;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

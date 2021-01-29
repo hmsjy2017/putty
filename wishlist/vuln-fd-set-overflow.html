@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-fd-set-overflow</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-fd-set-overflow.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-fd-set-overflow</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Buffer overflow in Unix PuTTY tools if server opens too many port forwardings<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.53b<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5c926d9ea4a9e0a0a2384f06c7583648cdff3ed6">5c926d9ea4a9e0a0a2384f06c7583648cdff3ed6</a> 0.71<br>
+<p>
+Up to and including version 0.70, the Unix PuTTY tools used
+<code>select</code>(2) to watch their collections of active Unix file
+descriptors for activity.
+
+<p>
+This involves putting all the file descriptors into a variable of type
+<code>fd_set</code>, using the OS-provided macro <code>FD_SET</code>.
+Unfortunately, <code>FD_SET</code> does not bounds-check the input
+file descriptor. So if any PuTTY tool encountered an fd greater than
+or equal to <code>FD_SETSIZE</code> (typically 1024), then not only
+would it be unable to monitor that file descriptor, but it would
+suffer a buffer overflow in the attempt, overwriting other variables
+on the stack.
+
+<p>
+We don't know if this was remotely <em>exploitable</em>, but it could at least be remotely <em>triggered</em> by a malicious SSH server, if you enabled any of the options that allow the server to open a channel:
+<ul>
+<li>remote-to-local port forwarding
+<li>agent forwarding
+<li>X11 forwarding
+</ul>
+
+<p>
+As of 0.71, all the Unix PuTTY tools have switched to monitoring file
+descriptors using <code>poll</code>(2), which does not have this API
+bug.
+
+<p>
+This vulnerability was found by Teguh P. Alko, as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+It has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9895">CVE-2019-9895</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-fd-set-overflow;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-25 20:23:34 +0000)</div>
+
+</BODY></HTML>

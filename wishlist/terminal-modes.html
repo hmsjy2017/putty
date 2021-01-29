@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish terminal-modes</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/terminal-modes.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish terminal-modes</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Implement sending of full terminal modes in SSH<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: r5653 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=fb581ac62541bfe09ebbc1de07ef678998b9a539">fb581ac62541bfe09ebbc1de07ef678998b9a539</a> 2005-04-22 (0.59)<br>
+<p>
+SSH (both SSH-1 and SSH-2) allows the client to specify the mode it wants
+server-side pseudo-terminals to be opened in. PuTTY does not currently
+specify any such information for either protocol apart from
+<a href="ssh-termspeed.html">terminal speed</a>.
+
+<p>
+I've always thought it would be nice to be able to configure this
+sort of thing locally, so that (for example) users connecting to the
+<a href="http://www.mono.org">mono.org</a>
+BBS could stop a single press of Ctrl-\ from sending a SIGQUIT and
+unexpectedly terminating their session.
+
+<p>
+Also, various servers do not have sane defaults for various terminal
+modes. (Neither SSH nor POSIX define any defaults; they leave them
+up to the implementation, so such servers are technically within their
+rights, although I (JTN) consider them buggy nonetheless.)
+Therefore PuTTY should probably send suitable values for certain modes
+by default, and in any case allow users to tweak them. (Often
+<tt>stty</tt> on the server can be used as a workaround, but some
+servers may not have this ability.)
+
+<p>
+Recently it was suggested to me that if the user has configured
+non-`auto' settings for local echo and/or local line editing, then
+perhaps PuTTY should deliberately send terminal modes which
+compensate for this on the server side? For example, if the user
+turns line editing off at the client end, we could send ICANON so
+that it's turned on at the server end; or conversely if the user
+enables local line editing we could send ~ICANON. It isn't remotely
+clear to me that this would be the right thing in all circumstances,
+though, so perhaps it would be better to leave it as a
+user-configurable option.
+
+<p>
+A complete UI for terminal modes would be a noticeable amount of work.
+
+<p>
+Configurable options in this area might also be directly usable by
+the pty back end in pterm.
+
+<p>
+Possibly also Telnet to some extent, since we can send
+WILL ECHO / WONT ECHO to announce an intention to do any echoing
+locally, and the server is expected to stop doing its own echoing if
+it thinks we're doing it ourselves. Perhaps that's better handled
+by separate UI, though.
+
+<p>
+<em>Update, 2005-04-21:</em> this is basically done. I haven't
+implemented any cleverness with echo or line editing (although doing
+so should now be a minimal amount of work), and it's SSH-only; nothing
+for pterm, or Telnet/Rlogin.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/terminal-modes;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

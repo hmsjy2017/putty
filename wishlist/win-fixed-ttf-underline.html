@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win-fixed-ttf-underline</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-fixed-ttf-underline.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win-fixed-ttf-underline</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: When using some bitmap TrueType fonts, underlined characters vanish<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>present-in</b>: 0.59 2007-04-10<br>
+<p><pre>Reported by a user:
+
+This one&#x27;s a bit hard to explain, so here it goes:
+
+  Client: PuTTY 0.59, and current snapshots
+      OS: Windows XP Professional SP2
+Protocol: SSHv2
+  Server: FreeBSD 6.2-STABLE
+
+Quite a few people (myself included) use the famous xterm 6x13 terminal
+font on Windows (converted using Fontforge from the original 6x13.bdf to
+an OpenType/TTF Bitmap font) with PuTTY.  This font contains a very
+large glyph set, and line drawing characters, thus is quite useful.
+
+All gylphs are shown correctly with this font... except for characters
+which should be displayed with underlines (ex: \e[4m).  The underlines
+are shown, but the gylph is blank/empty.  PuTTY does not appear to be
+&quot;drawing its own underline&quot; with this font -- yeah I&#x27;ve read the code,
+and this font does not suffer from the same problem &quot;Courier New&quot; 9pt
+does (see some of the debug output I added below).
+
+The font size selected must be 10pt.  All other point sizes (9pt, 11pt,
+etc.) show the gylphs and show underlining.  Of course, the font is
+intended to be used in 10pt...
+
+The PuTTY client &quot;Translation&quot; mode (e.g. ISO-8859-1, UTF-8, etc.) has
+no effect on this problem either -- it happens in all translations.
+
+The font metrics are indeed 6x13, and I&#x27;ve verified as such with some
+debugging code I threw into windows/window.c a few hours ago.  The
+applicable font details:
+
+Primary font H=13, AW=6, MW=4
+fonts[FONT_UNDERLINE]
+  tmHeight          = 13
+  tmAscent          = 11
+  tmDescent         = 2
+  tmInternalLeading = 0
+  tmExternalLeading = 1
+  tmAveCharWidth    = 6
+  tmMaxCharWidth    = 4
+  tmWeight          = 500
+  tmOverhang        = 0
+  tmItalic          = 0
+  tmUnderlined      = 0
+  tmStruckOut       = 0
+  tmPitchAndFamily  = 0x36
+  tmCharSet         = 0
+
+I&#x27;m ~99% positive this is not the result of a badly converted font.
+Other applications work just fine with this font: Wordpad, mIRC,
+Internet Explorer, and SecureCRT all function normally with this font,
+with underlining.  Here&#x27;s a screenshot of `man ls` which should speak
+for itself:
+
+http://jdc.parodius.com/putty_securecrt_6x13.png
+
+The font itself is available here:
+
+http://jdc.parodius.com/FixedMedium.ttf
+
+I have been hacking at the PuTTY code for the past 6 hours trying to
+figure out why this is happening, and I am completely stumped.
+
+The only thing I *have* found:
+
+In init_fonts(), forcing PuTTY to draw the underline itself and thus
+deleting fonts[FONT_UNDERLINE] causes the problem to disappear.  I have no
+explanation for why.  In windows/window.c around line 1481 -- before
+the if (bold_mode == BOLD_FONT) check...
+
+und_mode = UND_LINE;
+DeleteObject(fonts[FONT_UNDERLINE]);
+fonts[FONT_UNDERLINE] = 0;
+
+Again, don&#x27;t know why this helps solve the issue, but it does.  This
+isn&#x27;t the correct &quot;fix&quot; obviously -- I&#x27;m just pointing it out to help
+track down the source of the problem (I hope).
+
+Another report: 20080624013622.GC26675@pihost.us
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-fixed-ttf-underline;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2008-07-19 16:44:50 +0000)</div>
+
+</BODY></HTML>

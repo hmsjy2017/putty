@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish pageant-unix-either-or</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pageant-unix-either-or.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish pageant-unix-either-or</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Agnostic agent/client mode in Unix Pageant<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Windows Pageant can operate in two modes: either run in the background
+as the actual SSH agent, or contact an existing agent and load a key.
+This has the useful purpose that you can run (probably via a Windows
+shortcut) a command such as 'pageant.exe my_key.ppk', with the
+semantics of 'make that key available, by whatever means are currently
+necessary': Pageant will either start up a new agent, if one doesn't
+yet exist, or else just load the key into the existing agent, if one
+does.
+
+<p>
+The Unix version of Pageant (new as of 2015-05) also contains the code
+to be both an agent and a client, but it currently has no mode in
+which both are possible: any currently legal command line is
+agent-only or client-only. But it would be just as useful on Unix as
+it is on Windows to have a single convenient command you could run
+that says 'just make this key available, please'.
+
+<p>
+This is more difficult on Unix because of the pre-existing convention
+that SSH clients expect to find their agent by looking at
+<code>$SSH_AUTH_SOCK</code>. So if you've already started an X
+session, for example, and didn't run an agent early in its setup so
+that <code>$SSH_AUTH_SOCK</code> was inherited by every process in the
+session, then there's no way to start an agent up <em>now</em> and
+have the whole GUI login session able to use it, in the way that
+Windows Pageant can.
+
+<p>
+Nevertheless, there are still some possibilities that could be useful.
+For example, on a terminal login session, you can run a command such as
+<code>eval $(pageant -T key.ppk)</code>
+to start an agent and load a key file. It would be reasonably sensible
+to arrange that that command, or a slight modification of it, could
+instead switch to loading the same key into an existing agent if one
+were available. Then you could assign the command into an alias or
+shell function, and have that shell function be conveniently
+idempotent – if you'd already run it once in your session,
+running it again would be harmless, and not even bother prompting for
+your passphrase again.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-unix-either-or;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2015-05-19 18:36:34 +0100)</div>
+
+</BODY></HTML>

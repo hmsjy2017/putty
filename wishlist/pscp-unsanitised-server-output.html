@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug pscp-unsanitised-server-output</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pscp-unsanitised-server-output.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug pscp-unsanitised-server-output</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PSCP should strip unprintable characters from SCP server output<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.70<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=2675f9578daf662ea5338e54ebe4825b2ff35597">2675f9578daf662ea5338e54ebe4825b2ff35597</a> (0.71)<br>
+<p>
+When PSCP is downloading files from a server, it writes the names of
+the copied files to its standard output as part of progress reports.
+Also, if the SCP server writes data to its standard <em>error</em>
+channel, then PSCP will pass that through to its own standard error.
+
+<p>
+In neither case does PSCP take any care to sanitise the output. So if
+a server really wants to, it can corrupt the display of the terminal
+you run PSCP in, by sending escape sequences or other control
+characters such as backspace.
+
+<p>
+This isn't really part of the implied contract between an SCP client
+and its user (unlike Plink, which wouldn't be doing its job if it
+<em>didn't</em> pass through all the server's output unmodified). It
+would be better to sanitise the output down to just printable
+characters and newlines, and perhaps also to prefix server stderr data
+with something that made it clearly look like a different kind of
+thing from file download progress reports.
+
+<p>
+This bug was found and reported by Harry Sintonen as part of a piece
+of security research. It has two CVE numbers:
+<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-6109">CVE-2019-6109</a> (relating to file names sent by the server)
+and <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-6110">CVE-2019-6110</a> (relating to the server's stderr
+stream).
+
+<p>
+However, in spite of the existence of CVE numbers, we regard this as
+only a bug, not a vulnerability. In the context of Harry Sintonen's
+<a href="https://sintonen.fi/advisories/scp-client-multiple-vulnerabilities.txt">full advisory</a>,
+the server's ability to send escape sequences is dangerous because it
+can be used to hide the evidence of having exploited a more serious
+vulnerability that lets an SCP server write to the client's filesystem
+in ways the client did not intend to permit. But the research found
+that PSCP does not have that more serious vulnerability (though other
+SCP clients did). So in our case, the server wouldn't be able to
+perform that attack in the first place, and would gain no benefit from
+the ability to hide the evidence of it.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pscp-unsanitised-server-output;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

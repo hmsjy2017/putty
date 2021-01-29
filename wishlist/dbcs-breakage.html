@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug dbcs-breakage</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/dbcs-breakage.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug dbcs-breakage</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Double-byte character set (CJK, &amp;c) display is broken<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+We've had a report that Korean display got a lot worse in the
+snapshots between r5002 and r5003 <tt><000001c513c9$e63ae1e0$aa000059@ktd></tt>.
+Quoth Simon:
+
+<blockquote>
+<p>
+Looking at the code, I think I can see why this is happening. This
+is to do with RDB's idea that when the user selects `use font
+encoding' and a font with a DBCS encoding, the terminal code should
+simply store the individual bytes in individual character cells and
+rely on <code>do_text()</code> being passed a string of these so that <code>TextOut()</code>
+can reconstitute pairs of DBCS bytes into double-width characters.
+
+<p>
+As far as I can tell, <code>terminal.c</code> does not mark the first byte of a
+DBCS character stored in this way. Therefore, the mechanism is
+fundamentally dependent on a <code>do_text()</code> run <em>happening</em> to begin at
+the correct point mod 2! Hence the comment in the mail referenced
+above, which said that there was already some breakage when the
+cursor moved over a double-byte character - the half-character under
+the cursor cannot be properly redrawn. Owing to <a href="font-overflow.html">font-overflow</a>,
+though, when you move the cursor over a double-byte character we now
+redraw a lot of text to the right of that as well, and if the cursor
+is on the first half of the character then this is <em>bound</em> to be
+incorrect mod 2; so the problem shows up a lot more readily. I'd bet
+that the same breakage could have been seen in previous versions if
+the window was covered and re-exposed when the cursor was in a
+problem position.
+
+<p>
+A real fix for this would involve implementing proper DBCS support,
+by detecting DBCS lead bytes in the <code>terminal.c</code> input data stream and
+storing both bytes in the same character cell using the existing
+<code>UCSWIDE</code> mechanism. I have occasionally wondered about doing this: I
+envisage that we would co-opt the top half of the <code>unsigned long</code>
+space (never used by any flavour of Unicode/UCS ever) to provide
+more than enough fake character encodings for the purpose.
+
+<p>
+Of course, if we were going to support DBCSes in <code>terminal.c</code> it would
+also be good to be able to support them <em>properly</em>, by translating
+them to Unicode on input.
+
+<p>
+<em>Summary:</em> I think this has always been broken, and now it's merely
+more obviously broken. I regret the effect on CJK users who had
+found the previous behaviour worked just about well enough, but I
+don't think a hurried fix is in the general interest.
+</blockquote>
+
+<p>
+UTF-8 mode should work reasonably well. A workaround is to use UTF-8
+if possible (perhaps via something such as
+<a href="http://www.pps.jussieu.fr/~jch/software/luit/">luit</a> or
+<a href="http://www.gnu.org/software/screen/">screen</a>).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/dbcs-breakage;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish vt-utf8-keyboard</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vt-utf8-keyboard.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish vt-utf8-keyboard</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Keyboard mode to support Microsoft standard serial consoles<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>Microsoft have published a
+<a href="http://download.microsoft.com/download/whistler/hwdev3/1.0/WXP/EN-US/VT-UTF8andVT100+v09.exe">
+ standard
+</a>
+describing how PCs should talk to serial consoles.  To avoid compatibility,
+this uses a completely different keyboard mapping from the rest of the
+world, outlined below:
+</p>
+<table>
+<tr><td>Home Key<td><ESC>h
+<tr><td>End Key<td><ESC>k
+<tr><td>Insert Key<td><ESC>+
+<tr><td>Delete Key<td><ESC>-
+<tr><td>Page Up Key<td><ESC>?
+<tr><td>Page Down Key<td><ESC>/
+<tr><td>Function 1 Key<td><ESC>1
+<tr><td>Function 2 Key<td><ESC>2
+<tr><td>Function 3 Key<td><ESC>3
+<tr><td>Function 4 Key<td><ESC>4
+<tr><td>Function 5 Key<td><ESC>5
+<tr><td>Function 6 Key<td><ESC>6
+<tr><td>Function 7 Key<td><ESC>7
+<tr><td>Function 8 Key<td><ESC>8
+<tr><td>Function 9 Key<td><ESC>9
+<tr><td>Function 10 Key<td><ESC>0
+<tr><td>Function 11 Key<td><ESC>!
+<tr><td>Function 12 Key<td><ESC>@
+<tr><td>Shift Modifier<td><ESC>^S
+<tr><td>Alt Modifier<td><ESC>^A
+<tr><td>Control Modifier<td><ESC>^C
+<tr><td>Reserved<td><ESC>#
+<tr><td>Reserved<td><ESC>A
+<tr><td>Reserved<td><ESC>B
+<tr><td>Reserved<td><ESC>C
+<tr><td>Reserved<td><ESC>D
+<tr><td>Reserved<td><ESC>&
+<tr><td>Reserved<td><ESC>*
+<tr><td>Reserved<td><ESC>.
+<tr><td>Reserved<td><ESC>R
+<tr><td>Reserved<td><ESC>r
+</table>
+
+<p>The modifiers are represented as the codes listed above, prefixed to the
+normal sequences.  If the modifier is pressed alone, its sequence is
+transmitted twice in succession.  If multiple modifiers apply, they're
+transmitted in the order shift, control, alt.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vt-utf8-keyboard;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-02-26 22:58:28 +0000)</div>
+
+</BODY></HTML>

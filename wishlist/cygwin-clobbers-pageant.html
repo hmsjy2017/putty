@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug cygwin-clobbers-pageant</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/cygwin-clobbers-pageant.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug cygwin-clobbers-pageant</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Plink (etc) run under Cygwin cannot talk to Pageant<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>absent-in</b>: 0.51<br>
+<b>present-in</b>: 0.52<br>
+<b>fixed-in</b>: r9178 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=af78191a9c8a76281fe35b5e168b794d8cf328f9">af78191a9c8a76281fe35b5e168b794d8cf328f9</a> (0.61)<br>
+<p>
+We've had several reports that when utilities such as Plink are run
+under Cygwin, requesting keys from a running Pageant fails.
+
+<p>
+Useful stuff from Angus Duggan:
+
+<p>
+Problem does not occur with Pageant 0.51, but does occur with 0.52
+(version of Plink/PSCP is unimportant)
+
+<p>
+<pre>BTW, I'm still having bizarre problems with plink not communicating with
+Pageant. I have no idea what is going wrong, but Pageant repeatably passes
+the key when plink is invoked from an NT command shell, and repeatably
+doesn't pass the key when invoked from a cygwin bash shell. (Versions 0.51
+and 0.52.) UPDATE: I've just run the debugger on plink; the SendMessage in
+agent_query (pageantc.c) is returning 0 in the bash shell and 1 in the cmd
+shell. On the pageant side, it's the EqualSid() call that is failing when run
+under cygwin. Starting pageant from a cygwin shell, and it works...(BTW, the
+same is true for running under cvs in emacs, but I may have my shell set to
+cygwin bash for that too.) I have not yet worked out why the SID is
+different; I have run mkpasswd and checked the results in cygwin, and tried
+messing with it a bit, but to no avail.</pre>
+
+<p>
+<pre>Here's a followup to the SID differences I reported yesterday, which are
+causing failures under cygwin. I instrumented Pageant to show me the accounts
+for the SIDs, and when Pageant or another application is started directly, it
+runs as BUILTIN\Administrators. When an application is run under cygwin, it
+runs as MACHINE\user. The SID I am using is a member of the Administrators
+group for this machine (Win2K is almost impossible to use for development if
+this is not the case).</pre>
+
+<p>
+Simon was unable to reproduce this. I'm going to speculate that it
+might involve having an <tt>/etc/passwd</tt> that's been populated
+with SIDs by <tt>make-passwd</tt>, and/or be something to do with
+Cygwin's <tt>ntsec</tt> option.
+
+<p>
+There's a <a href="http://sources.redhat.com/ml/cygwin/2002-05/msg01770.html">
+thread</a> on the cygwin mailing list about this, though it's not very
+enlightening.
+
+<p>
+Workaround from Angus Duggan:
+
+<p>
+Use <tt>cygstart.exe</tt> to start both Pageant and PuTTY. This starts
+with the same set of credentials that the cygwin programs start with,
+and all work fine.
+
+<p>
+<b>SGT, 2011-07-10</b>: this <em>should</em> be fixed in r9178 (which
+in turn fixes a bug introduced by r9043 which was my first attempt to
+fix this). Both PuTTY and Pageant now use the SID corresponding to the
+current user account for their access control, whether or not that
+account is also a member of the administrators group.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/cygwin-clobbers-pageant;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

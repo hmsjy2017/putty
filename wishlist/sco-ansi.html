@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish sco-ansi</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/sco-ansi.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish sco-ansi</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for `SCO ANSI&#x27; terminal features<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+We occasionally get asked to support `SCO-ANSI' (aka `ANSIC'?)
+features (as used by UnixWare etc).  Some of these are supported by PuTTY now.
+
+<h2>Colours</h2>
+There are various escape sequences which set the default colours used for
+various kinds of text  PuTTY currently only supports the one for setting the
+default foreground and background (as of 2003-06-16).
+From <code><a href="http://groups.google.com/groups?q=msgid%3Ab1dhv1$s98$1%40hyppo.gu.net">comp.security.ssh</a></code>:
+<pre>Select foreground color              \027[=PsF
+Select background color              \027[=PsG
+Select reverse color                 \027[=PsH
+Select reverse background color      \027[=PsI
+
+            SCO-ANSI Color Table
+--------------------------------------------------
+   Ps      Color             Ps      Color
+--------------------------------------------------
+   0       Black              8      Grey
+   1       Blue               9      Lt. Blue
+   2       Green             10      Lt. Green
+   3       Cyan              11      Lt. Cyan
+   4       Red               12      Lt. Red
+   5       Magenta           13      Lt. Magenta
+   6       Brown             14      Yellow
+   7       White             15      Lt. White
+--------------------------------------------------</pre>
+<p>There are various other (possibly contradictory) lists of escape
+sequences buried in the putty-bugs archives.
+<a href="https://www.chiark.greenend.org.uk/~bjharris/ftp/all-escapes/">all-escapes</a>
+also lists some sequences.
+<p>Probably the most autoritative definition is in the SCO Open Server 
+manual page
+<a href="http://osr5doc.ca.caldera.com:457/cgi-bin/man/man?screen+HW">
+screen(HW)</a>.
+</dd>
+
+<dt>Line drawing</dt>
+<dd>(`SCO ACS'?) Setting line character set to `CP437' on the
+Translation panel <em>might</em> help with this.</dd>
+
+<dt>Function keys</dt>
+<dd>`SCO mode' function keys (and keypad top row) are already
+implemented (and possibly even do what you want). See the Keyboard
+panel.</dd>
+
+</dl>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/sco-ansi;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-05-07 16:29:13 +0100)</div>
+
+</BODY></HTML>

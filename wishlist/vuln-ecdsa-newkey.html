@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-ecdsa-newkey</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-ecdsa-newkey.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-ecdsa-newkey</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: use of uninitialised pointer loading ECDSA keys<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.65 0.66 0.67 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=7d1c30cd50ce18b8ad9c5970d7f917406d706ae0">7d1c30cd50ce18b8ad9c5970d7f917406d706ae0</a> 2014-11-01<br>
+<b>present-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=2bf868835591b39f17a157b1511b1e2f4b6e77da">2bf868835591b39f17a157b1511b1e2f4b6e77da</a> 2014-11-02<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=63b47ed9d504b37ac2e903715ae7bf40036473a1">63b47ed9d504b37ac2e903715ae7bf40036473a1</a> 2015-11-08 (0.68)<br>
+<p>Some development snapshots of PuTTY, when presented with an invalid
+ECDSA key, will zero unrelated memory.
+
+<p>(Since this vulnerability is in the as-yet-unreleased
+<a href="ecdsa.html">ECDSA implementation</a>, no released version
+of PuTTY is affected.)
+
+<p>The <code>ecdsa_newkey</code> function is the part of PuTTY that
+converts ECDSA public keys from SSH-2 wire format into a format that
+can be used internally.  If this conversion fails part-way through,
+PuTTY attempts to erase the memory holding the part-constructed
+internal key.  One of the fields of the internal format is not
+initialised to NULL before the first possible failure point, so PuTTY
+can end up erasing memory unrelated to the key being loaded.  It's
+possible that this could be exploited to cause PuTTY to erase
+something important.
+
+<p>The <code>ecdsa_newkey</code> function is called whenever PuTTY
+receives an ECDSA host key from an SSH-2 server, including during
+initial key exchange.  This means that an attack could be mounted by a
+man in the middle before PuTTY has validated the host key.
+
+<p>This is a particular problem because in an SSH-2 connection, PuTTY
+converts the server-presented host key into internal format before
+checking that it's the correct host key, so a man in the middle could
+cause trouble even if the user is connecting to a trustworthy server.
+
+<p>This bug was found with the help of
+<a href="http://lcamtuf.coredump.cx/afl/">American Fuzzy Lop</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-ecdsa-newkey;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

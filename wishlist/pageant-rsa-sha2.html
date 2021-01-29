@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish pageant-rsa-sha2</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pageant-rsa-sha2.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish pageant-rsa-sha2</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Pageant support for SHA-256/512 RSA signatures, used by e.g. OpenSSH client<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>present-in</b>: 0.70<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=13b29008b40249ded5af594b8c93ffb99d79b316">13b29008b40249ded5af594b8c93ffb99d79b316</a> (0.71)<br>
+<p>
+The traditional SSH agent protocol has recently been extended, as
+documented in 
+<a href="https://tools.ietf.org/html/draft-miller-ssh-agent">draft-miller-ssh-agent</a>,
+to allow signatures with SHA-256 and SHA-512 ("SHA2") hashes as well
+as the traditional but weak SHA-1. The client signals this with a
+'flags' word that previously didn't exist in the protocol.
+
+<p>
+Previously, Pageant has ignored this. OpenSSH has apparently been
+requesting these hashes since
+<a href="http://www.openssh.com/releasenotes.html#7.2">7.2</a>;
+<a href="http://www.openssh.com/releasenotes.html#7.7">7.7</a>
+started warning when it didn't get what it asked for from the agent
+(<a href="https://bugzilla.mindrot.org/show_bug.cgi?id=2799">bz#2799</a>):
+<pre>agent key RSA SHA256:XXXXXXXXXXXXXXX returned incorrect signature type</pre>
+
+<p>
+This warning could show up for instance in agent forwarding scenarios.
+
+<p>
+Now Pageant looks at the flag word, returns SHA-256 or SHA-512
+signatures if requested, and complains if any of the other flag bits
+are set.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-rsa-sha2;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-19 00:43:48 +0000)</div>
+
+</BODY></HTML>

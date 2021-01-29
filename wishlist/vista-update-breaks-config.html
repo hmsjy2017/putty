@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug vista-update-breaks-config</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vista-update-breaks-config.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug vista-update-breaks-config</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Windows Vista update KB3057839 breaks PuTTY configuration dialog<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.52 0.53b 0.54 0.58 0.60 0.63 0.64 2015-06-09<br>
+<b>fixed-in</b>: 2015-06-19 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6163710f043fb58fc80f6b45c14a92f7036bde75">6163710f043fb58fc80f6b45c14a92f7036bde75</a> 0.65<br>
+<p>
+Many people have reported that on Windows Vista (but not Windows 7),
+after the Windows security update
+<a href="https://support.microsoft.com/en-us/kb/3057839">KB3057839</a>
+(part of the update
+<a href="https://technet.microsoft.com/en-us/library/security/ms15-061.aspx">MS15-061</a>
+published on 9 June 2015), the PuTTY configuration window does not
+display. Only a taskbar icon is visible. The window is in fact present,
+but invisible; keyboard input and even blind clicking on the invisible
+configuration window still work.
+(Some public reports:
+<a href="http://www.geekzone.co.nz/forums.asp?forumid=45&topicid=174953">one</a>,
+<a href="http://superuser.com/questions/927268/cant-see-putty-window-on-windows-vista-any-longer">two</a>,
+<a href="http://www.vistaforums.com/putty-dont-start-since-couple-days-t96280.html">three</a>.)
+
+<p>
+The PuTTY terminal window works when launched from the command line
+(<tt>putty -load sessionname</tt>, <tt>putty -ssh hostname.full.domain
+-l username</tt>). Other PuTTY suite programs such as PuTTYgen work.
+
+<p>
+Uninstalling the KB3057839 update is reported to restore PuTTY to a
+working state; however, since that's a security update, that's not an
+ideal solution. (One correspondent reported that uninstalling
+KB3058515 also worked.)
+
+<p>
+We
+<a href="http://answers.microsoft.com/en-us/windows/forum/windows_vista-windows_programs/windows-update-ms15-061-kb3057839-breaks-putty/f5d4c549-59ff-4a17-bff5-2d4c810be2dd?tm=1434100111773">asked on Microsoft's forum</a>;
+this has yielded another program
+(<a href="https://forum.dbpoweramp.com/showthread.php?36159-CD-Ripper-and-Batch-Converter-No-Longer-Show-in-Windows-Vista-after-Security-Update">dBpoweramp</a>)
+suffering from what sounds like the same symptom.
+
+<p>
+One correspondent's experience suggests that the window is present but
+invisible (transparent); they've
+<a href="http://superuser.com/a/927318">also posted publicly</a>.
+They can restore visibility with an
+<a href="http://ahkscript.org/">AutoHotKey</a> script containing the
+following:
+
+<pre>WinWait, PuTTY Configuration
+WinSet, Transparent, 255</pre>
+
+<p>
+It's also been reported that hiding and showing the window with
+<tt>ShowWindow()</tt> (by hacking the PuTTY source, or externally
+from PowerShell) makes the window reappear.
+
+<p>
+Another perturbation that makes the symptom go away is mucking around
+with <tt>SetWindowLong()</tt>. It's not clear why, but it has made us
+a bit suspicious of our use of that family of functions.
+
+<p>
+Another correspondent reports that setting the Windows properties
+'Disable desktop composition' or 'Run in 256 colors' on putty.exe (in
+the Compatibility tab of the file properties?) avoids the issue.
+Others report that disabling desktop effects entirely (by selecting
+the "Windows Vista Basic" colour scheme) also works, although that's
+a sledgehammer to crack a nut. Presumably all these methods work by
+removing the possibility of transparency.
+
+<p>
+None of PuTTY's settings appear to have any effect on this behaviour
+(which is as you'd expect, since the configuration dialog is itself
+not configurable); at least, many people have tried erasing their
+saved sessions, uninstalling, using <tt>-cleanup</tt> etc with no
+improvement.
+
+<p>
+<em>Update, 2015 Jun 18:</em> we think we've found the root cause
+of this. It was apparently only by luck that the configuration dialog
+appeared at all, on any version of Windows (gory details in the
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6163710f043fb58fc80f6b45c14a92f7036bde75">commit message</a>).
+
+<p>
+The bug we've found is fixed in development snapshots dated 2015-06-19
+or later. It made the symptom go away on our test machine, and on those
+of all who originally raised the issue and reported back to us after
+testing the update.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vista-update-breaks-config;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

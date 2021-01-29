@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug connshare-overlarge-packets</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/connshare-overlarge-packets.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug connshare-overlarge-packets</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Pasting very long line into connection-sharing downstream can close it<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=04b6db55f20b7057a5503c0a9f348bfba66b44f7">04b6db55f20b7057a5503c0a9f348bfba66b44f7</a> (0.72)<br>
+<p>
+In PuTTY's connection sharing system, the protocol that the ‘upstream’
+and ‘downstream’ instances of PuTTY use to talk to each other has a
+hard limit of just over 16Kb on the maximum size of a data packet that
+may be sent.
+
+<p>
+This limit is enforced by the subsystem in the upstream instance that
+acts as the server end of that protocol: if the upstream PuTTY
+receives an overlarge packet, it will disconnect that downstream with
+an error message.
+
+<p>
+But, embarrassingly, PuTTY's <em>own</em> client implementation of the
+same protocol, spoken by a modified version of the ordinary SSH code
+in the downstream instance, did not pay attention to that packet
+limit. So in certain situations, it could send the upstream a packet
+that exceeded the size limit, and get itself disconnected.
+
+<p>
+This can only be observed if the actual SSH server advertises a
+maximum packet size greater than 16Kb. If the server's max packet size
+is small enough, then PuTTY will not send overlarge packets for that
+reason, so the bug will remain latent.
+
+<p>
+Even supposing the server does advertise a >16Kb max packet, PuTTY
+won't exceed it in typical interactive use. Even pasting a large block
+of data into the terminal will often not exceed the packet size limit,
+because the terminal code that handles pasting breaks the pasted data
+up at line boundaries. So you would need to paste data with a
+<em>single line</em> longer than 16Kb to trigger this bug in an
+interactive session.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/connshare-overlarge-packets;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-07-20 07:44:55 +0100)</div>
+
+</BODY></HTML>

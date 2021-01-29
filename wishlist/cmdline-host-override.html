@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug cmdline-host-override</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/cmdline-host-override.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug cmdline-host-override</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: -load overrides a host name specified on the command line<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2003-03-23 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=271adc266de500872573db1b1f918299db75988e">271adc266de500872573db1b1f918299db75988e</a> (0.54)<br>
+<p>
+If both <code>-load</code> and a hostname are specified on PuTTY's command
+line, the hostname from the saved session takes precedence, which it
+shouldn't.  This is because bare hostnames aren't passed through
+<code>cmdline_process_param()</code> in the same way that (e.g.) bare port
+numbers are, so they end up being trampled by
+<code>cmdline_process_saved()</code>.
+
+<p>
+<b>SGT, 2003-03-22</b>: Well, <code>-load</code> is now processed
+immediately rather than being deferred until
+<code>cmdline_process_saved()</code>. This should eliminate this
+sort of bug completely. However, the effect on Plink host names
+isn't exactly what I stated above; instead, specifying a
+<code>-load</code> option that mentions a host name actually
+<em>prevents</em> Plink from looking for an explicit host name. The
+upshot of this is that the command <code>plink -load session
+host</code> will connect to the host specified in the saved session,
+and interpret "<code>host</code>" as the command to run.
+
+<p>
+It's possible that some people really do have a need to load a saved
+session and override only its host name component, but I think this
+behaviour is more generally useful. If anyone complains I can always
+add an explicit <code>-host</code> command-line option.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/cmdline-host-override;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

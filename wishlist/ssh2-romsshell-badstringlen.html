@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY artifact ssh2-romsshell-badstringlen</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-romsshell-badstringlen.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY artifact ssh2-romsshell-badstringlen</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Embedded RomSShell server closes connection with &quot;Bad string Length&quot;<br>
+<b>absent-in</b>: 0.60<br>
+<b>present-in</b>: 0.61<br>
+<p>
+We've had several reports from people connecting to embedded devices
+of the server abruptly terminating the connection:
+
+<p>
+<code>Server sent disconnect message type 2 (protocol error): "Bad string Length".</code>
+
+<p>
+In the cases we've investigated, the server has turned out to be
+an implementation of Allegro's "RomSShell", and the server is clearly
+buggy.
+
+<p>
+As part of the fix for <a href="flow-control.html">flow-control</a>
+in 0.61, PuTTY sometimes sends
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixF.html#sshnames-channel">a special request type</a>
+to the SSH server with the name "winadj@putty.projects.tartarus.org",
+to calibrate large data transfers.
+
+<p>
+The RomSShell server objects to this request on the grounds (as far as
+we can tell) that its name is 34 characters long; experiments by one
+of our correspondents indicate that RomSShell accepts a maximum of 31
+characters. The <a href="http://www.ietf.org/rfc/rfc4251.txt">SSH-2 standard</a>
+clearly states a maximum length on request names, and it's 64
+characters, not 31 or 32. So RomSShell is being unreasonable in
+rejecting a 34-character name.
+
+<p>
+From PuTTY 0.63 onwards, this can be worked around with the
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-bug-winadj">"Chokes on PuTTY's SSH-2 'winadj' requests"</a>
+bug-compatibility mode. However, it's not currently automatically
+detected.
+
+<p>
+If anyone who runs into this has some channel to contact Allegro
+(a support contract or other clout), it would be helpful to point this
+out to them (we have no means of getting in contact). If the bug is
+fixed at source and the complete set of affected SSH version strings
+provided to us, we can automatically enable the workaround in PuTTY
+when appropriate (although from the patterns below, this doesn't look
+likely to be sensible).
+
+<p>
+Reported with the following servers / devices:
+<ul>
+<li><tt>SSH-2.0-RomSShell_4.64</tt> (reported by Allegro customer?)</li>
+<li><tt>SSH-2.0-RomSShell_4.62</tt> in "iLO 3 Standard Blade Edition 1.26"
+in a "HP Proliant BL460c G7"</li>
+<li><tt>SSH-2.0-RomSShell_4.61.</tt> in a "Brocade MLXe"
+<ul>
+<li>Brocade themselves actually assigned a bug number to this
+(DEFECT000362023, "SSH server in-compatible with Putty 0.61"), and
+said "this bug is fixed in 5.1.0E or later software code." (Don't know
+whether they got Allegro to fix it, or fixed it themselves. Sadly
+the version string is reportedly unchanged.)</li>
+</ul></li>
+<li>Adtran 3120 (reportedly, "ADTRAN OS version 16.03.00.SC.E" shows the
+problem but "17.07.02.00.E" does not -- both <tt>SSH-2.0-RomSShell_4.31</tt>,
+unhelpfully)</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-romsshell-badstringlen;hb=refs/heads/main">Audit trail</a> for this artifact.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

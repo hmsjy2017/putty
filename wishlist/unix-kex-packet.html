@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug unix-kex-packet</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/unix-kex-packet.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug unix-kex-packet</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Unix: &quot;expected key exchange reply packet from server&quot; and crash<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>present-in</b>: 0.54<br>
+<b>fixed-in</b>: 2005-01-08 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=88c52fa85fdfa000a33d350138b10c8ebfa85965">88c52fa85fdfa000a33d350138b10c8ebfa85965</a> (0.58)<br>
+<p>
+We've had a couple of reports of the Unix version putting up the
+"new host key" dialog, but then immediately putting up a
+"PuTTY Fatal Error: expected key exchange reply packet from server"
+error box over it and then crashing. I've reproduced this by
+connecting to one of our correspondents' servers.
+
+<p>
+If the host key is already in the database, the connection goes
+through fine. The fault doesn't appear to happen with the Windows
+version, nor with Unix plink.
+
+<p>
+<em>Workaround:</em> add the host key to the database first. (Apparently
+this can be done by setting "close window on exit" to "never" in
+the first session, or use
+<tt><a href="https://git.tartarus.org/?p=simon/putty.git;a=blob;f=contrib/kh2reg.py;hb=HEAD">contrib/kh2reg.py</a></tt>
+in PuTTY version control.)
+
+<p>
+<em>More detail:</em>
+In PuTTY's SSH packet log, what appears to distinguish failing from
+successful connections is that in the latter, PuTTY logs sending a
+NEWKEYS before logging receiving one, whereas in the former, it
+doesn't log sending one at all. So in Windows and Unix-plink
+connections with and without the host key prompt, and Unix PuTTY
+without the prompt, we get something like
+
+<p><pre>Incoming packet type 31 / 0x1f (SSH2_MSG_KEXDH_REPLY)
+[...]
+Event Log: Host key fingerprint is:
+Event Log: ssh-dss 1024 xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx
+Outgoing packet type 21 / 0x15 (SSH2_MSG_NEWKEYS)
+Incoming packet type 21 / 0x15 (SSH2_MSG_NEWKEYS)</pre>
+
+<p>
+whereas in Unix PuTTY with the prompt, we have
+
+<p><pre>Incoming packet type 31 / 0x1f (SSH2_MSG_KEXDH_REPLY)
+[...]
+Incoming packet type 21 / 0x15 (SSH2_MSG_NEWKEYS)
+Event Log: expected key exchange reply packet from server</pre>
+
+<p>
+while waiting for the user to respond to the prompt.
+
+<p>Tracing the code indicates that the SSH code gets a DH reply
+packet, goes to verify the host key, goes to put up a message box,
+enters <tt>gtk_main()</tt>... and the next thing we know is that
+<tt>ssh_receive()</tt> is prematurely invoked on the next packet
+(NEWKEYS), re-entering <tt>do_ssh2_transport()</tt> and looking for a
+DH reply packet again (and failing). So the messagebox isn't causing
+enough blocking. Probably something about the way we're using Gtk.
+
+<p>
+Reports:
+
+<ul>
+<li><tt>000701c3fd23$4a4626e0$0400a8c0@capricho</tt>
+    <br>followup: <tt>000b01c3fd2a$4822cd80$0400a8c0@capricho</tt>
+    <br><tt>putty-0.54-0.20040216.3mdk.i586.rpm</tt>
+<li><tt>40379F51.3030603@glendown.de</tt>
+    <br>server appears to be <tt>SSH-2.0-3.1.0 SSH Secure Shell (non-commercial)</tt>
+    <br>associated with diffie-hellman-group1-sha1 (as opposed to gex)?
+    <br>log: <tt>ixion:~jacob/putty-wishlist/data-mine/unix-kex-packet.d/putty.log</tt>
+    <br>protocol looks fine
+<li><tt>1090364295.14285.12.camel@scrat.iceage</tt>
+    <br>server is <tt>SSH-2.0-3.2.5 SSH Secure Shell</tt>
+    <br>using diffie-hellman-group1-sha1
+    <br>SSH packet log attached - protocol looks fine (although it has extra
+    IGNORE messages interspersed, unlike previous)
+</ul>
+
+<p>
+<b>SGT, 2005-01-07</b>: Simplest answer, I think, is to use
+<code>sk_set_frozen()</code> to ensure that the SSH connection in
+question doesn't accept any more data while we're in the middle of
+asking the user about something.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/unix-kex-packet;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

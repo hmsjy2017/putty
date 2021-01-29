@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh2-bug-maxpkt</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-bug-maxpkt.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh2-bug-maxpkt</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Servers send oversize packets, leading to garbled packet errors<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>absent-in</b>: 0.60<br>
+<b>present-in</b>: 2007-11-29 r7796<br>
+<b>fixed-in</b>: 2007-12-06 r7804 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=1940b37ff0d65468b531fd00f5576d9fa6d54e69">1940b37ff0d65468b531fd00f5576d9fa6d54e69</a> (0.61)<br>
+<p>When using one SSH-2 server, identifying itself as "1.36_sshlib GlobalSCAPE",
+PuTTY reports "Incoming packet was garbled on decryption".  This was
+originally
+<a href="http://forum.filezilla-project.org/viewtopic.php?f=2&t=4925">reported
+as a bug in FileZilla</a>, and turns out to be a bug in the server.
+
+<p>When PuTTY opens the data channel for the SFTP session, it sends
+SSH_MSG_CHANNEL_OPEN, and states a window size of 0x7FFFFFFF
+(2147483647) bytes but a maximum packet size of 0x4000 (32768). That
+is, the server is permitted to send almost any amount of data
+without requiring an SSH-level acknowledgment from PuTTY, but may
+not send an <em>individual packet</em> larger than 32768 bytes.
+
+<p>The server is disregarding the specified maximum packet size, and is
+sending a packet of 65548 bytes. PuTTY treats this as a decryption
+failure, since the most common reason for the packet length to be
+out of range is because there was a disagreement in the bulk
+encryption between client and server, causing the packet length
+field to decrypt to random garbage data. In fact that isn't the
+cause of the problem in this case, but PuTTY unfortunately can't
+determine that by itself.
+
+<p>This appears to have started happening as of r7672 in the PuTTY
+source base, which is when PSFTP began presenting a window size
+larger than its packet size. Prior to that, this server would not
+have generated too-large packets because it was honouring the window
+size limit. However, it is the server which is behaving incorrectly;
+PuTTY's change in behaviour is entirely legitimate.
+
+<p>PuTTY now detects this particular server software and limits the
+window size it advertises in order to work around the problem.
+
+<p><em>Update, 2008-07-19:</em> according to
+<a href="http://forum.filezilla-project.org/viewtopic.php?f=1&t=7271&p=25857#p25857">this thread</a>,
+another server with a subtly different version string has the same
+problem. As of today's snapshot PuTTY should automatically detect
+that version as well.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-bug-maxpkt;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

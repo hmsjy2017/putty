@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug needs-removeable-media</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/needs-removeable-media.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug needs-removeable-media</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Starting a session fails with &quot;There is no disk in the drive&quot;<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.61 0.62 0.63 0.65 0.66<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=bf00bcd2a4fee0855567b62cff83a0006c7c3232">bf00bcd2a4fee0855567b62cff83a0006c7c3232</a> 2016-08-30 (0.68)<br>
+<p>
+We've had several reports of trouble where PuTTY will not start (a
+session, it sounds like, rather than at all) unless there is a disc in
+a drive with removeable media: "There is no disk in the drive. Please
+insert a disk into drive D:" (In all reports that have specified, it
+has been D: rather than another drive, but of course that's the most
+common removeable drive letter.) There's no obvious reason for this,
+such as a path set in the configuration or shortcut that refers to the
+removeable drive.
+
+<p>
+We've not run into this ourselves, or been able to reproduce it.
+
+<p>
+This is vaguely reminiscent of
+<a href="pageant-dirhandle.html">pageant-dirhandle</a>, but probably
+not the same thing.
+
+<p>
+The earliest version this has been reported with is 0.61. It appears
+that it was the addition of support for 
+<a href="win7-jumplists.html">Windows 7 jump lists.</a> that triggered
+this. (All reports that have specified an OS have been with Windows 7.)
+
+<p>
+A correspondent says
+
+<blockquote>
+<p>
+It appears to be hung / frozen at this function call.
+<pre>Winjump.c/update_jumplist_from_registry/if (!SUCCEEDED(pCDL->lpVtbl->BeginList</pre>
+
+<p>
+The Windows documentation about ICustomDestinationList mentions calling the
+SetAppID function beforehand, and I figured out that you need to call
+SetCurrentProcessExplicitAppUserModelID before using SetAppID.
+
+<p>
+So, I added this to WinMain in window.c
+<pre>       SetCurrentProcessExplicitAppUserModelID(L"PuTTY");</pre>
+
+<p>
+And tried again.  Voila!  No error.  I did not have to add a SetAppID before
+BeginList.
+</blockquote>
+
+<p>
+The call stack when it hangs seems to indicate that it's trying to
+invent an App ID from things like filenames.
+
+<p>
+This seems like a harmless and useful change to make, so we've done so
+(using a different string for UserModelID).
+
+<p>
+Reports:
+
+<ul>
+<li>76179E18B340E04CA376B95E510416FEAB8719@nasanexd01d.na.qualcomm.com (Jan 2012, 0.61 on Windows 7)<br>
+Error message "when trying to open a session"<br>
+"still happens on a profile that I've asked not to use the GSSAPI"<br>
+Workaround: "From the device manager, I disabled the cd drive and then putty ran fine. I re-enabled the cd drive and putty ran fine. So that must have cleared some setting or data somewhere in windows."</li>
+<li><a href="https://groups.google.com/forum/#!topic/comp.security.ssh/tX9VdoktKtY">9a3ca081-3c9d-4ff1-b109-30bb6edb20db@h6g2000yqk.googlegroups.com</a> (Jan 2012)<br>Reboot made issue apparently go away</li>
+<li>50EB2A5D03FF4848A90AC0217EE38965029B132F@corpatsmail4.corp.sensis.com (Feb 2013, 0.62/2013-02-25 on Windows 7<br>"How to cause issue:<br>Insert ANY cd into computer run it and eject CD<br>Open PuTTY<br>Load a Profile<br>Get No Disk Error<br>Rebooting or inserting ANY cd will fix the issue<br>We are experiencing this issue on all of our computers."</li>
+<li>536278DB.7070801@klpd-uli.nl (May 2014, Windows 7 Ultimate)<br>"When I am starting putty"<br>Drive itself is removeable; no problem if it is absent</li>
+<li>54DBE295.2060903@shopsite.com (Feb 2015, 0.63 on Win 7 Professional)<br>
+"if I ever launch putty with a CD or DVD in the drive, putty then requires a CD or DVD to be present in the drive to make a connection until I reboot without a CD or DVD in." Have to reboot to clear the condition.</li>
+<li>009a01d0e6e7$1e3db9e0$5ab92da0$@gmx.de (Sep 2015, Windows 7)</li>
+<li>253A8A19C1E94042A83B87F2A12D015E52A7DCF3@HDXDSP51.us.lmco.com (Aug
+2016, with patch). Steps to repeat:<br>Insert CD<br>Start Putty / Load
+Profile / Connect<br>Stop Putty<br>Eject CD</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/needs-removeable-media;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

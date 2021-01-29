@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-bignum-division-by-zero</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-bignum-division-by-zero.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-bignum-division-by-zero</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: non-coprime values in DSA signatures can cause buffer overflow in modular inverse<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: r568<br>
+<b>present-in</b>: 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62<br>
+<b>fixed-in</b>: r9996 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=a7cc906df0f728f7181aa750494cb986bf0b5176">a7cc906df0f728f7181aa750494cb986bf0b5176</a> 2013-08-05 0.63<br>
+<p>
+Many versions of PuTTY prior to 0.63 have a buffer overflow
+vulnerability in the calculation of modular inverses when verifying a
+DSA signature.
+
+<p>
+One step of the DSA signature verification procedure involves
+computing the modular inverse of the integer <i>s</i> (part of the
+signature) with respect to the integer <i>q</i> (part of the public
+key). If <i>s</i> and <i>q</i> have any common factor, this modular
+inverse cannot exist. Of course, such a signature is invalid (and
+probably the private key is invalid too), but PuTTY will react to that
+situation by its bignum code overflowing a buffer when it attempts to
+divide by zero during Euclid's algorithm.
+
+<p>
+This bug applies to any DSA signature received by PuTTY, including
+during the initial key exchange phase. Therefore, this bug can be
+exploited by a malicious server, <em>before</em> the client has
+received and verified a host key signature. So this attack can be
+performed by a man-in-the-middle between the SSH client and server,
+and the normal host key protections against MITM attacks are bypassed.
+Even if you trust the server you <em>think</em> you are connecting to,
+you are not safe.
+
+<p>
+We are unaware of any way in which this can lead to remote code
+execution, since there is no control over the data written into the
+heap.
+
+<p>
+This bug does not affect RSA keys.
+
+<p>
+This bug has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4207">CVE-2013-4207</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-bignum-division-by-zero;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

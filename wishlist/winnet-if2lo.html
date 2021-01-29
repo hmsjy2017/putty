@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug winnet-if2lo</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/winnet-if2lo.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug winnet-if2lo</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY refuses connections to 127.0.0.1 from interface IP addresses<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: 2003-10-13 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4d76ca6658d4d557f1525e791cdb8910b5af4177">4d76ca6658d4d557f1525e791cdb8910b5af4177</a> (0.54)<br>
+<p>
+There are persistent reports of PuTTY's port forwarding not working
+with SMB connections, although there are just as many reports of it
+working fine. Thanks to Chip Killian's report of this bug and some
+detective work with netstat, I think I've tracked down the cause of
+this problem.
+
+<p>
+When PuTTY's network layer is asked to open a listening socket for
+connections from localhost only, it actively refuses any connections
+that don't come from a loopback source address. This was because I
+was told that at least some Windows systems implement "the weak end
+system model", in which any packet coming in to the system with a
+destination address the machine believes it has will be accepted. In
+other words, if I construct a packet with my own source address (say
+10.1.2.3) and destination 127.0.0.1, and if I convince my IP layer
+to send it to your machine's Ethernet MAC address, then your machine
+might actually accept the connection, send back responses to my MAC
+address with 127.0.0.1 as the source address, and then I've managed
+to make a connection to one of your machine's <em>internal</em> services
+from outside. PuTTY's deliberate check that loopback connections
+come from an actual loopback address largely defeats this attack: if
+I put 127.0.0.1 as the source address of your packets, I might still
+get your machine to believe the first SYN, but all its replies will
+be sent internally and won't come back to me.
+
+<p>
+Unfortunately, at least some versions of Windows connect to a SMB
+share on 127.0.0.1 in such a way that the source of the connection
+appears to be one of the machine's <em>other</em> IP addresses - and
+hence PuTTY will reject the connection and refuse to forward it.
+
+<p>
+To fix this, I suppose PuTTY will need to find out what IP addresses
+the machine believes it owns, so that it can accept connections from
+any of those. If anyone wants to save me some manual-grubbing by
+letting me know how to do that conveniently, it would be helpful.
+
+<p>
+<em>Update:</em> we have implemented a fix as of the 2003-10-13
+snapshot. It would be helpful if someone could tell us whether it
+makes SMB forwarding work.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/winnet-if2lo;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

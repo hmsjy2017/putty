@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish compressed-scrollback</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/compressed-scrollback.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish compressed-scrollback</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Compress scrollback contents to reduce memory usage<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <a href="256-colours.html">256-colours</a> <a href="unicode-combining.html">unicode-combining</a> <a href="unicode-more-planes.html">unicode-more-planes</a><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-10-14 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=709a94e5f27004e3933b022e1f01b96ddf854265">709a94e5f27004e3933b022e1f01b96ddf854265</a> (0.58)<br>
+<p>
+PuTTY's current terminal emulator stores 32 bits per character in both
+the active terminal screen and the scrollback, and practically all of
+those bits are full. If we want to add more state (such as
+<a href="256-colours.html">more colours</a> or
+<a href="unicode-combining.html">Unicode combining characters</a>), we
+need to expand the data structure. But expanding the data structure
+<em>throughout</em> the terminal code will seriously increase the size
+of the (potentially very large amount of) scrollback stored in memory,
+so we don't like that approach.
+
+<p>
+What we want to do instead is to separate scrollback from the active
+terminal screen by inventing a <em>compressed</em> format. So the
+active terminal screen will use a small <code>struct</code> per
+character (making it easy in future to add new fields), but each row
+of <code>struct</code>s will be compressed into a compact format for
+storing in the scrollback, which will not waste space on any elements
+of the per-character <code>struct</code> which aren't actually used.
+Since a scrollback line is never modified, the compressed format need
+not be easy to change individual characters in.
+
+<p>
+That way, the chances are that the average user will experience a
+<em>drop</em> in memory footprint (since all their scrollback will end
+up smaller than it is right now), and yet the terminal emulator will
+acquire extra flexibility to have features added to it without
+impacting memory usage for people who don't use them.
+
+<p>
+<b>SGT, 2004-10-13</b>: I've now done the initial work for this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/compressed-scrollback;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug diffie-hellman-range-check</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/diffie-hellman-range-check.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug diffie-hellman-range-check</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Missing range check in Diffie-Hellman key exchange<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.63<br>
+<b>fixed-in</b>: 0.64 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=174476813f0ed94337aecc3e2d13a202a1dc2fa8">174476813f0ed94337aecc3e2d13a202a1dc2fa8</a><br>
+<p>
+PuTTY 0.63 and earlier versions implement Diffie-Hellman key exchange
+without checking that the value sent by the server is within the range
+[1,p-1]. This range check is required by section 8 of RFC 4253.
+
+<p>
+PuTTY 0.64 does fix this. In fact, it enforces the slightly smaller
+range [2,p-2], since values 1 and p-1 are also worthless for secure
+Diffie-Hellman.
+
+<p>
+Thanks to Matta Security for reporting this bug.
+
+<p>
+Matta considers this to be a security vulnerability, on the grounds
+that a Diffie-Hellman value of zero (for example) sent by the server,
+if not rejected by the client, would constitute a weak key and permit
+even a passive eavesdropper to read the session traffic. Matta has
+assigned this issue the id "MATTA-2015-002"; we were given
+<a href="https://www.trustmatta.com/advisories/MATTA-2015-002.txt">this URL</a>
+for the forthcoming advisory, but as of the time of writing it has not
+yet appeared.
+
+<p>
+With respect to Matta, we do not classify this as a vulnerability: a
+server sending a value of zero <em>on purpose</em> could just as
+easily expose the session traffic by other methods anyway (e.g. simply
+sending a copy of the traffic to whoever it wanted to), and given the
+range of values from which Diffie-Hellman keys are selected, a server
+sending the value zero <em>by accident</em> would happen with
+probability far, far lower than a spontaneous collision in a secure
+hash function, so if spontaneous hash collision is not considered a
+vulnerability then neither should this be.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/diffie-hellman-range-check;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

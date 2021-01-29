@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish hostkey-prefer-cached</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/hostkey-prefer-cached.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish hostkey-prefer-cached</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY should prefer host-key types it already has cached<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: 2015-05-30 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d21041f7f8846b16ff6d72ed696d6190627e19b4">d21041f7f8846b16ff6d72ed696d6190627e19b4</a> (0.68)<br>
+<p>
+We've just added support for several new host key formats
+(<a href="ecdsa.html">ECDSA</a>; <a href="ed25519.html">Ed25519</a>) for the first time in a long time.
+EC host keys are already widely deployed in servers. If we do nothing,
+this is going to lead to lots of users prompted for
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter2.html#gs-hostkey">host key verification</a>
+as if they were connecting to the server for the first time.
+
+<p>PuTTY now deliberately adjusts its algorithm preferences to prefer
+host key types that it already has in its cache.  This means that in
+any case where pre-EC PuTTY would have successfully connected without
+issuing a host-key prompt, post-EC PuTTY will do the same (using the
+existing host key it knows rather than any new EC key; automatically
+upgrading is a knotty problem covered by
+<a href="host-key-rollover.html">host-key-rollover</a>).
+
+<p>
+<b>Update, March 2016:</b> in this situation, it's now possible to
+upgrade to a newer host key manually, using the new "Cache new host
+key type" submenu on the Special Commands menu.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/hostkey-prefer-cached;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

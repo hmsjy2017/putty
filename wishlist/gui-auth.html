@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish gui-auth</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/gui-auth.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish gui-auth</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Option to use GUI dialogs for authentication<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Several people have asked for password/passphrase prompts etc to
+appear in dialogue boxes in Plink and/or PuTTY, rather than inlined
+into the terminal output. There are a couple of good reasons you might
+want to do this.
+
+<p>
+For instance, if you're using Plink with CVS but not using
+passphraseless keys or Pageant, the interface for typing your password
+is less than ideal (you have to find the relevant command window and
+type blind into it, apparently).
+
+<p>
+Similarly if we ever get a Plink/PuTTY mode where no terminal session
+is required (e.g. it's used for forwarding only).
+
+<p>
+Also, GUI popups provide some degree of assurance against spoofing
+attacks; with password/passphrase prompts in the same terminal window
+as everything else, it's not always easy to be sure that your password
+is going where you expect, whereas a dialog box is somewhat harder
+to spoof. (Although we need to clearly distinguish local prompts such
+as key passphrases from remote prompts, especially keyboard-interactive,
+where the server would like to control as much of the prompt window
+as possible. Not sure of the best way to do this yet.)
+
+<p>
+On Windows, Plink can create dialog boxes despite being a console-mode
+program. On Unix, we wouldn't want to add a dependency to Gtk to Plink
+just for this; we can probably implement the <code>ssh-askpass</code>
+interface, although it would look a bit naff (existing passphrase
+requesters mention OpenSSH in the dialog caption, and only allow one
+prompt at a time).
+<ul>
+<li>For reference, the <code>ssh-askpass</code> interface is rather
+simple: a prompt (may contain newlines) is optionally passed in as
+the first argument, the passphrase is spit out on stdout with a
+newline, and exit status is zero for success and non-zero for failure
+or user cancellation.
+</ul>
+
+<p>
+All optional, of course.
+
+<p>
+Someone's already created a
+<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/*checkout*/tortoisecvs/TortoiseCVS/src/TortoisePlink/TortoisePlink.patch?rev=1.1">patch</a>
+to build a GUI Plink for
+<a href="http://www.tortoisecvs.org/">TortoiseCVS</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/gui-auth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2005-07-06 14:25:23 +0000)</div>
+
+</BODY></HTML>

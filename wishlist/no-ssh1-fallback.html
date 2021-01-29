@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish no-ssh1-fallback</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/no-ssh1-fallback.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish no-ssh1-fallback</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Remove fallbacks between SSH-2 and SSH-1<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=16dfefcbdedb00354860adb32034ac0f3791833c">16dfefcbdedb00354860adb32034ac0f3791833c</a> 2016-04-03 (0.68)<br>
+<p>
+While it's still apparently necessary to support the obsolete SSH-1
+protocol to connect to some outdated servers, these days it should
+really be treated as a separate and insecure protocol, like Telnet or
+Rlogin, and only used if the user explicitly requests it.
+
+<p>
+PuTTY currently supports a mode ('Preferred SSH protocol version' of
+'2' rather than '2 only') where it will prefer to use the modern SSH-2
+protocol, but will quietly fall back to SSH-1 if that's all the server
+appears to support. PuTTY used in this mode is open to a protocol
+downgrade attack; while the SSH-2 protocol exchange is set up to spot
+an active attacker tampering with version strings, algorithm choices
+and the like (provided that you have been careful about trusting the
+host key), that can't prevent downgrade to SSH-1, and after that
+further downgrade attacks are possible.
+
+<p>
+While it is not yet known to be trivial to exploit this, SSH-1 is now
+sufficiently rare that it's not worth the risk.
+
+<p>
+(One sign that it might be happening to you is being unexpectedly
+prompted for a new "rsa" host key; this would <b>not</b> be flagged as
+"WARNING - POTENTIAL SECURITY BREACH". In PuTTY 0.67 and before, this
+can also occur legitimately in SSH-2 if the server adds a new host key
+type but the key type would not be "rsa", which is SSH-1 specific;
+"rsa2" is the name of the RSA key type for SSH-2.)
+
+<p>
+Current versions of PuTTY default to not allowing fallback to SSH-1,
+but the default only <a href="ssh2-only-default.html">changed</a> in
+0.64 (early 2015), so there will be plenty of long-time users whose
+untouched settings leave them vulnerable to such a downgrade attack.
+
+<p>
+So: change "Preferred SSH protocol version" to just "SSH protocol
+version", and offer just two options "2" and "1", which behave the
+same way that "2 only" and "1 only" did in previous versions. (The
+'-2' and '-1' command-line options already behave like this.)
+Existing sessions that use the old settings instead use the equivalent
+no-fallback behaviour. The net result is that a PuTTY configuration
+that permits SSH-1 can no longer be used to connect to a server that
+only supports SSH-2, leaving it open to a downgrade attack in the
+future.
+
+<p>
+Most users will be connecting to SSH-2-supporting servers with a
+configuration that prefers SSH-2 (the default since
+<a href="ssh2-default.html">0.54 in 2004</a>) so will see no change.
+If you were relying on the fallback, your session will now fail and
+you'll have to change your settings to explicitly acknowledge the
+protocol version in use; if you discover that you need SSH-1, you
+might want to try to upgrade your server if possible.
+
+<p>
+(Compare
+<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=807107">Debian's approach</a>,
+where you will also have to explicitly opt in to allowing SSH-1 by
+invoking the 'ssh1' command instead of 'ssh'.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/no-ssh1-fallback;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

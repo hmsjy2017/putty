@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug plink-hostname</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/plink-hostname.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug plink-hostname</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Plink using wrong hostname when one is saved in Default Settings<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.60<br>
+<b>fixed-in</b>: r8651 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d992932e1eb1515d4674ab806730d13b4bf9223c">d992932e1eb1515d4674ab806730d13b4bf9223c</a> 2009-09-15 (0.61)<br>
+<p>
+Since <a href="defaults-launchable.html">'defaults-launchable'</a> was
+fixed, it's been possible to save a hostname in Default Settings.
+
+<p>
+However, Plink did not cope gracefully with that possibility -- it was
+not possible to override that hostname on the command line. Attempts
+at doing so would be treated as part of the remote command, but this
+typically wouldn't be obvious as the connection wouldn't get that far.
+
+<p>
+The most common symptom of this is output like this:
+
+<pre>C:\>plink myhost.example.com
+Unable to open connection:
+Host does not exist</pre>
+
+where a PuTTY connection to <tt>myhost.example.com</tt> works fine.
+Upon adding the <tt>-v</tt> option you might get:
+
+<pre>C:\>plink -v myhost.example.com
+Looking up host "otherhost.example.com"
+Unable to open connection:
+Host does not exist</pre>
+
+which "huh?" behaviour is explained by <tt>otherhost.example.com</tt>
+being in "Default Settings".
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/plink-hostname;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

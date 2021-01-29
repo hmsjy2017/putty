@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish mdpi</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/mdpi.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish mdpi</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: The mythical DLL Plugin Interface<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <em><a href="cooked-printer.html">cooked-printer</a></em> <em><a href="cryptoapi.html">cryptoapi</a></em> <em><a href="portfwd-ftp.html">portfwd-ftp</a></em> <em><a href="scripting.html">scripting</a></em> <em><a href="unicode-normalisation.html">unicode-normalisation</a></em><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Since we know a lot of people really appreciate PuTTY's small size,
+we try to preserve that small size. Unfortunately, there are some
+features which simply can't be implemented without a <em>lot</em> of
+code.
+
+<p>
+Therefore, we would like PuTTY to have an interface that allows
+plugins in the form of DLLs. These plugins would be completely
+optional; if PuTTY didn't find any plugins when it started up, it
+would go ahead and run without them, and you just wouldn't get any
+of the features supported in the plugins. If you needed to fit PuTTY
+into a small space (such as a floppy), you could include only those
+plugins you really needed - or none at all.
+
+<p>
+Quite how this plugin interface should fit together is unclear. In
+particular, since methods of DLL linkage and dynamic loading tend to
+be very platform-specific, it would be hard to design a plugin
+interface which would allow us to port the plugins bodily to other
+platforms (when we eventually get round to doing any ports).
+
+<p>
+Patch (unreviewed): 404DDD77.9010501@nodomain.org
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/mdpi;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2004-03-24 14:14:11 +0000)</div>
+
+</BODY></HTML>

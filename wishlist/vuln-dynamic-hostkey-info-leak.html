@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-dynamic-hostkey-info-leak</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-dynamic-hostkey-info-leak.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-dynamic-hostkey-info-leak</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Dynamic host key policy leaks information about known host keys<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.67<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=08f1e2a5066ea95559945af339a60ca14560d764">08f1e2a5066ea95559945af339a60ca14560d764</a> 0.74<br>
+<p>
+PuTTY 0.68 <a href="hostkey-prefer-cached.html">introduced a dynamic
+policy</a> for setting the host key preference order in the
+<code>SSH_MSG_KEXINIT</code> message. Host key types for which the
+client already has a stored host key are promoted to the top of the
+list. This ensures that if the client does have at least one stored
+key for the server, then one of those keys will be used in the
+connection.
+</p>
+
+<p>
+Without this option, if you already had a host key stored, and the
+server acquired a new key higher up PuTTY's default preference order
+(e.g. an <code>sshd</code> upgrade caused an Ed25519 key to be
+generated when previously the host only had RSA), the client would ask
+you to confirm the new key, even though you already knew a key you
+could use to talk to that host safely.
+</p>
+
+<p>
+However, this policy has a downside as well as an upside. The list of
+host key types is sent in cleartext in the first
+<code>SSH_MSG_KEXINIT</code> message of the connection. So a network
+snooper eavesdropping on all your SSH connections will notice the
+different orders of host key preference used for different hosts, and
+can use those to make a guess about which servers you already have
+host keys for, and which ones you're connecting to for the first time.
+</p>
+
+<p>
+So, if you're the kind of user who clicks "accept" to new host keys
+without checking them out of band (the TOFU policy – Trust On First
+Use), and if an active attacker is intending to substitute fake host
+ in your SSH connections, then they might be able to use this clue
+to substitute fake keys for only the hosts you don't already have keys
+for, which might reduce their risk of being detected when performing
+that attack.
+</p>
+
+<p>
+PuTTY 0.74 comes with a new configuration option in the SSH > Host
+keys panel: “Prefer algorithms for which a host key is known”. This
+option is on by default. If you turn it off, you can revert to the
+pre-0.68 policy in which the same host key preference order is used
+regardless of the keys you already have cached for a given server.
+</p>
+
+<p>
+Our analysis is that this is a choice with pros and cons on each side.
+Taking several classes of user in turn:
+</p>
+
+<dl>
+
+<dt>The “model” user who checks host keys out of band:</dt>
+
+<dd>
+<p>
+We think this user benefits from the default dynamic policy. (These
+are the users for whom we introduced it in the first place.)
+</p>
+<p>
+Checking host keys out of band is awkward, and sometimes not possible
+(if you can't contact the admin of the server by other methods at the
+time you need to make the connection). So it's desirable to avoid it
+whenever possible.
+</p>
+<p>
+The information leak is not important to this class of user, because
+an attacker substituting a phony host key will be detected anyway by
+the out-of-band check.
+</p>
+</dd>
+
+<dt>The “oblivious” user who always clicks yes to new host keys (but not to changed ones of the same type):</dt>
+
+<dd>
+<p>
+For this user, it makes very little difference which option they
+select!
+</p>
+<p>
+Suppose they turn off the dynamic host key policy, and the
+active attacker tries to fake a host key for an already-known server,
+in a case where they would otherwise have been warned off by a changed
+preference order.
+</p>
+<p>
+In most cases this will mean that the server does
+not provide the host key type at the <em>top</em> of PuTTY's
+preference list (or else the preference order would have been the same
+<em>even</em> with the dynamic policy enabled). So the attacker could
+substitute that topmost host key type in any case, and still not be
+detected.
+</p>
+</dd>
+
+<dt>The “semi-oblivious” user who clicks yes to new hosts, but checks up on old hosts offering new key types:</dt>
+
+<dd>
+<p>
+This is the class of user who is likely to benefit from turning the
+dynamic policy off, because in this case, the attacker will be misled
+into trying to attack a connection to an already-known server; they
+will substitute a host key of a type the server does not provide; and
+the semi-oblivious user will notice, and check up on it, and detect
+the attack.
+</p>
+</dd>
+
+All of this analysis assumes that the user has not meddled with the
+default host key preference order in the PuTTY configuration. If they
+do – and, especially, if they change it differently depending on the
+saved session – then they can probably completely confuse this
+hypothetical attacker in any case.
+
+</dl>
+
+<p>
+This potential vulnerability was reported to us by the Competence
+Center for IT security at the FZI Research Center for Information
+Technology. They have assigned it the id FZI-2020-5, and Mitre
+assigned it <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14002">CVE-2020-14002</a>. Here is their own
+<a href="https://www.fzi.de/en/news/news/detail-en/artikel/fsa-2020-2-ausnutzung-eines-informationslecks-fuer-gezielte-mitm-angriffe-auf-ssh-clients/">writeup of the issue</a>.
+</p>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-dynamic-hostkey-info-leak;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2020-06-27 08:16:18 +0100)</div>
+
+</BODY></HTML>

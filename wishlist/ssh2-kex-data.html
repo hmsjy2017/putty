@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ssh2-kex-data</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-kex-data.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ssh2-kex-data</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Data transfer during SSH-2 KEX causes confusion<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>blocks</b>: <a href="ssh2-kex-repeat.html">ssh2-kex-repeat</a><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-11-25 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=a4ba0268389027f2985da7a45ddbf7b84104266d">a4ba0268389027f2985da7a45ddbf7b84104266d</a> (0.58)<br>
+<p>If there is data being transferred through PuTTY while the SSH-2
+repeat key exchange is taking place, it can confuse some servers.
+
+<p>In the current SSH-2 protocol drafts, it's not entirely clear to
+all readers what happens to the connection layer while the transport
+layer is in a key exchange phase, so it isn't clear from there what
+PuTTY <em>should</em> do in this situation. A good
+conservative/liberal option would be to accept incoming
+connection-layer packets provided we can decrypt them, and to queue
+outgoing connection-layer packets until the key exchange is
+completed. I can't easily imagine a standards decision that would
+invalidate that behaviour.
+
+<p>
+There has been (repeated) discussion of this issue on
+<a href="ftp://ftp.ietf.org/ietf-mail-archive/secsh/">IETF SECSH</a>:
+<ul>
+  <li>Thread 'Key Re-Exchange' starting 4 Apr 2001
+  <li>Thread 'Some questions about "SSH Transport Layer Encryption Modes"' starting 16 Oct 2003
+  <li>Thread 'data during rekey?' starting 1 Dec 2003
+  <li>Thread 'Data transfer during key re-exchange' starting 25 Jun 2004
+</ul>
+
+<p>
+The consensus seems have settled on the proposal above, and having
+any nonblocking rekey as a protocol extension (see for instance message
+<code><200310192351.h9JNpxAx004282@thunk.east.sun.com></code>),
+so we don't now have much excuse for not implementing that;
+but as of version -18 of the transport draft no change has been made 
+to the actual documents. (See 
+<a href="https://www.chiark.greenend.org.uk/ucgi/~jacobn/cvsweb/ssh2-kex-data.d/draft-ietf-secsh-transport-18-plus-kex-data.txt.diff?r1=1.1&r2=1.4&f=H">the current version</a>
+of a proposed change to the language to make this clearer.)
+
+<p>
+People have also muttered about the receiving end continuing to accept
+data encrypted using the "old" context; perhaps we'd want to keep an
+eye on how much data the other end tried to encrypt with a given
+context and close the connection if in our opinion it was too much.
+(Although this would be rather rude if we didn't
+<a href="ssh2-kex-repeat.html">request a rekey</a> first in plenty
+of time.)
+
+<p>
+Symptoms of this:
+<a href="http://www.ssh.com/products/ssh/">ssh.com</a>'s server, which
+does repeat key exchange every hour or so, will sometimes throw you
+off - a common disconnect message seems to be "Protocol error:
+Received 94 as newkeys". (We've also had a report of "packet too long"
+from F-Secure.) This will seem intermittent.
+
+<p>
+There aren't any really satisfactory workarounds - either using SSH-1
+or disabling key re-exchange will both work, but have obvious
+drawbacks.
+
+<p>
+<em>Update:</em> should be fixed as of the 2004-11-25 snapshot.
+We haven't been able to test it very thoroughly yet, though, so
+testing is welcomed.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-kex-data;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-05-07 16:29:13 +0100)</div>
+
+</BODY></HTML>

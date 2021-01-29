@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug vshell-no-bug-compat</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vshell-no-bug-compat.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug vshell-no-bug-compat</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Bug compatibility modes accidentally triggered for VShell.<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2003-05-25 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e955cc77ce2d0b950ca5815c0ca728f0d79a5d67">e955cc77ce2d0b950ca5815c0ca728f0d79a5d67</a> (0.54)<br>
+<p>
+It appears that the triggers for bug compatibility modes in
+ssh_detect_bugs() are too lax. For instance, the following version
+string (presented by
+<a href="http://www.vandyke.com/products/vshell/">VShell</a>):
+
+<blockquote><tt>SSH-2.0-2.0.1 (official) VShell</tt></blockquote>
+
+<p>
+is mistakenly triggering the HMAC bug compatibility mode.
+
+<p>
+A workaround in 0.53 is to manually turn off
+detection of the bug (SSH / Bugs panel, "Miscomputes SSH2 HMAC
+keys").
+
+<p>
+A better solution would be to use the wildcard engine we already
+have for PS*P internally to match version strings. (This depends on
+our being able to reconstruct exactly which version strings we should
+be matching, of course!)
+
+<p>
+<em>Update:</em> an exception has been added to the bug compatibility
+modes for VShell, although I haven't tested it.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vshell-no-bug-compat;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

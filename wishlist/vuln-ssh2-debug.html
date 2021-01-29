@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-ssh2-debug</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-ssh2-debug.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-ssh2-debug</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: crafted SSH2_MSG_DEBUG can cause remote code execution<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.51<br>
+<b>present-in</b>: 0.52 0.53 0.53b 0.54 0.55<br>
+<b>fixed-in</b>: 2004-10-23 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5ff0e6b1d98888226f46c70afe396d4a14703912">5ff0e6b1d98888226f46c70afe396d4a14703912</a> 0.56<br>
+<p>
+Many versions of PuTTY prior to 0.56 have a memory corruption
+vulnerability in their treatment of received debug messages in SSH
+protocol version 2 (SSH2_MSG_DEBUG).
+
+<p>
+This message is handled in <code>ssh2_rdpkt()</code>. A string length
+is read from the SSH packet and clipped to the length of a buffer.
+However, the string length is stored as a signed integer, and there is
+no protection against its being large enough to be stored as a
+negative number. This will bypass the length checking and appear as a
+large positive number once again to the subsequent
+<code>memcpy()</code>, causing a memory overflow. Code execution has
+been demonstrated as a result of this overflow.
+
+<p>
+This bug is <b>EXTREMELY SEVERE</b>. PuTTY can process debug messages
+at any time in the protocol, including during the initial key exchange
+phase. Therefore, this bug can be exploited by a malicious server,
+<em>before</em> the client has received and verified a host key
+signature. So this attack can be performed by a man-in-the-middle
+between the SSH client and server, and the normal host key protections
+against MITM attacks are bypassed. Even if you trust the server you
+<em>think</em> you are connecting to, you are not safe.
+
+<p>
+This bug does not affect SSH protocol version 1, as the SSH1_MSG_DEBUG
+string length is sanity-checked against the packet length before use.
+
+<p>
+This bug was discovered by an anonymous contributor to
+<a href="http://www.idefense.com/">iDEFENSE</a>'s
+<a href="http://labs.idefense.com/vcp/">Vulnerability
+Contributor Program</a>. It is documented in iDEFENSE's advisory
+<a href="http://labs.idefense.com/intelligence/vulnerabilities/display.php?id=155">10.27.04</a>. It is also mentioned in an
+advisory by Secunia, numbered
+<a href="http://secunia.com/advisories/12987/">SA12987</a>,
+and has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2004-1008">CVE-2004-1008</a>
+and
+<a href="http://www.osvdb.org/11165">OSVDB ID 11165</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-ssh2-debug;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

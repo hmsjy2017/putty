@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug unix-connreset-spin</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/unix-connreset-spin.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug unix-connreset-spin</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Unix PuTTY spins in tight loop after abnormal exit<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>depends</b>: <a href="port-unix-gtk2.html">port-unix-gtk2</a><br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 2006-11-29<br>
+<b>fixed-in</b>: r8040 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=865b6b404d34f8eec5d3a3abccb8e38271bef6a6">865b6b404d34f8eec5d3a3abccb8e38271bef6a6</a> 2008-06-06 (0.61)<br>
+<p><pre>PuTTY (development snapshot 2006-11-29) on Linux spins on the CPU after a
+connection has been terminated unexpectedly.  (In this case, displaying a
+PuTTY Fatal Error dialogue box with a &quot;Connection Reset by Peer&quot; message
+in it.) stracing the putty process when it&#x27;s in this state produces lots
+of:
+
+poll([{fd=3, events=POLLIN}, {fd=7, events=POLLIN}, {fd=5,
+events=POLLIN|POLLPRI, revents=POLLNVAL}], 3, -1) = 1
+gettimeofday({1165238007, 805859}, NULL) = 0
+gettimeofday({1165238007, 805953}, NULL) = 0
+ioctl(3, FIONREAD, [0])                 = 0
+poll([{fd=3, events=POLLIN}, {fd=7, events=POLLIN}, {fd=5,
+events=POLLIN|POLLPRI, revents=POLLNVAL}], 3, -1) = 1
+gettimeofday({1165238007, 806293}, NULL) = 0
+gettimeofday({1165238007, 806386}, NULL) = 0
+ioctl(3, FIONREAD, [0])                 = 0
+
+SGT, 2006-12-28: I&#x27;ve looked briefly into this. I can reproduce it
+easily: the simplest way is to make an SSH connection to a Linux
+box, type `ps j $$&#x27; to find out the parent PID of the bash process
+(i.e. the user half of the privilege-separated sshd) and kill it.
+
+Examining the full strace shows that the reason poll() is repeatedly
+returning POLLNVAL on that fd is because it was closed shortly
+before that. So we&#x27;ve closed the fd, but not removed it from GDK&#x27;s
+input loop.
+
+Or have we? Applying the following diagnostic patch...
+
+Index: uxsel.c
+===================================================================
+--- uxsel.c	(revision 7026)
++++ uxsel.c	(working copy)
+@@ -71,6 +71,7 @@
+ 
+     oldfd = find234(fds, newfd, NULL);
+     if (oldfd) {
++printf(&quot;uxsel_input_remove %d %d\n&quot;, fd, oldfd-&gt;id);
+ 	uxsel_input_remove(oldfd-&gt;id);
+ 	del234(fds, oldfd);
+ 	sfree(oldfd);
+@@ -78,12 +79,14 @@
+ 
+     add234(fds, newfd);
+     newfd-&gt;id = uxsel_input_add(fd, rwx);
++printf(&quot;uxsel_input_add %d %d\n&quot;, fd, newfd-&gt;id);
+ }
+ 
+ void uxsel_del(int fd)
+ {
+     struct fd *oldfd = find234(fds, &amp;fd, uxsel_fd_findcmp);
+     if (oldfd) {
++printf(&quot;uxsel_input_remove %d %d\n&quot;, fd, oldfd-&gt;id);
+ 	uxsel_input_remove(oldfd-&gt;id);
+ 	del234(fds, oldfd);
+ 	sfree(oldfd);
+
+... shows that we actually _do_ call gdk_input_remove() for that fd
+before entering the tight loop, and yet somehow the GDK event loop
+is still checking it. Also, setting a breakpoint on fd_input_func()
+in gtkwin.c indicates that GDK&#x27;s event loop is not repeatedly
+calling it - i.e. that POLLNVAL is _not_ being passed to user code,
+but is entirely contained within GDK.
+
+In other words, I&#x27;m reasonably sure this is a bug in GDK or Glib,
+not in PuTTY. And since PuTTY is still running on GDK 1.2, it seems
+quite possible that the bug might already be fixed in later
+versions. Therefore, we probably ought to (finally) get round to
+porting to GTK 2.x, and see if the problem has gone away, before
+devoting any more effort to this issue.
+
+SGT, 2007-01-03: Indeed, this is now confirmed as a GTK problem, and
+moreover one which is already fixed in GTK 2. Colin Watson has
+submitted a preliminary patch to build PuTTY against GTK 2, and the
+problem goes away if you do that.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/unix-connreset-spin;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

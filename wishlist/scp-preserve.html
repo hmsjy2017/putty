@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug scp-preserve</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/scp-preserve.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug scp-preserve</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PSCP in SCP mode messes up file download with &#x27;-p&#x27; option<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.70<br>
+<b>present-in</b>: 0.71<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4135e5d29550654227e275907e63a58e232cce38">4135e5d29550654227e275907e63a58e232cce38</a> (0.72)<br>
+<p>
+PSCP, when it is using the SCP protocol (which is rare), and has been
+configured to preserve timestamps and permissions (with <tt>-p</tt>)
+on a downloaded file can, due to a mistake in the protocol
+implementation, get the file name wrong, create a local file with an
+unhelpful mode, get the size wrong and perhaps hang, maybe print bits
+of the file content to the console, and generally makes a complete
+hash of things. For instance:
+
+<pre>$ ./pscp -scp -remotehost:stoat .
+Keyboard-interactive authentication prompts from server:
+| Password:
+End of keyboard-interactive prompts from server
+warning: remote host tried to write  to a file called '0 1559391040 0
+0664 160166 stoat
+'
+         when we requested a file called 'stoat'.
+         If this is a wildcard, consider upgrading to SSH-2 or using
+         the '-unsafe' option. Renaming of this file has been disallowed.
+stoat                     | 32 kB |  32.0 kB/s | ETA: 00:04:45 |   0%
+[hang]</pre>
+
+<p>
+In most circumstances, PSCP will use the more modern SFTP protocol,
+which does not have this problem. The SCP protocol will only be used
+if the server doesn't appear to support SFTP (rare), or if the user
+explicitly specified the <tt>-scp</tt> option on the command line.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/scp-preserve;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-06-01 13:44:01 +0100)</div>
+
+</BODY></HTML>

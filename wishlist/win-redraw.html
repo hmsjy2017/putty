@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win-redraw</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-redraw.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win-redraw</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Window redraw problems on Windows (white areas)<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.56 2005-01-13 0.58<br>
+<p>
+We get occasional reports of failure to redraw parts of the PuTTY
+terminal window, typically when another window is opaquely dragged
+over the PuTTY window, leaving white areas on the window which can
+usually be filled in by dragging another window over the PuTTY window
+again. Two of us have managed to reproduce this ourselves with
+vigorous window-waving.
+
+<p>
+Currently this looks like a Windows bug. We (JTN and OSD) can reproduce it with
+apps other than PuTTY (for instance, in WordPad's menu bar). We're
+assured that this probably isn't a function of the video card driver
+(which isn't responsible for calculating what to redraw, just for
+doing what it's told), but it may be a function of the Windows version
+(all reports so far are on NT-series OSs, and my (JTN) attempts to
+reproduce on 98SE didn't show anything).
+
+<p>
+(I (JTN) have a vague recollection about some misgivings and our
+return value from window/dialog functions, or similar, compared to the
+docs on MSDN, although this was years ago. I wonder if that could be
+causing this?)
+
+<p>
+Reports:
+
+<ul>
+
+<li>0.56, WinXP SP2, nVidia card
+<br><tt>8E5ACAE05E6B9E44A2903C693A5D4E8A04C48633@hqemmail02.nvidia.com</tt>
+
+<li>0.56?, WinXP pre-SP2, Matrox Millennium G550 (OSD)
+<br><tt>831xebsg1z.fsf@chiark.greenend.org.uk</tt>
+
+<li>2005-01-13, Win2K SP4, ATI RAGE 128 PRO II (JTN), 1.4GHz
+<br>Quite reproducible. Unable to get Notepad to exhibit the same
+behaviour on similar timescales, so it seems PuTTY-specific.
+<br>(I can also trigger partial redraw failures on the configuration
+dialog by the same method! -- the background
+<a href="https://tartarus.org/~jacob/junk/20050118/putty-2005-01-13-noredraw-config.png">becomes green</a>,
+bizarrely. Also 0.56.)
+<br>Can also reproduce with WordPad menu bar, so probably not our
+problem.
+<br><tt>20050117101008.GI7859@chiark.greenend.org.uk</tt>
+
+<li>0.58 and previous; various video cards, XP Pro / 2000 Pro, many machines
+<br>Correlated with "East Asian Languages" in Region Options
+<br><tt>20050319141100.GA68401@parodius.com</tt> et al
+
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-redraw;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-20 17:30:51 +0000)</div>
+
+</BODY></HTML>

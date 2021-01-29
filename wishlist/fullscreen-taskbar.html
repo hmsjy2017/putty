@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug fullscreen-taskbar</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/fullscreen-taskbar.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug fullscreen-taskbar</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Switching to full-screen doesn&#x27;t always hide taskbar<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>present-in</b>: 0.53b 2003-10-23<br>
+<p><pre>When switching to full-screen mode (e.g. with Alt-Enter), the taskbar
+is not always hidden. In some proportion of switches it stays on top.
+
+(At least, for a while. With 0.53b and Win98, it does disappear
+within a second or two if not immediately. I couldn&#x27;t say for sure
+that wasn&#x27;t the behaviour years ago.)
+
+I (JTN) have only noticed it on Win98 systems (2 so far), but it has
+been the case on that platform for ages.
+
+OSD: On WinXP, the behaviour differs depending on whether the taskbar
+is set to &quot;always on top&quot;.  If this is set, the taskbar disappears a
+fraction of a second after PuTTY goes full screen.  If &quot;always on top&quot; 
+is not set, a fullscreen PuTTY covers it immediately.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/fullscreen-taskbar;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-21 16:52:17 +0000)</div>
+
+</BODY></HTML>

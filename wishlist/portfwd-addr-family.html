@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug portfwd-addr-family</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portfwd-addr-family.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug portfwd-addr-family</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Unix listening sockets (e.g., tunnels) are IPv6-only by default<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.60<br>
+<b>fixed-in</b>: r8150 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6e2bd31d32b38f78e89513ada283315f50bc0a68">6e2bd31d32b38f78e89513ada283315f50bc0a68</a> 2008-08-21 (0.61)<br>
+<p>
+On a Unix system supporting IPv6, PuTTY will by default create
+listening sockets (e.g. for the local end of a local-to-remote tunnel)
+as IPv6-only. Attempts to connect to the port using IPv4 addresses
+(127.0.0.1) will fail, and often the same problem will occur with the
+name "localhost". This occurs for instance on Ubuntu Linux
+(so this is probably what's behind
+<a href="https://bugs.launchpad.net/ubuntu/+source/putty/+bug/67488">LP
+#67488</a>).
+
+<p>
+This contradicts the
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-portfwd-address-family">documentation</a>
+of the default "Auto" setting for tunnels, which states that "ticking
+'Auto' should always give you a port which you can connect to using
+either protocol."
+
+<p>
+Unix PuTTY should ensure that listening sockets are valid for at least
+the address families specified in the configuration.
+
+<p>
+Workarounds:
+<ul>
+<li>Explicitly configure PuTTY to use an IPv4 listening socket (change
+'Auto' to 'IPv4'). Of course, you won't then be able to connect to the
+tunnel endpoint with IPv6; if you need to be able to connect with both
+protocols, set up two tunnels with the same destination.
+<li>Leave the PuTTY configuration as it is, but explicitly connect to
+the IPv6 localhost address (<tt>::1</tt>).
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portfwd-addr-family;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

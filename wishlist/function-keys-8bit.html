@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish function-keys-8bit</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/function-keys-8bit.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish function-keys-8bit</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Option to start key sequences with 0x9B instead of 0x1B<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Debian apparently has a terminal type <code>xterm-8bit</code> where
+all occurrences of 0x1B in key sequences (such as function keys) are
+replaced by 0x9B.
+
+<p>
+This gets rid of the irritating delay on pressing Esc while the server
+works out of it's part of a multi-byte sequence or not.
+
+<p>
+It's been suggested that PuTTY should have an option to work like
+this.
+
+<p>
+<b>SGT adds</b>: This sounds like a nice simple feature on the face
+of it, but unfortunately UTF-8 complicates it a lot. What should
+happen when the terminal is in UTF-8 mode (or, hypothetically and if
+we ever get round to it, some other multi-byte character encoding)?
+Should we send a bare 9B <em>anyway</em>, causing an illegal UTF-8
+sequence but keeping compatibility with any software which is
+scanning the incoming byte stream for a precise sequence of
+<em>bytes</em>? Or should we send C2 9B, the UTF-8 encoding of
+U+009B? Or should we simply outlaw this mode completely in UTF-8
+mode?
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/function-keys-8bit;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2004-01-19 09:05:21 +0000)</div>
+
+</BODY></HTML>

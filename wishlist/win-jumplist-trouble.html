@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win-jumplist-trouble</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-jumplist-trouble.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win-jumplist-trouble</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Trouble with Windows &#x27;jump lists&#x27; of recently used sessions since 0.68<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.67<br>
+<b>present-in</b>: 0.68 0.71<br>
+<p>
+Various people have reported that the Windows 'jump list' features,
+which maintain a list of recently used sessions (and optionally
+'pinned' sessions) accessible via the taskbar button and/or Start
+Menu, have been broken in various ways since the 0.68 release.
+
+<p>
+There's a fair amount of evidence that this was triggered by our fix for
+<a href="needs-removeable-media.html">needs-removeable-media</a>.
+This fix involved changing how PuTTY identifies itself to Windows for
+the purposes of storing recent session information (using
+<tt>SetCurrentProcessExplicitAppUserModelID()</tt> where previously we
+were doing nothing). That fix didn't make any provision for migrating
+any existing stored information; in our pre-release testing, we saw
+some transitory anomalies from this, but it seemed to work itself out
+without forgetting recently used sessions, suggesting that Windows can
+somehow manage the migration itself at least under some circumstances.
+However, others have seen more permanent effects.
+
+<p>
+We suspect the exact symptoms seen may depend on the exact history of
+which versions of PuTTY were run when by what exact means, and/or
+which flavour of installers were installed/uninstalled/upgraded in
+what order. Which makes investigating this systematically rather
+tricky.
+
+<p>
+If anyone has deep knowledge of how Windows jump list storage works
+(particularly with respect to how applications are identified) and can
+suggest ways to mitigate this in future releases without making things
+worse, that would be helpful.
+
+<p>
+Reported symptoms:
+<ul>
+<li>The PuTTY shortcut on the Start Menu, which normally has a
+right-arrow leading to a list of recent and optionally pinned
+sessions, does not do so.
+<ul>
+<li>This at least we have some sort of explanation for; we should have
+made the PuTTY shortcuts created by the installer reference the same
+AppUserModelID as the PuTTY executable sets at runtime. We have
+rectified this in the post-0.68 snapshot installers
+(<a href="https://git.tartarus.org/?p=simon/putty.git;a=commit;h=4c67f0b060a8eb392063b055839d85c6d9913e94">4c67f0b06</a>).</li>
+<li>However, in a test on Windows 7, we found that the shortcut did
+get its list of saved sessions back after a while with no such care
+taken. Not sure how that happened; I suppose I did launch PuTTY from
+the Start Menu at some point in the proceedings, so maybe Windows went
+"aha, this shortcut launches an executable with this AppUserModelID, I
+shall remember that for next time".</li>
+<li>One user suggests that the problem only happens if you uninstall
+0.67 and then install 0.68 (with any installer); if you upgrade from
+the 0.67 to the 0.68 exe uninstaller without uninstalling, the issue
+is not seen.</li>
+</ul></li>
+<li>Ending up with two PuTTY icons on the taskbar; one permanent
+'pinned' icon, and one for the running session. The 'pinned' icon,
+which would normally have a list of recent or pinned sessions, does
+not, so is not very useful.
+<ul>
+<li>But others report that while you can end up with two different
+icons, they behave sensibly.</li>
+</ul></li>
+<li>Recent sessions appear, but the 'pin' icon doesn't do anything
+(<a href="https://youtu.be/QWz-OOG2OiU">demo video</a>). Windows 10,
+64-bit.
+<ul>
+<li>Another user hints that this kind of brokenness (and also broken
+'Remove from this list' functionality) might be correlated with the
+Windows version: broken on 'Windows 10 1607 (Redstone 1 / Anniversary
+Update)', not broken on Windows 7/8.1/'Windows 10 1511 (Threshold 2)',
+and affecting both 0.67 and 0.68, although it's not clear what the
+installation history was so maybe merely having had a new version
+installed at some point causes permanent confusion.</li>
+</ul></li>
+<li>PuTTY's taskbar icon is a generic blank-page sort of icon rather
+than the usual blue-and-yellow PuTTY icon. Has no "Pin this program
+to the taskbar" option. Other options ("Run Pageant", recent sessions)
+are present and work. PuTTY icon appears in Alt-Tab. (Observed on
+Windows 7 with 0.71.)</li>
+<li>One person reported that when they ran the PuTTY 0.71 MSI installer
+to upgrade their 0.70 installation (on Win 7 Pro SP1 64-bit), they got
+this error from the installer:
+<blockquote>Warning 1946.Property '{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}, 5' for shortcut 'PuTTY (64-bit).lnk' could not be set.</blockquote>
+(that GUID comes from the MSI installer.wxs script),
+and after that they suffered the kind of problems described here,
+which sorted themselves out after using PuTTY to connect to a server.
+This may be a clue.</li>
+<li>Cosmetic: the way PuTTY identifies itself on the taskbar menu item
+that launches the executable without arguments seems to randomly
+fluctuate between 'PuTTY' and 'SSH, Telnet and Rlogin client' (the
+FileDescription in the resources). This doesn't obviously hurt
+anything, but may be a clue.</li>
+</ul>
+
+<p>
+Anyone investigating or suffering from this may be interested to know
+that the
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter3.html#using-cleanup">putty -cleanup</a>
+option requests Windows to delete its stored information about
+recent/pinned sessions. We make no attempt to account for different
+versions of PuTTY's information being stored in different places; so
+running this command with PuTTY 0.67 or earlier presumably deletes
+pre-ExplicitAppUserModelID information, and running it with PuTTY 0.68
+or later deletes information identified the new way. Note that this
+option also <b>deletes all your saved sessions and host keys</b>;
+while you can be more selective by saving and restoring
+<tt>HKEY_CURRENT_USER\Software\SimonTatham\PuTTY</tt> using REGEDIT,
+you probably shouldn't try this unless you're confident, or don't mind
+losing this information. (People investigating the registry should
+note that the <tt>Jumplist</tt> key in this registry location is
+<em>not</em> the storage under discussion here; it is a separate
+record that PuTTY maintains because the Windows storage is write-only,
+and hasn't moved between versions. The storage affected by
+ExplicitAppUserModelID is maintained elsewhere by Windows and we don't
+know where it is.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-jumplist-trouble;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-24 11:20:01 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug telnet-resize-iac</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/telnet-resize-iac.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug telnet-resize-iac</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY doesn&#x27;t correctly encode 255x255 NAWS messages<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>present-in</b>: 0.53<br>
+<b>fixed-in</b>: 2003-01-03 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=50fbac19eb167b026e2b06403fbe90399190f674">50fbac19eb167b026e2b06403fbe90399190f674</a> (0.54)<br>
+<p><pre>From Thomas Thurman:
+
+| When the telnet option NAWS is enabled, and the width or height of the
+| screen is exactly 255 characters, PuTTY fails to double up the 0xFF
+| byte in the subnegotiation, as required by RFC1073.
+
+(in telnet.c:telnet_size())
+
+| Linux telnet servers don&#x27;t seem to be fazed by this, but it crashed a
+| Python telnet server I was testing it on.
+
+SGT, 2003-01-02: Should now be fixed. And I disagree that Linux
+telnet servers aren&#x27;t fazed by it - the Debian 3.0 machine on my
+desk certainly doesn&#x27;t like it much!
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/telnet-resize-iac;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug defaults-launchable</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/defaults-launchable.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug defaults-launchable</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: &quot;Default Settings&quot; can be launchable, leading to confusion<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.58<br>
+<b>present-in</b>: 0.59<br>
+<b>fixed-in</b>: 2007-02-11 r7265 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5d76e00dac9220e8798e4d0f17a4069a58ae1667">5d76e00dac9220e8798e4d0f17a4069a58ae1667</a> (0.60)<br>
+<p>
+When PuTTY loads a saved session, it will under some circumstances
+automatically launch it if it's launchable. "Launchable" used to
+simply mean that it actually specified a host name to connect to,
+but due to <a href="serial-backend.html">the serial port backend</a>
+it's now a more complex criterion.
+
+<p>
+The original intention of the PuTTY configuration storage was that
+"Default Settings" should never describe a session which is
+launchable, which is why we don't permit a host name to be saved in
+the default settings. (People occasionally complain about this.)
+
+<p>
+However, due to an oversight, it <em>is</em> now possible to have
+Default Settings describe a launchable session: simply set
+"Protocol" to "Serial", and have the "Serial line" box non-blank (as
+it is by default). This leads to undesirable behaviour; in
+particular, PuTTY launched with no arguments will try to start up
+a session instead of bringing up the configuration dialog.
+
+<p>
+I'm not sure how best to fix this. Restricting what can be stored in
+Default Settings so that even serial-based defaults are forced not
+to be launchable seems to me like the wrong answer. Perhaps the
+right answer is actually to go through the code and ensure that
+Default Settings in particular is never automatically launched
+<em>even if launchable</em>. If we do that, then perhaps we could
+also repeal the restriction on having a default host name saved in
+Default Settings.
+
+<p>
+<b>SGT, 2007-02-10</b>: Should now be fixed, by the method described
+above: Default Settings may describe a launchable session but is
+never actually launched unless PuTTY is sure the user really meant
+it. In particular, merely starting PuTTY doesn't launch the session
+described by DS, and neither does double-clicking DS from the saved
+sessions menu. Hitting Open once you've loaded it still works, and
+using "<code>-load</code>" still works. Also, as mentioned above,
+I've relaxed the restriction on storing a host name in DS, on the
+basis that since one type of launchable session is now permitted in
+DS there's no reason not to permit the other too.
+
+<p>
+If you get into this situation, and can't upgrade permanently to 0.60
+or later, the following workarounds are available:
+<ul>
+<li>Download 0.60, which does not suffer
+from this problem. You will then be able to edit Default Settings so
+that PuTTY 0.59 does not attempt to launch a serial connection.
+(Although if you're using the serial backend, you are likely to need
+to carry on using 0.60 or later in any case, as the serial
+support is <a href="win-handle-double-free.html">prone to crashes</a>.)
+</li>
+<li>If you're happy editing the Registry:
+<ol>
+<li>Run <tt>REGEDIT.EXE</tt>.
+<li>Go to <tt>HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\Default%20Settings</tt>
+<li>Change the value of the '<tt>Protocol</tt>' key from '<tt>serial</tt>'
+to '<tt>ssh</tt>'.
+</ol>
+</li>
+<li>If you don't mind <em>losing all your saved sessions</em>, you
+can use <tt>putty -cleanup</tt>. See
+<a href="http://the.earth.li/~sgtatham/putty/0.59/htmldoc/Chapter3.html#using-cleanup">the documentation</a>.
+</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/defaults-launchable;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

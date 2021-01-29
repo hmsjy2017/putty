@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ssh1-fwd-trouble</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh1-fwd-trouble.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ssh1-fwd-trouble</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Reports of SSH-1 trouble, particularly with port/X11 forwarding<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>absent-in</b>: 0.55 0.57 2005-02-17<br>
+<b>present-in</b>: 2005-02-18 0.58 2005-05-19<br>
+<b>fixed-in</b>: r6221 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5661adabbc8c40bfb1c96390cd0e0f735f36ae21">5661adabbc8c40bfb1c96390cd0e0f735f36ae21</a> 2005-08-27 (0.59)<br>
+<p>
+We've had several reports of SSH-1 connections in PuTTY 0.58 bombing
+out with various error messages when port- or X11 forwarding is in
+use. The problems do not show up with SSH-2.
+
+<p>
+We haven't reproduced this ourselves yet. A correspondent has found
+that the problem appeared between 2005-02-17 and 2005-02-18, which
+implies that something between r5324:5335 broke it.
+
+<p>
+Error messages reported include:
+<ul>
+<li>"Incorrect CRC received on packet"
+<li>"Extremely large packet length from server suggests data stream
+corruption"
+<li>"Out of memory"
+</ul>
+
+<p>
+<em>Update:</em> we've made a change which is reported to have fixed
+this. (It turns out that use of port forwarding wasn't absolutely
+necessary to cause this problem.) Thanks to Gevan Dutton for pointing
+us in the right direction.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh1-fwd-trouble;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win-askappend-multi</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-askappend-multi.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win-askappend-multi</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Logging dialog box duplicated, and can cause session to hang<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>absent-in</b>: 0.57 2005-02-18 r5343<br>
+<b>present-in</b>: r5344 2005-02-21 0.58 2006-02-01 2006-09-02<br>
+<b>fixed-in</b>: 2007-01-09 r7077 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6c3f4b3baa3d795c615ad212d700ba213010211e">6c3f4b3baa3d795c615ad212d700ba213010211e</a> (0.59)<br>
+<p><pre>According to a report:
+
+When PuTTY is set up to log (printable or all session data), and the
+option &quot;Ask the user every time&quot; is selected, two dialog boxes titled
+&quot;PuTTY Log to File&quot; questioning whether to overwrite, append, or cancel
+logging appeared.  After answering both dialog boxes, the PuTTY terminal
+no longer displays incoming data.
+
+The double dialog box was fixed in 2006-01-26, but the session hang
+remains. (It&#x27;s particularly evident with Telnet sessions.)
+
+This appeared in r5344 (asynchronous askappend() box).
+
+SGT, 2007-01-08: Should now be fixed (r7077).
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-askappend-multi;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

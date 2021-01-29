@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-indirect-dll-hijack-3</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-indirect-dll-hijack-3.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-indirect-dll-hijack-3</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: More potential malicious code execution via indirect DLL hijacking<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.69<br>
+<b>fixed-in</b>: 0.70<br>
+<p>
+On some versions of Windows, all versions of the PuTTY tools up to and
+including 0.69 can end up loading a DLL from the local directory which
+contains the PuTTY executables.
+
+<p>
+We believed we had fixed this class of problem in 0.68 (see
+<a href="vuln-indirect-dll-hijack.html">vuln-indirect-dll-hijack</a>), and when that turned out not to
+be true, we believed we'd fixed all the remaining instances in 0.69
+(<a href="vuln-indirect-dll-hijack-2.html">vuln-indirect-dll-hijack-2</a>). However, it turned out that
+even in 0.69 we <em>still</em> hadn't caught all cases of it.
+
+<p>
+We know of one special DLL name to which PuTTY 0.69 was still vulnerable:
+<ul>
+<li><code>CRYPTBASE.DLL</code>
+</ul>
+
+<p>
+We believed we had finished fixing these problems in 0.69 because all
+the remaining DLLs that PuTTY's makefile <em>explicitly</em> told the
+linker to refer to at load time were on the default 'known DLLs' list,
+which seems to accord those DLL names special load-time treatment
+which prevents this kind of hijacking attack. However, the remaining
+problem involved a system function <em>not</em> explicitly used in
+PuTTY's code – the reference to it apparently came from an
+internal module in Visual Studio's standard library. Updating our
+build environment to use Visual Studio 2015 update 3 instead of the
+original 2015 RTM build made the rogue function reference go away and
+appears to have closed this hole.
+
+<p>
+(The API name of the system function in question is <a
+href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa387694(v=vs.85).aspx"><code>RtlGenRandom()</code></a>,
+but physically, it's imported from <code>ADVAPI32.DLL</code> by the
+name <code>SystemFunction036</code>.)
+
+<p>
+As described in the previous related bug entries, the most likely way
+in which this vulnerability could be used in an attack is via a web
+browser's download directory – an attacker contrives to deliver
+a malicious DLL into your download directory under one of the special
+names that an application is vulnerable to, and when you later
+download and run PuTTY, it loads that DLL from alongside itself and is
+taken over. Whereas if PuTTY is installed on the system via the MSI
+installer, then there is no issue, because the installer will put the
+executable files in a dedicated directory, and an attacker with enough
+file access permissions to drop malicious DLLs into that directory
+would probably be able to overwrite the executable files themselves in
+any case.
+
+<p>
+Thanks to Walter Thyselius for reporting this additional vulnerability
+to us.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-indirect-dll-hijack-3;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-07-08 07:45:18 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug strange-winsock-msg</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/strange-winsock-msg.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug strange-winsock-msg</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Strange WinSock messages cause failed assertion in tree234.c<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.53 0.53b 2002-12-09 2003-01-07<br>
+<b>fixed-in</b>: 2003-01-10 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=1604a192fe9f62f9f47369c5267f9c3609ebda47">1604a192fe9f62f9f47369c5267f9c3609ebda47</a> (0.54)<br>
+<p>
+A few people have reported seeing the following assertion failure:
+
+<pre>Assertion failed!
+
+Program: C:\Program Files\Putty\putty.exe
+File: tree234.c
+Line: 536
+
+Expression: relation == REL234_LT || relation == REL234_GT</pre>
+
+<p>
+Appears to be dependent on use of port forwarding. Also, "It was
+working fine until a few days ago", "funnily enough this started
+happening in the last couple of weeks", so may be something to do with
+a Windows hotfix or update.
+<a href="http://groups.google.com/groups?as_umsgid=auv6q1$ued$03$1%40news.t-online.com">One report</a>
+indicates that it happens on WinXP but not Win2000; another report is
+against WinME.
+
+<p>
+Reports:
+<ul>
+<li><code>200211231214.AA3343320060@nextgen.net.mt</code>
+<li><code>00c801c29c20$5bce79e0$0301a8c0@jefflap3</code>
+</ul>
+
+<p>
+As far as we can tell this implies that WinSock is sending us unexpected
+messages. As of 2002-12-09, diagnostics have been added of the form
+"Strange WinSock message: wp=00000000 lp=00000002"; the numbers will
+help us to debug the problem. Further info from an original reporter 
+(<code>005801c2b80e$b6a3b470$1f69010a@jefflap3</code>):
+
+<blockquote>
+I have noticed that the lp=1 correlates to the rule
+for port 3000 and lp=2 correlates to the rule for port 110.
+</blockquote>
+
+<p>
+<b>SGT</b>: Reported as fixed in 2003-01-10. (The diagnostics
+confirmed that WinSock was occasionally sending netevent messages
+with wParam==0, hence relevant to no socket. If the lParam had
+contained an error notification for an error which wasn't
+socket-specific, I might have believed they were meaningful and paid
+them some attention; but the lParam was actually an ordinary
+FD_READ/FD_WRITE sort of thing which makes no sense on a non-socket.
+So I've just put in code to ignore such messages, and that seems to
+have worked.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/strange-winsock-msg;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

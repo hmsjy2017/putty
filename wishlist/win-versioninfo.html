@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish win-versioninfo</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-versioninfo.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish win-versioninfo</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Add VERSIONINFO resource to Windows binaries<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2005-10-05 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4d48ba62e8c9cf2bdb9d192e5944fb584aba2a83">4d48ba62e8c9cf2bdb9d192e5944fb584aba2a83</a> (0.59)<br>
+<p>
+A number of people have asked us to include a
+<a href="http://msdn.microsoft.com/library/en-us/tools/tools/versioninfo_resource.asp"><code>VERSIONINFO</code> resource</a>
+in the Windows binaries we ship, declaring a version number.
+<ul>
+<li>Some people find it more convenient to look at the file properties
+to identify a binary than to run it.
+<li>Some remote auditing tools apparently pick up on this information.
+<li>Some people would like to create installers that depend on a
+particular version of a PuTTY utility.
+<li>It also affects <a href="http://www.jrsoftware.org/isinfo.php">Inno
+Setup's</a> behaviour.
+</ul>
+
+<p>
+Such a version numbering scheme needs to take into account our daily
+snapshots, and thus to be updated in an automated way.
+
+<p>
+<em>Update, 2005-10-05:</em> after wrestling with various toolchains,
+we've finally checked in something that appears to work with the
+Windows compilers we've tried. We reserve the right to back it out
+if it causes trouble.
+
+<p>
+As of 2016-12-20, the meaning of the binary version number (e.g.,
+0.58.6356.0) is described in
+<tt><a href="https://git.tartarus.org/?p=simon/putty.git;a=blob;f=Buildscr;h=863f01bd31df7d8d009a00528c0762707bc81128;hb=HEAD#l96">Buildscr</a></tt>.
+
+<p>
+(The PuTTY binaries also contain XML
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sbscs/setup/application_manifests.asp">application manifests</a>
+to improve appearance on Windows XP; these contain a mandatory 
+four-component version number. We don't attempt to keep this in sync
+with the VERSIONINFO resource. In current code this is hard-coded
+to 0.0.0.0, although in some older versions it was set to 1.0.0.0.
+This isn't ideal, although we don't currently know of anything that
+actually looks at this version number.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-versioninfo;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

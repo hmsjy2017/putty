@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug pageant-dirhandle</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/pageant-dirhandle.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug pageant-dirhandle</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Pageant keeps open handles on removeable media<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>fixed-in</b>: 2005-03-01 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d7b50f8066b835b348f0e0a952db2c73e812133b">d7b50f8066b835b348f0e0a952db2c73e812133b</a> (0.58)<br>
+<p>
+We've had a couple of reports (e.g. on
+<a href="http://groups.google.co.uk/groups?selm=c3k42q%242936ve%241%40ID-30312.news.uni-berlin.de">comp.security.ssh</a>)
+that the Pageant process tends to keep hold of a directory handle to
+the directory of the last key loaded via the file selection GUI.
+
+<p>
+This causes trouble for people who keep keys on removeable media such
+as USB memory sticks, as Windows won't let them unmount and remove the
+device.
+
+<p>
+The following workarounds are said to work:
+<ul>
+<li>Load, or attempt to load, a second (dummy) key from somewhere else
+such as a fixed drive using the file selection GUI.
+<li>Don't use the file selection GUI at all - pass the path to the key
+on the Pageant command line.
+</ul>
+
+<p>
+We don't believe that the Pageant code itself keeps handles on
+anything particularly, so we suspect that the file selection GUI is
+keeping a handle behind our backs. The workarounds above bear out this
+hypothesis.
+
+<p>
+<em>Update, 2005-02-28 (JTN):</em> I've implemented a wrapper to
+<code>GetOpenFileName()</code> which maintains a separate CWD for
+the file requester and for the process as a whole (which should appear
+in snapshots >=r5413), so this <em>should</em> be fixed now. I
+haven't tested it with anything that objects to having a process in a
+particular directory, nor with anything potentially awkward like UNCs,
+but the docs suggest it should work. (A simpler solution would have
+been to use <code>OFN_NOCHANGEDIR</code>, but that would have changed
+the UI behaviour.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-dirhandle;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

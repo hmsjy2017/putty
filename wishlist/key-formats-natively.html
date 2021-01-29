@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish key-formats-natively</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/key-formats-natively.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish key-formats-natively</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Ability to use OpenSSH and ssh.com SSH-2 private keys directly (without first converting with PuTTYgen)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+We are occasionally asked if PuTTY could acquire the ability to use
+foreign private key formats. The PuTTY <em>suite</em> supports these
+key formats, in the sense that PuTTYgen can load and save them and
+convert them into PuTTY's own PPK key format; but a conversion step
+is required, because PuTTY itself does not include the foreign key
+import code.
+
+<p>
+I'm unwilling to do this, because I designed the PPK format rather
+carefully with some specific design goals in mind, and PuTTY in its
+current form actually depends on those design goals. The advantages
+of the PuTTY key format are:
+
+<ul>
+<li>
+<b>Public half of key is stored in plaintext</b>. OpenSSH's private
+key format encrypts the entire key file, so that the client has to
+ask you for your passphrase before it can do anything with the key
+at all. In particular, this means it has to ask for your passphrase
+before it can even <em>offer</em> the public key to the server for
+authentication. PuTTY's format stores the public key in plaintext
+and only encrypts the private half, which means that it can
+automatically send the public key to the server and determine
+whether the server is willing to accept authentications with that
+key, and it will only ever ask for a passphrase if it really needs
+to.
+<p>
+I think OpenSSH will read a <code>.pub</code> file for this
+purpose if it appears alongside the private key file, but this is a
+source of confusion as often as convenience (I've seen people
+replace a private key file and leave an out-of-date
+<code>.pub</code> alongside it, and then be very confused by the
+resulting SSH authentication process!).
+
+<li>
+<b>Key is fully tamperproofed</b>. Key formats which store the
+public key in plaintext can be vulnerable to a tampering attack, in
+which the public half of the key is modified in such a way that
+signatures made with the doctored key leak information about the
+private half. For this reason, PuTTY's key format contains a MAC
+(Message Authentication Code), keyed off the passphrase, and
+covering the public <em>and</em> private halves of the key. Thus, we
+provide the convenience of having the public key available in
+plaintext but we also instantly detect any attempt at a tampering
+attack, giving a combination of security and convenience which I do
+not believe is found in any other key format. As a side benefit, the
+MAC also covers the key's comment, preventing any possible mischief
+that might be possible if someone were to swap two keys and
+interchange the comments.
+<p>
+OpenSSH's approach of keeping the public key encrypted
+<em>might</em> also provide some security against this type of
+attack, but it's unclear that it provides proper protection:
+encryption designed for confidentiality often leaves ways in which
+the encrypted data can be usefully modified by an attacker. For real
+integrity protection you want a real dedicated MAC, which is
+designed to do precisely that.
+</ul>
+
+<p>
+So in order to support non-PPK key formats in PuTTY, we would have
+to revamp the public-key authentication code considerably, to make
+it a lot more flexible about when it asked the user for a
+passphrase. This would also lead to confusing subtle differences
+in operation depending on the key type in use; supporting OpenSSH's
+<code>.pub</code> files would also introduce the same failure mode
+as OpenSSH exhibits when the two files get out of sync; and for all
+of this coding effort on our part and potential UI-level chaos, we
+would be providing users with the ability to decrease the security
+of their private keys without even necessarily being aware of it.
+
+<p>
+Therefore, our current intention is not to implement this feature,
+and our recommendation is that people convert foreign private key
+formats to PPK in order to use them with PuTTY. This is not too
+difficult now that we have a Unix command-line port of PuTTYgen,
+which should make it feasible to automate such conversion.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/key-formats-natively;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2006-05-17 10:34:13 +0000)</div>
+
+</BODY></HTML>

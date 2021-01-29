@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug async-dns</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/async-dns.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug async-dns</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: DNS lookups are synchronous.<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>DNS lookups are synchronous. We could make them async quite easily,
+which would stop the last potential delay before the PuTTY window
+appears and would also prevent an absent DNS server from hanging
+PuTTY while a remote-to-local port forwarding times out on DNS; but
+ideally I'd like an abstraction of DNS so that we can still port
+later (since the socket API only has synchronous DNS). Porting to
+Unix will be fine (we can use
+<a href="https://www.chiark.greenend.org.uk/~ian/adns/">adns</a>),
+as will the Mac OS (where almost everything can be asynchronous),
+and any thread-capable OS won't
+have a problem. Everything else will just have to degrade gracefully
+to synchronous DNS.
+
+<p><b>SGT, 2003-02-07</b>: I now think I have some idea of
+<em>how</em> to design a DNS abstraction which can cope equally well
+with being implemented synchronously or asynchronously. It's rather
+simple, actually: <code>sk_namelookup</code> acquires a couple of
+extra parameters, in the form of a function pointer and a context
+handle to be passed to that function. The code which calls
+<code>sk_namelookup</code> should expect that function to be called
+in turn on completion of the DNS lookup. Then a synchronous DNS
+implementation could actually call the function straight from
+<code>sk_namelookup</code> itself, whereas an asynchronous one could
+call it from whatever callback ends up getting hold of the results
+of the lookup. Client code, of course, will have to be written in
+such a way that it doesn't mind which happens; in practice that will
+probably mean the function which called <code>sk_namelookup</code>
+should terminate immediately after doing so, rather than doing
+anything which might need to be done before or after the DNS lookup.
+
+<p>
+<a href="http://dillgroup.ucsf.edu/~justin/putty/adns/">Patch</a> (unreviewed):
+<tt>Pine.LNX.4.60.0510092209320.31985@maxwell.compbio.ucsf.edu</tt>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/async-dns;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-05-07 16:29:13 +0100)</div>
+
+</BODY></HTML>

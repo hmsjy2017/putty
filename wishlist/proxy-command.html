@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish proxy-command</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/proxy-command.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish proxy-command</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Proxying through arbitrary command (e.g. another SSH session)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2006-08-27 r6808 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=cda522186a8ca486b181a764884fd15e079783e5">cda522186a8ca486b181a764884fd15e079783e5</a> (0.59)<br>
+<p>
+We occasionally get asked to implement use of arbitrary commands as
+proxy-like transports, similar to the ProxyCommand feature of
+<a href="http://www.openssh.com/">OpenSSH</a>.
+
+<p>
+We also get requests to use an SSH server as a `proxy'. These should
+probably be considered an instance of the general case. Treating SSH
+as just another proxy type like HTTP etc isn't feasible - we have
+pages of configuration UI for the `main' session, and all this would need
+to be configurable for the `proxy' session too. In the current model
+all this would have to be crammed in or under the Proxy panel somehow.
+With a ProxyCommand feature you <em>could</em> use Plink as a
+transport and configure it as usual.
+
+<p>
+It's less obvious how a ProxyCommand-type feature should be configured
+on Windows than on Unix, as Windows is much less command-oriented
+(where OpenSSH usually runs). Also, implementation in a manner
+compatible with Win95/98 (which lack useful pipes) might be tricky.
+(see also design discussion in
+<a href="win-command-prompt.html#puttycyg">win-command-prompt</a>)
+
+<p>
+A partial solution is to set up a local (e.g.) SOCKS server which will
+run whatever bizarre command you need. You can then use PuTTY's
+existing proxy facilities. I don't know whether there is a convenient
+product that provides a SOCKS front end and runs arbitrary commands at
+the back end, but there clearly should be. This does of course require
+that your SOCKS server has been started up in the first place, but
+since (if sufficiently clever) it can defer doing anything tricky
+until it's needed, that needn't be an onerous requirement.
+
+<p>
+With <a href="portfwd-dynamic.html">portfwd-dynamic</a>,
+this approach would assist those people who need to use
+an SSH server as a proxy.
+
+<p>
+<b>SGT, 2006-08-26</b>: I've just implemented this for Windows (Unix
+has supported it since 2003) and it seems to be basically working.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/proxy-command;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

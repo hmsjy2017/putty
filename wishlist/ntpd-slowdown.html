@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug ntpd-slowdown</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ntpd-slowdown.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug ntpd-slowdown</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY causes ntpd to lose time<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.53b<br>
+<b>fixed-in</b>: 2004-03-18 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=c4bfa9b7b77f719a61de6049c9c18d80c9685c9b">c4bfa9b7b77f719a61de6049c9c18d80c9685c9b</a> (0.55)<br>
+<p>
+It's been reported that running an SSH-2 session through PuTTY causes ntpd
+to lose time in 10ms steps, as if 100Hz interrupts are being lost.  The
+same problem doesn't affect Telnet connections, though.  Ref
+<C5EA7C1F01A7D311A44700508B95196C0730D8AB@004-h00028.wugo.intranet.wegener.nl>
+<i>et seq.</i>, which mentions the platform as
+
+<blockquote>
+PC DELL Latitude 610 with w2k pro Dutch with SP3 on AC Power.
+</blockquote>
+
+<p>As far as I can tell, <code>noise_ultralight()</code> and
+<code>noise_regular()</code> are called even during a Telnet
+session (they're stubs in PuTTYtel, but in PuTTY they go out
+and hunt for noise even if no-one's ever going to consume it).
+<code>noise_get_heavy()</code> is only called at the start of an SSH
+session, so it shouldn't cause continuing problems, especially not ones
+that go away when the session ends.
+
+<p>I think this narrows us down to <code>noise_get_light()</code>,
+which is called every time the random pool is used, which
+looks like being most packets in an SSH session, but never
+in a Telnet session.  <code>noise_get_light()</code> calls
+<code>GetSystemTime()</code>, <code>GetSystemTimeAdjustment()</code>
+and <code>GetSystemPowerStatus()</code>.
+
+<p>By use of diagnostic builds we've narrowed the problem down to use
+of <code>GetSystemPowerStatus()</code>, which is likely to be calling
+the APM BIOS, which ISTR has to be done with interrupts disabled.
+
+<p><em>Update, 2004-03-18</em>: the <code>GetSystemPowerStatus()</code>
+call has been removed in an attempt to fix
+<a href="hard-hangs.html">hard-hangs</a>. With luck, that should
+make this problem go away too.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ntpd-slowdown;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

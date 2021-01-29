@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish line-endings</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/line-endings.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish line-endings</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Line ending conversion (&quot;ASCII mode&quot;) in PSCP and PSFTP<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+Possibly line-end conversion in PSCP and PSFTP. An option to turn it
+on, an option (enabled by default) to turn it off, and perhaps an
+option to try to auto-detect whether to turn it on or not. (Anyone
+know a good heuristic for distinguishing text from binary files?
+infozip has one, as does less; anyone want to comment on which is
+better or whether there are better still?)
+
+<p>
+Heuristics shouldn't now be needed at the protocol end for SFTP, as
+<code>SSH_FXF_TEXT</code> has now been proposed as of SFTP v4 (see
+<a href="http://www.ietf.org/internet-drafts/draft-ietf-secsh-filexfer-05.txt">draft-ietf-secsh-filexfer-05</a>).
+I don't know what implementations exist.
+
+<p>
+(However, note that this version of the protocol does not allow the
+server to give hints to the client about whether the file is best
+opened in text or binary mode, so the operation of "get" would have to
+be manually switched by "text" and "binary" commands or similar.)
+
+<p>
+(The SCP protocol continues to have no notion of transferring a file
+in anything other than binary mode.)
+
+<p>
+For "put", should we require explicit triggering of this mechanism for local
+files via a command/option, or should we have a "guess" mode? If the
+latter, I think we should be able to spot and cope with Unix-style
+files on a Windows system.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/line-endings;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2013-08-07 00:24:31 +0000)</div>
+
+</BODY></HTML>

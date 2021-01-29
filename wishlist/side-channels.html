@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug side-channels</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/side-channels.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug side-channels</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Rewrite crypto code to avoid cache/timing side channels<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=9cb8c4bcb78fd3388f10ed626e853a225c33faed">9cb8c4bcb78fd3388f10ed626e853a225c33faed</a> (0.71)<br>
+<p>
+Between the 0.70 and 0.71 releases, a great deal of PuTTY's
+cryptographic code has been substantially rewritten to try to
+eliminate cache and timing side channels.
+
+<p>
+This is often referred to as ‘constant-time’ coding – see for example
+BearSSL's page entitled <a
+href="https://www.bearssl.org/constanttime.html">‘Constant-Time
+Crypto’</a>. However, that's a misnomer: firstly, timing is not the
+only consideration (you <em>also</em> need to avoid leaving sensitive
+data in the cache state), and secondly you can't make your code run in
+<em>actually constant</em> time, because it can be sped up or slowed
+down by many factors outside your control such as thermal CPU
+throttling, prior states of caches and branch predictors, or
+straight-up system load. Fortunately, you don't actually <em>need</em>
+the time to be literally constant; you only need it to be independent
+of your secret data (keys and plaintexts). Some alternative phrase
+such as ‘secret-independence’ would be better.
+
+<p>
+Anyway, be that as it may, we've rewritten the following components of
+PuTTY in that style for 0.71:
+<ul>
+<li>All the bignum-handling code (used in RSA, DSA, and elliptic curve
+algorithms)
+<li>All the elliptic-curve code itself (the layer above the bignums)
+<li>The AES and DES block ciphers.
+<li>The CRC32 function that SSH-1 uses in place of a MAC.
+</ul>
+
+<p>
+All of the affected code will run more slowly as a result of this
+rewrite. We haven't done detailed benchmarking on the asymmetric
+crypto used only in key exchange, but SGT's measurements on the bulk
+encryption suggest a factor of 4.5 slowdown for DES, and about 2 for
+software AES in SDCTR mode. AES in CBC mode will be slower still,
+because CBC encryption can't be parallelised.
+
+<p>
+However, on modern hardware, the software AES implementation will
+typically not be used, because we've also provided
+hardware-accelerated implementations: see <a href="cpu-crypto-accel.html">cpu-crypto-accel</a>.
+So, in the usual case where you're running on a system with hardware
+AES acceleration available and connecting to a server that speaks AES,
+you should find that PuTTY 0.71's bulk encryption is <em>faster</em>
+overall than 0.70's.
+
+<p>
+The following components of PuTTY have not been rewritten, but testing
+suggested that they already had the required secret-independence
+properties:
+<ul>
+<li>The Chacha20-Poly1305 combined cipher and MAC.
+<li>All the standalone hash functions: MD5, SHA-1, SHA-256, SHA-384, SHA-512.
+</ul>
+
+<p>
+Finally, the following components <b>still have cache and timing side
+channels</b>, because rewriting them would make them so slow as to be
+virtually useless:
+<ul>
+<li>The Blowfish block cipher.
+<li>The Arcfour (aka RC4) stream cipher.
+</ul>
+In recognition of this, Blowfish has been demoted to below the ‘weak
+algorithm’ warning threshold in PuTTY's default configuration. Arcfour
+was already below that threshold.
+
+<p>
+This work also included creating some test suites:
+<ul>
+<li>A functional test suite for crypto primitives and supporting
+libraries.
+<li>A test suite that checks for side channels, based on
+<a href="https://github.com/DynamoRIO/dynamorio">DynamoRIO</a>;
+see comments in
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=blob;f=testsc.c">testsc.c</a>
+for details.</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/side-channels;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-16 16:34:15 +0000)</div>
+
+</BODY></HTML>

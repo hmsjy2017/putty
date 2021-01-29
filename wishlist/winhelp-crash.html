@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug winhelp-crash</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/winhelp-crash.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug winhelp-crash</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Context help causes WinHelp crash after PuTTY help files upgraded<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<p>
+Invoking context help from within Windows PuTTY after the PuTTY help
+files on a system have been replaced has been observed to cause
+WinHelp to crash.
+
+<p>
+Since the crash occurs in <tt>winhelp.exe</tt>, it's almost certainly
+a WinHelp bug, but perhaps there is something we can do to avoid
+triggering it. We're out of ideas, though.
+
+<p>
+The symptoms I observed (on Win98SE, and also on 2000 when I had
+access to it, IIRC) were:
+
+<ul>
+<li>When using new .HLP and .CNT files (e.g., downloaded into a new
+   directory, alongside a new version of PuTTY such as a development
+   snapshot), invoking context help consistently causes WINHELP.EXE to
+   crash and leave a putty.TMP file lying around.
+<li>However, invoking the Help file without context by pressing
+   (say) the Help button on PuTTY's configuration dialog, or invoking it
+   from a session's system menu, or from Explorer, works fine (and
+   generates a hidden putty.GID file), and subsequently to that, context
+   help works too.
+<li>If all the files (including .GID) are moved to a different path,
+   things break again.
+<li>Deleting the hidden putty.GID file doesn't appear to cause other
+   instances not to break, but it can break a previously-working
+   installation if other help files are accessed in the meantime.
+<li>The two installations can be copies of each other and still cause
+   trouble.
+</ul>
+
+<p>
+The precise crash (on Win98SE at least) is: "WINHLP32 caused an
+invalid page fault in module WINHLP32.EXE at 0167:004099ba." (A
+<a href="http://groups.google.com/groups?q=%220167%3A004099ba%22">Google Groups search</a>
+finds an apparently unrelated reference, so it's not just us.)
+
+<p>
+Things I've tried, in desperation:
+<ul>
+<li>Fiddling with the precise macro we pass to <code>HELP_COMMAND</code>.
+Changing from <code>JI</code> to <code>JumpId</code>, or filling in the
+first argument (<code>JI(`putty.hlp',`foo.bar')</code>) makes no
+difference.
+<li><a href="http://www.helpfulsolutions.com/undoc_3and4.html">This page</a>
+claims there is an undocumented <code>uCommand</code> value to give to
+<code>WinHelp()</code> - <code>HELP_TOPIC_ID</code> = 259 - which would
+avoid the need to use the <code>JI</code> macro at all. However, I've had
+no luck with it ("The topic does not exist. Contact your application vendor
+for an updated Help file. (129)")
+<a href="http://groups.google.com/groups?as_umsgid=VA.0000000d.03c8734a%40birdofprey">A newsgroup post</a> reports it as broken on Win98.
+</ul>
+
+<p>
+<em>March 2019:</em> this is now moot, as we no longer ship the .HLP
+file (since <a href="vuln-chm-hijack.html">vuln-chm-hijack</a>).
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/winhelp-crash;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-18 22:27:45 +0000)</div>
+
+</BODY></HTML>

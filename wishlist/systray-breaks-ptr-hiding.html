@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug systray-breaks-ptr-hiding</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/systray-breaks-ptr-hiding.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug systray-breaks-ptr-hiding</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: System tray activity breaks pointer hiding<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+Activity in the Windows system tray (new icons, possibly changed
+icons) can cause the pointer to become spuriously unhidden when `Hide
+mouse pointer when typing in a window' is checked.
+
+<p>
+We've had one report of this on Win2K (5.00.2195). I (JTN) can
+reliably reproduce it at work with Win2K by sending myself mail
+(Outlook adds an icon to the system tray when this happens).
+
+<p>
+<em>Update, 2004-Jul-25:</em> I was unable to reproduce the system
+tray behaviour on a Win98SE system, but activity in other windows
+would cause <code>WM_MOUSEMOVE</code> and <code>WM_NCMOUSEMOVE</code>
+messages to be sent when nothing had actually changed. As of tomorrow's
+snapshot, PuTTY will ignore such messages. Hopefully this will solve
+the original problem; if it works for you it'd be nice if you could
+tell us.
+
+<p>
+(Aside: the mouse pointer occasionally seems to get shown on my Win98SE
+system - as a pointer, not an I-beam - and then isn't hidden by
+subsequent typing. I think it may momentarily be an hourglass first.
+It's sometimes caused by playing a <code>.WAV</code> file for a bell,
+and sometimes happens for no apparent reason. This doesn't appear to
+be visible to the usual PuTTY show/hide pointer mechanisms
+(<code>show_mouseptr()</code>), so isn't fixed by the above change.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/systray-breaks-ptr-hiding;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2004-07-26 10:37:31 +0000)</div>
+
+</BODY></HTML>

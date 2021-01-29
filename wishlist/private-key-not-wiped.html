@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability private-key-not-wiped</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/private-key-not-wiped.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability private-key-not-wiped</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Private keys left in memory after being used by PuTTY tools<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: r1020<br>
+<b>present-in</b>: 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62<br>
+<b>fixed-in</b>: r9988 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=bf9b9224d8325d63513efef547857983a6f145e5">bf9b9224d8325d63513efef547857983a6f145e5</a> 2013-07-14 0.63<br>
+<p>
+When PuTTY has sensitive data in memory and has no further need for
+it, it should wipe the data out of its memory, in case malware later
+gains access to the PuTTY process or the memory is swapped out to disk
+or written into a crash dump file. An obvious example of this is the
+password typed during SSH login; other examples include obsolete
+session keys, public-key passphrases, and the private halves of public
+keys.
+
+<p>
+After loading an RSA key, PuTTY runs the internal routine
+<code>rsa_verify()</code> to check that it makes sense. Every version
+of PuTTY since 2001, up to and including 0.62, has a bug in which
+<code>rsa_verify()</code> fails to wipe from memory two large integer
+variables containing <i>p</i>−1 and <i>q</i>−1, where
+<i>p</i> and <i>q</i> are the two primes whose product is the RSA key
+modulus. Recovering these from a PuTTY memory image would be
+sufficient to reconstruct the private half of the RSA key; so those
+versions of PuTTY would effectively store your private key in memory
+for as long as they were running.
+
+<p>
+Similar problems apply to DSA keys: PuTTY fails to free the private
+key component <i>x</i>, and also does not free the random number
+<i>k</i> that it generates when making a DSA signature, possession of
+which is sufficient to expose the private key.
+
+<p>
+This applies to every program in the PuTTY suite which loads private
+keys: PuTTY, PSCP, PSFTP and Plink. If any of those programs loads a
+private key directly (rather than getting a signature from an SSH
+agent such as Pageant) then they will have left information equivalent
+to the private key in memory for their entire run.
+
+<p>
+Pageant also had the same bug, but of course since its <em>job</em> is
+to retain decrypted private keys in memory that isn't important in
+most cases. However, if you ever told Pageant to delete a key from
+memory, it would not have properly deleted it: it would still have
+retained a copy by mistake due to this bug.
+
+<p>
+PuTTY 0.63 fixes this bug in all the tools: those variables are now
+correctly wiped from memory.
+
+<p>
+However, it is still <em>unavoidably</em> very dangerous if malicious
+software is in a position to read the memory of your PuTTY processes:
+there is still a lot of sensitive data in there which cannot be wiped
+because it's still being used, e.g. session keys. And, as mentioned
+above, Pageant retains decrypted private keys in memory for long
+periods <em>on purpose</em> if you use it. So this fix somewhat
+mitigates the risks of malicious access to your PuTTY processes'
+memory, but no fix can eliminate those risks completely.
+
+<p>
+The RSA part of this vulnerability was spotted by
+<a href="https://scan.coverity.com/">Coverity Scan</a>.
+
+<p>
+This bug has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4208">CVE-2013-4208</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/private-key-not-wiped;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

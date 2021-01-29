@@ -1,0 +1,96 @@
+3037e937d5acdaae6191dfc7d31b2de93787bd31  htmldoc/Chapter5.html
+e063fa16c6fd05ad42baa4b34a0270b3d0bf02f6  htmldoc/Chapter1.html
+cd0f3dd27e3a78cf118286b55c6a6f838cd0352c  htmldoc/Chapter2.html
+cb40d244c2b6e6b380feeb35467af3d9daf5afa3  htmldoc/AppendixB.html
+dda5282bd16710f2763312f2d5ca8b7e764dff2a  htmldoc/Chapter9.html
+9523a6a8728271ddacbc8650725d30542f06731a  htmldoc/Chapter7.html
+ac2520875b4c35d65266c7151db368e53e68e325  htmldoc/AppendixC.html
+4d18defbf86a374627f7f56c1dd547673d0840b3  htmldoc/Chapter8.html
+11fd9af13da32dabdb8dd844c1866df7a4862b9e  htmldoc/Chapter4.html
+8bfae0c5f8182671f1f25c5244a5012cabe34808  htmldoc/Chapter6.html
+c1ae866ec4a6e047aec31d265c70ae18256b41e4  htmldoc/AppendixA.html
+e1239e1d28f37df163bae283e06a75f08eb7a3fc  htmldoc/Chapter10.html
+995df472c7ff679cdbf5dee10c1a55f40c8935c5  htmldoc/AppendixF.html
+8ada44b6822d884fe6793dc30b721ca35b6dfe1c  htmldoc/IndexPage.html
+6ad91ea223f3599ceab0575ba4b811c6728c0319  htmldoc/index.html
+e50aa75c024d82aa8a8f8ef25a6cf168ef7d7679  htmldoc/Chapter3.html
+2fd4d8d3b264673e4d6cab39cb1f70955c0eeb8b  htmldoc/AppendixE.html
+8aff31f27fb6304dbb326055fe19048e00e3dde8  htmldoc/AppendixD.html
+17b160e9720f67f9af9399d7d185b913b81f18fe  putty-0.74.tar.gz
+db416f8bf36a9cee588945bfc4e4916292042679  putty-src.zip
+d263abcb1639ffd3e7fe29bd4c09666718b956e3  putty.chm
+c0c7fd23ce862805b4968a60e21135b864cb7b49  puttydoc.txt
+cae07cc3620be0481c88d2f228ab092dbefc6400  puttydoc.zip
+b6e51e9230e558e90209ad77f0cbb44ef3afedb0  w32/plink.exe
+9a917ab5494af0de11a0c2941b9cb40dc64b7689  w32/pageant.exe
+c16d8bbdc2f1fdf03a686f6d51d0b6db245b008c  w32/puttytel.exe
+227ecc316fb7e972a5f536fbffab0cec01e5d998  w32/puttygen.exe
+2c4dfa0f50ce827d245b78f571940a92187f8ef6  w32/putty.zip
+4568be9928f3b399f15c8e19d74e0ec5bcf4141e  w32/pscp.exe
+ce9cba115e6efff3bf100335f04da05ffff82b9d  w32/putty.exe
+eda6ec7b7bf42e7555304905317cedad56b14f80  w32/psftp.exe
+e15ffeaab22bd176512a0401d46305c49bb8c88e  w32/putty-0.74-installer.msi
+df5de03f9e96b7eb045fba3d6f4a5e6a9f076455  w32old/plink.exe
+1efbd5b28ac30d2b2d86b8dc5598f00079c13756  w32old/pageant.exe
+a7d67154fe4b6f671c0d8828dd444634e5bb1cf5  w32old/puttytel.exe
+52f5360fc94182096ab22c44c36cb347a2c750ed  w32old/puttygen.exe
+6db65c91e196bf10039e1b799a6648e87eaa10b1  w32old/putty.zip
+dcca67b9877478051f8742e1aa80eb70dbdc9a04  w32old/pscp.exe
+f4d39e26f8ffbe0473ba7522d73970dacc58b074  w32old/putty.exe
+19287495275aac5d85dd3fdb5f7d11bff78fe079  w32old/psftp.exe
+736ba9daf63a2add3217c79fa9d83088358f7012  w64/plink.exe
+e5395c13890b05a3d51a042556c8199c47e793d8  w64/pageant.exe
+72fac57e4fda02224b248e92a7276319f756be12  w64/puttytel.exe
+e8e15ce43da920995ed625f58a516f540552e9bc  w64/puttygen.exe
+73061e6df40028b881badc5ba56ccef05a0ae02e  w64/putty.zip
+8eba34d9bfa3080a2f359ac073633280990a8d0d  w64/pscp.exe
+fafe9c2c410aed31084c98892ad05237f709de81  w64/putty.exe
+f325733233ce5dbf1c108cd266d95a94d02f0035  w64/psftp.exe
+930bc5cebed3eadf6bbddb01c040b911f8d944aa  w64/putty-64bit-0.74-installer.msi
+8da9795ee220969e01e73bb595a502014b0b8813  wa32/plink.exe
+8b555a5ec7ddd13bd75a011ac1f8a4e593ff016d  wa32/pageant.exe
+6a7198c860313ae0c986bccf838ffa80c0fa6c1a  wa32/puttytel.exe
+cb2522858c2b68c8d21df800a2e287afd3aaf704  wa32/putty-arm32-0.74-installer.msi
+96a79e1f2df900bd409cdb5b0b8034dbaceb8a6e  wa32/puttygen.exe
+eaec702b431ae771a3a54106c52775919ff2aeaa  wa32/putty.zip
+886d574841e359df88986c38e9cde06ad8404c0c  wa32/pscp.exe
+b8edc127c5f3f19b76f4ad79411fec4edb77129b  wa32/putty.exe
+9d92afb58a6b573a4d0cf7aeefb2cf486c19c141  wa32/psftp.exe
+f04f488702750be5658844e4ed12535848f82df9  wa64/plink.exe
+cf245c0d0b5c50264a9ecd59d088b375d5caef0d  wa64/pageant.exe
+36cc1a60752e5890cded742bd4cd1ed585f42ebe  wa64/puttytel.exe
+f45c728b03623ab671906093786ffbb5667b66d9  wa64/puttygen.exe
+e1879be93aaf50a6997bf400c99150fd3a938aa4  wa64/putty.zip
+8ec73e7ca46d76b1f4535bb8e2b87256f7813359  wa64/pscp.exe
+2ccd45f87990b7df171fe9424b0f87a912b7819a  wa64/putty.exe
+83ce92898864a3a816a28487de8a30c54bc47a41  wa64/psftp.exe
+0a132b26ec2f042dc4c2957634beb90600f7606d  wa64/putty-arm64-0.74-installer.msi
+
+4ea9672d75173d60ac22006e0f1428cad5dadb3d  w32/pageant.exe (installer version)
+16e4bd7bd2456bd2ed4d9581e4de10898fe37c74  w32/plink.exe (installer version)
+9e8fb7e1dcc5e2fc18bac5deb7d46c18124b90fa  w32/pscp.exe (installer version)
+925593e7a8106d82711df928409e4fe545161564  w32/psftp.exe (installer version)
+4c05267aaf14e8dd2ace5e00d4c94a5031c9f7f2  w32/putty.exe (installer version)
+aa868f60708ce58b782cfd19490b88076283f818  w32/puttygen.exe (installer version)
+6c245b9333c1f7c28aee869312c82cff79899b0e  w32/puttytel.exe (installer version)
+e6b3f384b4c1de2095a224273a8c93959794beb7  w64/pageant.exe (installer version)
+2483cbb7f28dca127ffbf66ecd3311d97fbfc5f2  w64/plink.exe (installer version)
+fed8575ca2d47cf40035456052b3a32f55d1c5fc  w64/pscp.exe (installer version)
+ed18fe77dcf3cd512f448a0865d7368b1cdc1df5  w64/psftp.exe (installer version)
+70329e3f10ab96fcd1461d46b3b78d80dd1474e6  w64/putty.exe (installer version)
+ea41b1f6d621e3f6a4c293c1a3de6f163741747d  w64/puttygen.exe (installer version)
+2ec72758af08e670f0799982ec059ba6737d9177  w64/puttytel.exe (installer version)
+a5072d152ba7fcd5e166276fd6bfd3141fd98c29  wa32/pageant.exe (installer version)
+a89d9d15183d4436d13622f4c98e58113f2ae143  wa32/plink.exe (installer version)
+9cd660624b8147d9000786f38d08b730db9c2b94  wa32/pscp.exe (installer version)
+c7652e049a10aff8f3b9f7a22b68f6ff800628cc  wa32/psftp.exe (installer version)
+ceeb6446bc757266f4a3747f5fa503b8b823cf9d  wa32/putty.exe (installer version)
+541afebfd6b1c37ea99893ace327eaf9e072b3f2  wa32/puttygen.exe (installer version)
+7168751d07f54482934b90a736d78cec6a29aa05  wa32/puttytel.exe (installer version)
+2d86b38d164818c3989ce3be41e32a7e3b8ecf99  wa64/pageant.exe (installer version)
+b41fb134a18a0cb4a319092d12ede04cc30e5a1e  wa64/plink.exe (installer version)
+f8e5cc8acfde6317e42daa073709235433386f5f  wa64/pscp.exe (installer version)
+c37886040598891f1607c0bb8099ca0cd284a096  wa64/psftp.exe (installer version)
+277aed370ca33d19bfe03c607eefacdb2faba569  wa64/putty.exe (installer version)
+8ce1018d1d015b7fce53cfd6721984ce6f0c81bb  wa64/puttygen.exe (installer version)
+0521da5d30153afac3932d94d3eab7216ad6ab70  wa64/puttytel.exe (installer version)

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-terminal-dos-one-column-cjk</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-terminal-dos-one-column-cjk.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-terminal-dos-one-column-cjk</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: DoS by terminal output if a CJK wide character is written to a 1-column-wide terminal<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=03777723e553024e94d8bfcf182f3a2e92ffb914">03777723e553024e94d8bfcf182f3a2e92ffb914</a> 0.71<br>
+<p>
+Up to and including version 0.70, PuTTY's terminal emulator would fail
+an assertion if the terminal is exactly one column wide and the
+terminal output stream tries to print a width-2 character of the kind
+used by Chinese, Japanese and Korean.
+
+<p>
+Both of the conditions for this failure can be triggered by remote
+terminal output. (Remote-controlled resizing of the terminal window
+can be turned off in the Features config panel, but it's on by
+default.) So, if a malicious process is able to write escape sequences
+to your terminal, then they can terminate your entire PuTTY session
+uncleanly, making it impossible for you to even recover any important
+information from your terminal scrollback.
+
+<p>
+As of 0.71, this assertion failure is fixed. If you ask PuTTY to
+display a width-2 character in a width-1 terminal, it will substitute
+a width-1 U+FFFD REPLACEMENT CHARACTER instead of getting confused.
+
+<p>
+This vulnerability was found by Brian Carpenter, as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+
+<p>
+CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-9897">CVE-2019-9897</a> has been assigned for the collection
+of terminal DoS attacks fixed in 0.71, including this,
+<a href="vuln-terminal-dos-combining-chars.html">vuln-terminal-dos-combining-chars</a> and
+<a href="vuln-terminal-dos-combining-chars-double-width-gtk.html">vuln-terminal-dos-combining-chars-double-width-gtk</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-terminal-dos-one-column-cjk;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-25 20:23:34 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win-tounicodeex-bis</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-tounicodeex-bis.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win-tounicodeex-bis</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Regression in Windows Unicode keyboard handling<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.68 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=b189df947d2625499cf508fd1fae7e18b03b9247">b189df947d2625499cf508fd1fae7e18b03b9247</a><br>
+<b>present-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=73039b7831aa863fabba1e6ff06471643303ae09">73039b7831aa863fabba1e6ff06471643303ae09</a> 0.69<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5a576e0c891ddc745ea1f67bcca10f1386ff1849">5a576e0c891ddc745ea1f67bcca10f1386ff1849</a> (0.70)<br>
+<p>
+PuTTY 0.69 inadvertently reverted to using the Windows API
+<tt>ToAsciiEx()</tt> instead of <tt>ToUnicodeEx()</tt>, which we had
+started using in 0.63 (<a href="win-tounicodeex.html">win-tounicodeex</a>).
+
+<p>
+This prevents typing characters outside the current Windows code page
+into the PuTTY terminal window. We haven't tested for the
+consequences, but previous correspondence suggests that this can be
+expected to cause problems including the following:
+
+<ul>
+<li>Inability to enter Romanian characters s-comma and t-comma (ș
+and ț), which are in ISO-8859-16 but not ISO-8859-2, on at least
+Windows XP.</li>
+<li>Trouble with keyboards in Unicode-only locales (Armenian, Georgian
+etc).</li>
+<li>Inability to enter characters outside the current ANSI code page
+with Alt-Numpad-plus.</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-tounicodeex-bis;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-29 12:34:56 +0100)</div>
+
+</BODY></HTML>

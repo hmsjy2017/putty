@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish xp-shortcut</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/xp-shortcut.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish xp-shortcut</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Trouble creating PuTTY shortcuts in WinXP<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 0.53<br>
+<p>
+Many people have reported that bad things happen to @ signs in
+shortcut (.LNK) files under Windows XP. No-one has been able to find a
+way of quoting them yet. This makes use of shortcuts with PuTTY
+problematic.
+
+<p>
+This obviously isn't a bug in PuTTY per se, but it might be nice if we
+could characterise the problem, and publish a workaround in the FAQ
+(possibly by extending PuTTY's command-line syntax).
+
+<p>
+As of 0.53, the <code>@session</code> syntax is deprecated in favour
+of <code>-load session</code>. There should be no reason to use an @
+sign in a shortcut any more.
+
+<p>
+<em>Update:</em> for anyone interested in the original problem, it's been
+<a href="http://groups.google.com/groups?selm=f77d8eda.0310200521.242ab7fc%40posting.google.com">claimed</a>
+that putting two spaces between command and argument works (i.e.,
+<pre>putty  @mysession</pre>). We still recommend using
+<code>-load</code>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/xp-shortcut;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-10-20 17:09:56 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish resize-altscr</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/resize-altscr.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish resize-altscr</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Resizing window has nasty effects on alternate screen<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>present-in</b>: 2003-01-14<br>
+<b>fixed-in</b>: 2003-03-08 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e9cc32850132b0ed4bc1279200ef9a432dc8d0f5">e9cc32850132b0ed4bc1279200ef9a432dc8d0f5</a> (0.54)<br>
+<p>
+Suppose you run a server-side application which switches to the
+alternate terminal screen. While running this application, you
+decide you could do with some more vertical space, so you make the
+window taller. A SIGWINCH is sent to the remote process and it
+adjusts to the new screen size; no problem there.
+
+<p>
+Now, when you quit the application and the primary terminal screen
+is restored, something weird seems to happen. It looks to me as if
+the previous contents of the primary screen are restored somewhere
+near the bottom of the now-taller window, while the cursor is
+restored somewhere near the top.
+
+<p>
+I'm not entirely sure how this <em>should</em> be handled - for
+instance, there's an argument in favour of pulling lines out of the
+scrollback and putting them back into the primary screen, as happens
+when you resize without the alternate screen active. But certainly
+it would be a good start for the cursor position to match up to the
+screen contents!
+
+<p><b>SGT, 2003-03-07</b>: Just accepted a patch from Richard
+Boulton which fixes this.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/resize-altscr;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish url-launching</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/url-launching.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish url-launching</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Launch URLs in the PuTTY window by clicking on them<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>depends</b>: <em><a href="scripting.html">scripting</a></em><br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+One of the most common features we are asked for is the ability for
+PuTTY to recognise URLs displayed in its terminal window, and pass
+them to the configured default web browser when you click on them.
+
+<p>
+This is not a very well-specified feature, since it can be hard to
+determine exactly where a URL ends and the following text begins.
+Therefore, it would seem sensible to implement this as a script,
+after we get a scripting language written. That way, the regular
+expressions used for URL recognition would be available to the user
+so that if they didn't quite work right they could easily be tweaked.
+
+<p>
+In the meantime, you might find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/winurl/">WinURL</a>
+a useful tool. It allows you to select a URL in PuTTY (automatically
+copying it to the clipboard), and then click on the WinURL icon in
+the System Tray (or press Windows-W), and have the URL automatically
+launched for you.
+It's not quite as good as a one-click launch, but it's a lot better
+than pasting into a browser window by hand.
+
+<p>
+There is a third-party patch to PuTTY to add this feature, called
+Nutty (see our <a href="../links.html">Links page</a>).
+We won't be incorporating it into PuTTY as it doesn't take account of
+several of our
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixD.html">design principles</a>:
+<ul>
+<li>it isn't cross-OS portable (Windows-specific URL launching and
+platform-independent URL finding are entangled in the same source
+module)
+<li>it uses global variables for per-session data
+<li>it's written in C++
+<li>it incorporates a regular expression matcher and hence increases
+code size excessively
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/url-launching;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-05-07 16:29:13 +0100)</div>
+
+</BODY></HTML>

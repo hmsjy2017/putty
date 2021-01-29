@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish idn</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/idn.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish idn</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for Internationalized Domain Names (IDNs)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+We've had a couple of requests for IDN support
+(<a href="ftp://ftp.rfc-editor.org/in-notes/rfc3490.txt">RFC3490</a> et al)
+in PuTTY.
+
+<p>
+Ideally this would be implemented by the OS. However it's been
+suggested to us that Microsoft at least won't add anything "until at
+least Longhorn". There are various libraries out there such as the
+<a href="http://www.verisign.com/nds/naming/idn/sdk.html">VeriSign IDN SDK</a>
+and <a href="http://www.gnu.org/software/libidn/">GNU libidn</a>.
+
+<p>
+It's not clear that IDN support in PuTTY is worth the developer effort
+or the binary space, given that (presumably) you can just type
+<tt>xn--</tt>whatever into the "host name" box.
+With (say) a web browser, it is normal to want to access lots of
+different web sites you've never visited before, whose addresses
+you've got off a cereal packet, and so on; the domain name is a
+relatively important part of the process. With PuTTY, you typically
+access a small number of sites with which you have prior arrangements,
+and often you just put the domain name into a saved session and forget
+about it.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/idn;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2006-01-23 21:13:30 +0000)</div>
+
+</BODY></HTML>

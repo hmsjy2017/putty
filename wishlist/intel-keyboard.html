@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish intel-keyboard</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/intel-keyboard.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish intel-keyboard</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Keyboard mode to support Intel serial consoles<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>Intel's server boards appear to use their own keyboard mapping, which
+doesn't <em>quite</em> correspond to anything that PuTTY supports:
+</p>
+<table>
+<tr><th>Key	<th>Normal	<th>Shift	<th>Ctrl	<th>Alt
+<tr><td>ESC	<td>^[
+<tr><td>F1	<td>^[OP
+<tr><td>F2	<td>^[OQ
+<tr><td>F3	<td>^[OR
+<tr><td>F4	<td>^[OS
+<tr><td>F5	<td>^[OT
+<tr><td>F6	<td>^[OU
+<tr><td>F7	<td>^[OV
+<tr><td>F8	<td>^[OW
+<tr><td>F9	<td>^[OX
+<tr><td>F10	<td>^[OY
+<tr><td>F11	<td>^[OZ
+<tr><td>F12	<td>^[O1
+<tr><td>Print Screen
+<tr><td>Scroll Lock
+<tr><td>Pause
+<tr><td>Insert	<td>^[[L
+<tr><td>Delete	<td>(7Fh)
+<tr><td>Home	<td>^[[H
+<tr><td>End	<td>^[[K
+<tr><td>Pg Up	<td>^[[M
+<tr><td>Pg Down	<td>^[[2J
+<tr><td>Up Arrow<td>^[[A
+<tr><td>Down Arrow<td>^[[B
+<tr><td>Right Arrow<td>^[[C
+<tr><td>Left Arrow<td>^[[D
+<tr><td>Tab	<td>(09h)
+<tr><td>backspace<td>(08h)	<td>(08h)	<td>(7Fh)	<td>^[}(08h)
+<tr><td>(accent)`<td>`		<td>(tilde)~	<td>		<td>^[}`
+<tr><td>1	<td>1		<td>!		<td>		<td>^[}1
+<tr><td>2	<td>2		<td>@		<td>		<td>^[}2
+<tr><td>3	<td>3		<td>#		<td>		<td>^[}3
+<tr><td>4	<td>4		<td>$		<td>		<td>^[}4
+<tr><td>5	<td>5		<td>%		<td>		<td>^[}5
+<tr><td>6	<td>6		<td>^		<td>		<td>^[}6
+<tr><td>7	<td>7		<td>&	<td>		<td>^[}7
+<tr><td>8	<td>8		<td>*		<td>		<td>^[}8
+<tr><td>9	<td>9		<td>(		<td>		<td>^[}9
+<tr><td>0	<td>0		<td>)		<td>		<td>^[}0
+<tr><td>(dash)-	<td>-		<td>(under)_	<td>(1Fh)	<td>^[}-
+<tr><td>=	<td>=		<td>+		<td>		<td>^[}=
+<tr><td>a to z	<td>a to z	<td>A to Z<td>(01h)to (1Ah)<td>^[}a to ^[}z
+<tr><td>[	<td>[		<td>{		<td>(1Bh)	<td>^[}[
+<tr><td>]	<td>]		<td>}		<td>(1Dh)	<td>^[}]
+<tr><td>\	<td>\		<td>|		<td>(1Ch)	<td>^[}|
+<tr><td>(semi-colon);<td>;	<td>(colon):	<td>		<td>^[};
+<tr><td>(apostrophe)'<td>'	<td>(quote)"<td>		<td>^[}'
+<tr><td>(comma),<td>,		<td><	<td>		<td>^[},
+<tr><td>(period).<td>.		<td>>	<td>		<td>^[}.
+<tr><td>/	<td>/		<td>?		<td>		<td>^[}/
+<tr><td>(space)	<td>(20h)	<td>(20h)	<td>(20h)	<td>^[}(20h)
+</table>
+<p>Table from <cite>SCB2 Server Board Technical Product Specification</cite>,
+Intel order number A70821-003.
+
+<p>I think this would best be handled by:
+<ul>
+<li>Adding a function-key mode for it (assuming that that similar VT100+ mode
+isn't intended to be identical),
+<li>Adding an option to have Alt generate a ^[} prefix, and
+<li>Ignoring all the other discrepancies (control characters, US keyboard
+mapping etc).
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/intel-keyboard;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-03-05 18:44:19 +0000)</div>
+
+</BODY></HTML>

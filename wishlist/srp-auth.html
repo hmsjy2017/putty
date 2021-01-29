@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish srp-auth</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/srp-auth.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish srp-auth</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: SRP authentication (in SSH and perhaps also Telnet)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<p>
+SRP support in SSH, as an alternative to pure password authentication.
+Possibly also in Telnet.
+
+<p>
+This would be <em>really</em> useful in SSH, because it removes a
+lot of the danger of accepting a host key you're uncertain about.
+The SRP exchange convinces each side that the other side knows the
+same password, without requiring either side to give the password
+away to the other - so if you use SRP authentication, you can safely
+type your password in even if you don't know the remote host key is
+correct. Moreover, the current drafts of SRP authentication in SSH
+then use the SRP shared secret to authenticate the SSH host key - so
+that even if you aren't sure the host key belongs to the host you
+think it does, you can at least be sure that it does belong to a
+machine which knows your password. This would be a massive
+improvement in the SSH host key model.
+
+<p>
+Resources:
+<ul>
+<li><a href="http://srp.stanford.edu/">Stanford SRP page</a> and
+<a href="ftp://ftp.rfc-editor.org/in-notes/rfc2945.txt">RFC2945</a>
+<li><a href="http://cvs.lysator.liu.se/viewcvs/viewcvs.cgi/lsh/doc/srp-spec.nroff?cvsroot=lsh"><tt>draft-nisse-secsh-srp-01</tt></a> (expired) describing how <a href="http://www.lysator.liu.se/~nisse/lsh/">LSH</a> implements SRP (as a key exchange method)
+<li><tt>draft-tomh-secsh-srp-00</tt> (expired) describes how Tom Holroyd's <a href="http://freshmeat.net/projects/opensshsrp/">OpenSSH patch</a> implements SRP (as a userauth method)
+<li>A <a href="http://www.ietf.org/ietf/IPR/WU-SRP">statement</a> on the IPR issues around SRP
+<li>The IETF SECSH mail archive has discussions of the above drafts.
+<li><a href="ftp://ftp.rfc-editor.org/in-notes/rfc2944.txt">RFC2944</a>
+describes Telnet SRP authentication.
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/srp-auth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2003-07-08 08:14:55 +0000)</div>
+
+</BODY></HTML>

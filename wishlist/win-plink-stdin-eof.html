@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win-plink-stdin-eof</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-plink-stdin-eof.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win-plink-stdin-eof</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Plink reports an error when it gets EOF from standard input<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: 0.58<br>
+<b>present-in</b>: 0.59<br>
+<b>fixed-in</b>: r7415 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=702a92ceb848394f722292cd4a54c414d4e0be67">702a92ceb848394f722292cd4a54c414d4e0be67</a> 2007-03-28 (0.60)<br>
+<p>From a report received (42994.55835.qm@web56205.mail.re3.yahoo.com):
+<pre>
+The following command is designed to pipe through a remote command back to  
+the local host and demonstrates an issue found while using mercurial.  I  
+have looked through your existing bug list but failed to spot anything  
+similar.
+
+dir | PLINK.EXE -v -ssh -l duncan -i "C:\Program Files\PuTTY\hugo.ppk"  
+remote_host cat > tmp
+
+fails on 0.59 and 2007-03-21:r7403.  works on 0.58.
+
+localhost : Win XP home edition SP2 all updates applied
+remote: suse linux 10.2 : SSH-2.0-OpenSSH_4.4
+
+
+dir | "c:\Program Files\Putty\PLINK.EXE" -v -ssh -l duncan -i "C:\Program  
+Files\PuTTY\hugo.ppk" cyclops cat > tmp
+
+Looking up host "cyclops"
+Connecting to 192.168.0.101 port 22
+Server version: SSH-2.0-OpenSSH_4.4
+We claim version: SSH-2.0-PuTTY_Snapshot_2007_03_21:r7403
+Using SSH protocol version 2
+Doing Diffie-Hellman group exchange
+Doing Diffie-Hellman key exchange with hash SHA-256
+Host key fingerprint is:
+ssh-rsa 1024 18:d1:50:e9:e4:79:83:f5:42:6a:eb:52:5e:9b:06:dc
+Initialised AES-256 SDCTR client->server encryption
+Initialised HMAC-SHA1 client->server MAC algorithm
+Initialised AES-256 SDCTR server->client encryption
+Initialised HMAC-SHA1 server->client MAC algorithm
+Reading private key file "C:\Program Files\PuTTY\hugo.ppk"
+Using username "duncan".
+Offered public key
+Offer of public key accepted
+Authenticating with public key "imported-openssh-key"
+Access granted
+Opened channel for session
+Started a shell/command
+Unable to read from standard input
+</pre>
+This particular instance of "Unable to read from standard input" should
+be fixed now:
+<pre>
+> Does that fix the "Unable to read from standard input" bug?
+
+The answer, currently, is `I don't know'. It certainly fixes _a_ bug which
+gives rise to that error message: if you do something along the lines of
+
+  echo -e 'wibble\nscrark' | plink foovax sort
+
+then you should now no longer get that error.
+
+However, I can't be sure that the same error when doing complicated things
+launched from a service is due to the same Windows error, so it might not fix
+all instances of the problem. This is why I also added more detailed error
+reporting to that error message, so that if any instances of the problem remain
+we'll have more information with which to investigate them.
+</pre>
+
+<p>
+It turns out there are more instances of this; see
+<a href="win-plink-stdin-handle-invalid.html">win-plink-stdin-handle-invalid</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-plink-stdin-eof;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

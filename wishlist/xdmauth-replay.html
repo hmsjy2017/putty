@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug xdmauth-replay</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/xdmauth-replay.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug xdmauth-replay</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY doesn&#x27;t apply replay protection to XDM-AUTHORIZATION-1<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 2005-01-23<br>
+<b>fixed-in</b>: 2005-02-03 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=b69e9d07816162a76f2e3813a44db4cad7d22d93">b69e9d07816162a76f2e3813a44db4cad7d22d93</a> (0.58)<br>
+<p><pre>The XDMCP specification says that an X server should only accept an
+XDM-AUTHORIZATION-1 if no packet containing the same (N, T) pair has been
+received in the last 20 minutes.  This provides replay protection, but
+PuTTY&#x27;s X11 proxy doesn&#x27;t implement it, leaving it potentally open to
+replay attacks.
+
+NB: I (BJH) think that this 20 minutes is incorrect -- used tokens should
+be remembered until they&#x27;re so old that they&#x27;d be rejected for that reason
+alone, which could be 40 minutes after they&#x27;re received allowing for clock
+skew.
+
+As a corollory to this, when using XDM-AUTHORIZATION-1 to talk to a local
+server, PuTTY should avoid generating the same token more than once, which
+it can currently do for Unix-domain connections because it doesn&#x27;t vary the
+address field.  Xlib decrements the address field (starting at 0xffffffff)
+for each connection it makes.
+</pre><div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/xdmauth-replay;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

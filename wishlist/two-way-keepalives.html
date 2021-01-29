@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish two-way-keepalives</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/two-way-keepalives.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish two-way-keepalives</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: An alternative form of keepalive which is two-way<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+Anecdotal evidence suggests that at least one type of router is not
+fooled by PuTTY's current SSH keepalive mechanism (sending
+<code>SSH_MSG_IGNORE</code>): it ignores them and disconnects idle
+sessions regardless. I asked the user in question to experiment with
+using repeat key exchanges as an alternative form of keepalive, and
+that turned out to work fine.
+
+<p>
+This leads me to suspect that the router has noticed that the
+<code>SSH_MSG_IGNORE</code> keepalives only transfer data in the
+client-to-server direction: although TCP <em>packets</em> must come
+back the other way carrying acks, no actual <em>data</em> is
+transferred down the TCP connection from server to client. Rekeys
+transfer real data in both directions, so they work better for this
+purpose. (However, they're very CPU-intensive compared to what a
+keepalive ought to be.)
+
+<p>
+It wouldn't be very difficult to rig up an alternative form of
+keepalive, at least in SSH-2, which requested an actual response
+from the server. The obvious approach would be to invent a spurious
+<code>SSH_MSG_GLOBAL_REQUEST</code> ID which no servers would
+understand, so that they would respond with
+<code>SSH_MSG_REQUEST_FAILURE</code>. Much like the OpenSSH "client
+alive" feature, in fact.
+
+<p>
+I envisage this being implemented as a checkbox with wording
+something along the lines of "Use two-way keepalives where
+available"; then we could implement it in SSH-2 immediately, and add
+it to other back end protocols if and when we thought up ways to do
+it. (For example, it's not entirely impossible that there might be
+some fiddly way to make it work in Telnet, perhaps by periodically
+sending <code>IAC WILL</code> followed by a non-existent option
+number; but I haven't tried it and can't be sure.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/two-way-keepalives;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2005-03-10 11:55:27 +0000)</div>
+
+</BODY></HTML>

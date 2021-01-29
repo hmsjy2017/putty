@@ -1,0 +1,3 @@
+AddType application/octet-stream .chm
+RedirectMatch temp (.*/)putty.tar.gz$ $1putty-0.74.tar.gz
+RedirectMatch temp (.*/)putty.tar.gz.gpg$ $1putty-0.74.tar.gz.gpg

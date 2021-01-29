@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug large-files</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/large-files.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug large-files</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PSFTP and PSCP can&#x27;t handle big files (&gt; 2 GB, &gt; 4 GB)<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: 2006-08-13 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=33b7caa5900167e6a8134c3affef352da557af23">33b7caa5900167e6a8134c3affef352da557af23</a> (0.59)<br>
+<p>
+The file transfer utilities (PSCP and PSFTP) ought to handle
+really really big (>2Gb) files. There have been reports
+that they don't do so properly. (Apparently, on Windows, this will only
+be meaningful under an NT-series OS; the 95 series inherently can't
+handle more than 2Gb in any case.)
+
+<p>
+2004-04-27: One symptom we've had reported a lot recently is the error
+message "Assertion failed: actuallen <= len, file scp.c, line 1435"
+for files >2GB. As of the 2004-04-28 snapshot, there should be a
+fix which will make this go away (thanks to Krzysztof Kowalczyk), but
+we've not been able to test that; also note that the same error can
+still occur if files <a href="pscp-size-change.html">change in size</a>.
+In any case files over 4GB are <em>still</em> not supported (and this
+would require some upheaval to fix).
+
+<p>
+2006-08-13: I (OSD) have checked in a pile of stuff which should allow
+large file support where possible.  On Windows, this basically means
+NT and above.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/large-files;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

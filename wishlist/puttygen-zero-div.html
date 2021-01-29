@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug puttygen-zero-div</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/puttygen-zero-div.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug puttygen-zero-div</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Occasional PuTTYgen division-by-zero errors<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>present-in</b>: 0.53 0.53b<br>
+<b>fixed-in</b>: 2003-06-29 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=61648131fb37777c927e955e4beb82665be1640f">61648131fb37777c927e955e4beb82665be1640f</a> (0.54)<br>
+<p>
+We are getting <em>very</em> occasional reports of integer division by
+zero errors in PuTTYgen.
+
+<ul>
+
+<li><code>15345.43775.42454.321823@chiark.greenend.org.uk</code>
+<br>2001-11-13? (maybe already resolved)
+
+<li><code>3CA268CA.7258.2CA7836@localhost</code>
+<br>SSH-1 1024, Win95, version 0.52 (assuming that, as we were told,
+`Teilungsfehler' is a division error)
+
+<li><code>000001c2bb51$77afcbf0$6401a8c0@lynn</code>
+<br>SSH-2 RSA 2048, version ???
+
+<li><code>1645070571.20030227150247@inbox.ru</code>
+<br>SSH-2 RSA 1024, version 0.53b
+<br>At last, we have a stack trace:
+<br><pre>PUTTYGEN! 00408160()  sshbn.obj:_internal_mod
+PUTTYGEN! 004086fa()  sshbn.obj:_bigdivmod
+PUTTYGEN! 00408ecd()  sshbn.obj:_modinv
+PUTTYGEN! 0041040f()  sshrsag.obj:_rsa_generate
+PUTTYGEN! 004051c2()  puttygen.obj:_generate_rsa_key_thread@4
+KERNEL32! 77e887dd()</pre>
+
+</ul>
+
+<p>
+<b>SGT, 2003-06-28</b>: Believed fixed. Thankfully, the bug was not
+in the bignum implementation (although I found a small bug in there
+too in the course of fixing it!) but in the much simpler
+prime-generation code that called it.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/puttygen-zero-div;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

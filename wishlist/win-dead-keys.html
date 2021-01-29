@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win-dead-keys</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-dead-keys.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win-dead-keys</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Trouble with dead keys on Windows<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>taxing:</i> Needs external things we don&#x27;t have (standards, users etc)<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2004-03-27 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=4736781f42e99168a2fc792b96141d08ee5d6497">4736781f42e99168a2fc792b96141d08ee5d6497</a> (0.55)<br>
+<p>
+When using a keyboard layout that uses dead keys (such as German, or
+US International) on Win2K or XP, entering a non-composing sequence
+(such as a pair of circumflexes), such that the second keypress
+resulted in two characters, gave the wrong result (the second
+character was wrong).
+
+<p>
+Changing the storage behind the <code>lpChar</code> argument of 
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/WinUI/WindowsUserInterface/UserInput/KeyboardInput/KeyboardInputReference/KeyboardInputFunctions/ToAsciiEx.asp"><code>ToAsciiEx</code></a>
+from <code>WORD[]</code> to <code>BYTE[]</code>, and using a pointer
+cast, makes it work properly on 2K/XP. (Done as of 2004-03-25.) The
+documentation isn't clear what type the storage behind the pointer
+should be, but Googling indicates that this usage is not uncommon.
+
+<p>
+<em>However,</em> this breaks the same situation in (French and German) Win98SE,
+which was working OK before with the <code>WORD[]</code> array. (But
+fixes it for French Win2K.) The storage of the array is conditionalised
+on Windows version as of 2004-03-27. *crosses fingers*
+
+<p>
+This area is rich in history. For example:
+<ul>
+<li>We originally switched from <code>ToAscii</code> to
+<code>ToAsciiEx</code> to fix a problem a Lithuanian user was having
+with top bits being stripped.
+<br>ref: 20001222172132.A17154@kibiras.kaunas.alna.lt
+<li>We then had a <a href="mapvirtualkeyex.html">complaint</a> from a
+Korean user that <code>ToAsciiEx</code> didn't work on Korean Win98
+(but was OK on WinMe and 2000), whereas <code>ToAscii</code> was fine.
+We didn't do anything about this because it seemed just too horrible.
+<br>ref: 3B67475D.64790726@kias.re.kr
+<li>We've also had a <a href="keyboard-problems.html">complaint</a>
+from a Danish user that they get the first key in a dead key sequence
+<em>and</em> the composed character.
+<br>ref: 000701c09c57$a2ce70e0$0e00a8c0@neland.dk
+<li>We've had a report that fiddling with the <code>keys</code> array
+<em>before</em> passing it to <code>ToAsciiEx</code> makes a
+difference, which could be consistent with a confusion like that
+described above.
+<br>ref: E14wR3x-0000t8-00@ixion.tartarus.org
+</ul>
+
+<p>
+I've got a horrible suspicion that it's not as simple as a Win9x/NT
+split; this function appears to be an interface to the keyboard
+driver, and MS's specification of that interface on their website looks
+unclear to me, so I suspect that whether it's an array of bytes or
+words is dependent on the keyboard driver in question.
+
+<p>
+We could in principle try to detect it by initialising the array with
+unlikely values and seeing what changes. Bleurgh.
+
+<p>
+This may be the root of some other keyboard problems people have been
+having, too, if we're lucky. If our hacking in this area makes a
+difference to you (positive <em>or</em> negative), please let us know.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-dead-keys;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

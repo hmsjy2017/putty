@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug ssh2-romsshell-badpacket</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-romsshell-badpacket.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug ssh2-romsshell-badpacket</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY emits invalid SSH_MSG_IGNORE packets<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>absent-in</b>: 0.58<br>
+<b>present-in</b>: 0.59<br>
+<b>fixed-in</b>: r7236 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=91694cb3a28a10e105430bf03ef0a37d4701637b">91694cb3a28a10e105430bf03ef0a37d4701637b</a> 2007-02-07 (0.60)<br>
+<p>
+Connecting to a Foundry router fails:
+<pre>
+> 2007-01-29 09:37:53       Server version: SSH-2.0-RomSShell_4.31
+  [...]
+> 2007-01-29 09:37:53       Initialised triple-DES CBC client->server encryption
+> 2007-01-29 09:37:53       Initialised HMAC-SHA1 client->server MAC algorithm
+> 2007-01-29 09:37:53       Initialised triple-DES CBC server->client encryption
+> 2007-01-29 09:37:53       Initialised HMAC-SHA1 server->client MAC algorithm
+> 2007-01-29 09:37:53       Received disconnect message (protocol error)
+> 2007-01-29 09:37:53       Disconnection message text: Bad packet content
+</pre>
+<p>
+More detail from an SSH packet log of a different session (same
+RomSShell version string; "Foundry BigIron16 running 2.3.0aT145"):
+<pre>
+Outgoing packet type 21 / 0x15 (SSH2_MSG_NEWKEYS)
+Event Log: Initialised triple-DES CBC client->server encryption
+Event Log: Initialised HMAC-SHA1 client->server MAC algorithm
+Incoming packet type 21 / 0x15 (SSH2_MSG_NEWKEYS)
+Event Log: Initialised triple-DES CBC server->client encryption
+Event Log: Initialised HMAC-SHA1 server->client MAC algorithm
+Outgoing packet type 2 / 0x02 (SSH2_MSG_IGNORE)
+Outgoing packet type 5 / 0x05 (SSH2_MSG_SERVICE_REQUEST)
+  00000000  00 00 00 0c 73 73 68 2d 75 73 65 72 61 75 74 68  ....ssh-userauth
+Incoming packet type 1 / 0x01 (SSH2_MSG_DISCONNECT)
+  00000000  00 00 00 02 00 00 00 12 42 61 64 20 70 61 63 6b  ........Bad pack
+  00000010  65 74 20 63 6f 6e 74 65 6e 74 00 00 00 00        et content....
+</pre>
+
+<p>
+It would appear that
+<a href="http://www.allegrosoft.com/romcli.html">RomSShell</a> is having
+problems with the <a href="ssh2-cbc-weakness.html">empty SSH_MSG_IGNORE</a>
+that we send before each packet in CBC mode (since it's complaining after
+seeing the first of these).  This is perfectly reasonable, since SSH_MSG_IGNORE
+packets are meant to contain strings, which need four length bytes at the
+start.  As of r7236, PuTTY sends packets containing empty strings instead,
+which should help.
+
+<a href="http://www.cs.auckland.ac.nz/~pgut001/cryptlib/">cryptlib</a>
+complains about this bug as well, probably returning
+CRYPT_ERROR_BADDATA and (in the next release) the message
+"Bad message payload length 0 for packet type 2".
+
+<p>
+Refs: 000601c743cd$ff7e6a60$9823650a@DRMCKAY,
+2AB5541EB33172459EE430FFB66B1EE901C0F465@BN-EXCH01.nuance.com,
+E1HVpbz-0002Zv-00@medusa01.cs.auckland.ac.nz
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-romsshell-badpacket;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

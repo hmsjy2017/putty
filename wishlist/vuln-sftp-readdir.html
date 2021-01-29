@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-sftp-readdir</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-sftp-readdir.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-sftp-readdir</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: crafted SFTP FXP_READDIR reply may allow remote code execution<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.56 2005-02-20<br>
+<b>fixed-in</b>: 0.57 2005-02-21 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=893d187b81991a7b259ede864b7d18ae60c59589">893d187b81991a7b259ede864b7d18ae60c59589</a><br>
+<p>
+Many versions of PSFTP and PSCP prior to 0.57 have a heap corruption
+vulnerability in their treatment of the response to the FXP_READDIR
+command (enumerate entries in a directory) in the SSH File Transfer
+Protocol (SFTP).
+
+<p>
+In order for this vulnerability to be exploited, the user connect to a
+malicious server and issue a <code>ls</code> or <code>dir</code>
+command to PSFTP, or supply the <code>-ls</code> command-line option
+to PSCP.
+
+<p>
+(Note however that the vulnerability kicks in <em>after</em> host key
+verification, so the host key of the server has to have been
+accepted to get this far.)
+
+<p>
+SFTP is always used by PSFTP; it is also used by PSCP if available
+(depending on server behaviour). It can be used in both SSH-2 and
+SSH-1 (again, depending on server behaviour). Thus, a malicious server
+can exploit this in all invocations of PSFTP and PSCP, unless the
+<code>-scp</code> option is supplied to PSCP.
+
+<p>
+This bug was discovered by a contributor to
+<a href="http://www.idefense.com/">iDEFENSE</a>'s
+<a href="http://labs.idefense.com/vcp/">Vulnerability
+Contributor Program</a>. Along with
+<a href="vuln-sftp-string.html">vuln-sftp-string</a>, it is
+documented in iDEFENSE's advisory
+<a href="http://labs.idefense.com/intelligence/vulnerabilities/display.php?id=201">02.21.05</a>,
+mentioned in Secunia's advisory
+<a href="http://secunia.com/advisories/14333/">SA14333</a>,
+and has been assigned CVE ID <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-0467">CVE-2005-0467</a>.
+It has also been individually assigned
+<a href="http://www.osvdb.org/14002">OSVDB ID 14002</a>.
+
+<p>
+<em>Vulnerability details:</em>
+In response to an <code>FXP_READDIR</code> request, the server returns
+a count of directory entries, followed by the entries themselves. In
+<code>sftp.c:fxp_readdir_recv()</code>, this count was passed to
+<code>snewn()</code> to allocate memory, where it was used as a
+multiplier for an internal structure size. With a sufficiently large
+count, an integer overflow could be provoked in <code>snewn()</code>,
+such that insufficient memory could silently be <code>malloc()</code>'d.
+<code>fxp:readdir_recv()</code> would then read server-supplied data
+into this buffer, leading to a heap corruption with server-controlled
+contents, and hence potentially to execution of arbitrary code.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-sftp-readdir;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

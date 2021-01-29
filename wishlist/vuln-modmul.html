@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-modmul</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-modmul.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-modmul</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: buffer underrun in modmul can corrupt the heap<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>absent-in</b>: r571<br>
+<b>present-in</b>: 0.52 0.53 0.53b 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62<br>
+<b>fixed-in</b>: r9977 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=e01104f8998163ddb3f893e8c5d2d1691989e36e">e01104f8998163ddb3f893e8c5d2d1691989e36e</a> 2013-07-09 0.63<br>
+<p>
+Many versions of PuTTY prior to 0.63 have a heap-corrupting buffer
+underrun bug in the <code>modmul</code> function which performs
+modular multiplication.
+
+<p>
+In order to get as many useful bits as possible out of each division,
+<code>modmul</code> starts by shifting the modulus left so that its
+highest set bit appears at the top of a machine word. To correct for
+that shift in the following calculation, the last thing it does is to
+shift the entire output value left by the same number of bits, reduce
+it again, and shift back down. A missing bounds check can cause it to
+allocate the array it uses to store that output value with too little
+capacity, with the effect that the bit-shifting process runs off the
+beginning of the array and corrupts data preceding it in memory.
+
+<p>
+The corrupted data will typically consist of other values involved in
+the same modular multiplication, and the heap block headers in between
+them. Since the shifted data is shifted back again immediately after
+the final modular reduction, this bug would be harmless (though still
+wrong) except for the fact that one word at the bottom of the data is
+<em>not</em> shifted back down. By choosing the inputs to
+<code>modmul</code> to have appropriate lengths relative to each
+other, that one unrestored word can be made to point at a heap block
+header.
+
+<p>
+The <code>modmul</code> function is called during validation of any
+DSA signature received by PuTTY, including during the initial key
+exchange phase. Therefore, this bug can be exploited by a malicious
+server, <em>before</em> the client has received and verified a host
+key signature. So this attack can be performed by a man-in-the-middle
+between the SSH client and server, and the normal host key protections
+against MITM attacks are bypassed. Even if you trust the server you
+<em>think</em> you are connecting to, you are not safe.
+
+<p>
+We are currently unaware of any way in which this can lead to remote
+code execution or controlled memory overwriting, since the overwritten
+heap block cannot be assigned an arbitrary value by the attacker, only
+shifted left by a chosen number of bits. However, we cannot be sure of
+that.
+
+<p>
+This bug does not affect RSA keys.
+
+<p>
+This bug was discovered by Mark Wooding. It has been assigned CVE ID
+<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-4206">CVE-2013-4206</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-modmul;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-21 07:16:27 +0000)</div>
+
+</BODY></HTML>

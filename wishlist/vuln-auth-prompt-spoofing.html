@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-auth-prompt-spoofing</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-auth-prompt-spoofing.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-auth-prompt-spoofing</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Authentication prompts can be spoofed by a malicious server<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=514796b7e421327f2291571179e8657a07ace14d">514796b7e421327f2291571179e8657a07ace14d</a> 0.71<br>
+<p>
+Up to and including version 0.70, the PuTTY tools had no way to
+indicate whether a piece of terminal output was a genuine
+user-authentication prompt (such as a prompt for a password, or for an
+SSH private key passphrase), or whether it was a faked version sent by
+the server after PuTTY's authentication phase had already completed.
+
+<p>
+For example, suppose that a malicious server let you log in without
+any authentication at all, and then started the session by sending
+text that looked exactly like PuTTY prompting you for your private key
+passphrase. If you didn't know for sure that you <em>didn't</em>
+expect that prompt, the server might trick you into entering your
+passphrase, which should not have been sent to any remote server.
+
+<p>
+If the server had also acquired a copy of your encrypted key file
+(which, for example, you might have considered safe to copy around
+<em>because</em> it was securely encrypted), then this would give it
+access to your private key.
+
+<p>
+This is a user-interface weakness rather than the usual kind of
+software vulnerability, so it requires a user-interface fix. It's also
+difficult to fix because the Unix terminal model gives the server so
+much control over what is displayed. For example, it wouldn't be
+enough for PuTTY to display a separator line between the real
+authentication prompts and the start of the main session, because the
+server could immediately send escape sequences that moved the cursor
+back up by a line and erased the separator! If you looked away from
+the screen and didn't catch the (probable) rapid flicker, you might
+easily miss that completely, and then the separator line would have
+been useless.
+
+<p>
+As of 0.71, we're using the following combination of strategies to
+distinguish legitimate from fake authentication prompts.
+
+<p>
+<b>In GUI PuTTY</b>: any line of the terminal containing data that was
+legitimately emitted by the local PuTTY during SSH connection setup is
+marked with what our code describes as a ‘trust sigil’. A trust sigil
+must be something the server can't cause PuTTY to display by sending
+escape sequences. We've chosen a small copy of the PuTTY program's
+icon, because it's multicoloured and distinctive. (You can think of it
+as the name of the speaker in a chat: it's indicating that <em>PuTTY
+is saying</em> whatever is written next to it.)
+
+<p>
+<b>In Plink</b>: at the point where authentication ends and the main
+session begins, we print a new interactive message: ‘Access granted.
+Press Return to begin session’. Then we wait for the user to
+acknowledge it by pressing Return, which means that even if the server
+overwrites the message immediately afterwards, the user will have seen
+it already and will know to be suspicious.
+
+<p>
+This additional interactive prompt is rather annoying (especially if you had set up one-touch authentication via a passphraseless SSH key or Pageant), so we provide as many methods as possible to avoid it:
+<ul>
+<li>If you run Plink with the <code>-batch</code> option, it is
+assumed that you already know that you're not expecting <em>any</em>
+interactive authentication prompts, so you'll already be suspicious of
+anything that resembles one. So the new prompt is not given.
+<li>If you run Plink with its standard input redirected to anywhere
+other than the terminal, then server-side authentication-prompt
+spoofing would not gain the server anything in any case, since you
+wouldn't be <em>able</em> to enter a response even if you were fooled
+by the prompt. So the new prompt is not given.
+<li>If you trust your server not to do this in any case, you can run
+Plink with the <code>-no-antispoof</code> option, which
+unconditionally eliminates the new prompt.
+</ul>
+In particular, the rule about redirecting Plink's standard input
+should cover all cases where Plink is being used as a transport for an
+automated protocol such as <code>git</code> or <code>rsync</code>,
+which was the original use case for Plink in any case. The new prompt
+<em>should</em> only appear if you're using Plink for terminal-based
+<em>interactive</em> login, and even there, you have a choice of ways
+to suppress it.
+
+<p>
+<b>During authentication</b> (in all tools, GUI and console): prompts
+and text sent by the server as part of the authentication phase (e.g.
+SSH banners, or <code>keyboard-interactive</code> server-generated
+login prompts) are prefixed with a vertical-bar symbol
+(‘<code>|</code>’) on each line, and their line lengths are limited so
+that on a default 80-column terminal the server can't mimic an
+unprefixed prompt by word wrapping. This should allow you to
+distinguish a legitimate request for your passphrase from a fake one
+sent by the server, even if the server sends it <em>during</em>
+authentication.
+
+<p>
+(This does mean that banners that previously took up the full width of
+a terminal, e.g., 79 or 80 characters, will now wrap and look ugly.
+This is unavoidable.)
+
+<p>
+This vulnerability was found as part of a
+<a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
+the auspices of the EU-FOSSA project.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-auth-prompt-spoofing;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2019-03-26 00:15:27 +0000)</div>
+
+</BODY></HTML>

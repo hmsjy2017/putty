@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh2-generality</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-generality.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh2-generality</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Support for SSH-2: zero, or more than one, terminal per session<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: r10083 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=bb78583ad29084f16db994d66895917e1b20346e">bb78583ad29084f16db994d66895917e1b20346e</a> (0.64)<br>
+<p>
+SSH-2 is a much more flexible protocol than SSH-1. It doesn't
+require exactly one terminal session per SSH connection; you can
+have more than one, or indeed none at all.
+
+<p>
+It would be nice if PuTTY could make use of this. For example, there
+could be a System menu option to start an extra terminal window
+inside the same SSH connection as the existing one(s). This would be
+more efficient than the existing Duplicate Session command, and also
+wouldn't require repeated authentication (which you don't care that
+much about if you're using public keys, but you might care a lot if
+you don't want to have to type your password in again).
+
+<p>
+Going in the other direction, several people have asked if it could
+be possible to start PuTTY <em>without</em> starting a 
+<a href="no-terminal-window.html">terminal window</a>
+and a shell - just have PuTTY sit in the background and do
+port forwarding only. This would also be possible in theory.
+
+<p>
+Similarly, perhaps we should also support running (e.g.) psftp
+sessions over an existing connection rather than forcing a new TCP/SSH
+connection - similar to the "connection multiplexing" feature in recent
+versions of OpenSSH - using the same sort of inter-process
+communication as with Pageant. Needs careful implementation to avoid
+opening security holes.
+
+<p>
+Would we want the server part of such a feature implemented in all
+the PuTTY utilities, or only in a dedicated application, perhaps one
+created for <a href="no-terminal-window.html">no-terminal-window</a>?
+
+<p>
+<b>SGT, 2004-10-13</b>: Just checked in the easy bit. PuTTY and
+Plink can now avoid running a command (equivalent to OpenSSH's
+<code>-N</code> option, and indeed enabled by the same switch).
+(PuTTY will still put up a terminal window.)
+
+<p>
+<b>SGT, 2013-11-17</b>: now implemented a 'connection sharing' system
+configurable from the SSH panel. Instances of PuTTY can be told to
+share each other's connections where possible, in which case the first
+PuTTY to connect to a given user@host will set itself up as an
+'upstream' able to forward stuff to the server on behalf of other
+processes, and subsequent PuTTYs (and PSCPs, PSFTPs etc) will then use
+that upstream if they can rather than make their own SSH connections.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-generality;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

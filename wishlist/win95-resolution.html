@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win95-resolution</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win95-resolution.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win95-resolution</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Problems with host name resolution on Win95; WinSock 2 implicated?<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>absent-in</b>: 0.52 0.53b<br>
+<b>present-in</b>: 0.54 0.56 2005-02-14<br>
+<p>
+We've had a couple of reports that recent versions of PuTTY have
+trouble resolving hostnames, while other apps such as Windows Telnet,
+and old versions of PuTTY, work fine. However, the only Win95 system I
+(JTN) have access to appears to work fine in this regard; on that
+system the Windows Sockets 2 upgrade is <em>not</em> installed,
+whereas on all of the problem systems WinSock2 <em>does</em>
+appear to be installed. (We changed to dynamically loading WinSock 2
+where available in all applications between 0.53b and 0.54; previously
+all the apps except Plink linked against WinSock 1.)
+
+<p>
+The error reported is "<tt>ssh_init: Host does not exist</tt>".
+
+<p>
+I (JTN) have had a brief look at the 0.56 name resolution code and
+can't see anything obviously wrong or potentially dubious about it.
+
+<p>
+Reports:
+<ul>
+<li><tt>E1Bq1Ni-00053V-00@smtp6.mindspring.com</tt> (looks like
+WinSock 2 <em>is</em> installed)
+<li><tt>Pine.SOL.3.96.1040920100623.8845A-100000@langs</tt> (WinSock 2
+is installed)
+<li><tt>20041115005023.GA28326@radon.dcs.kcl.ac.uk</tt> (WinSock 2
+is installed)
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win95-resolution;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2005-02-17 12:55:02 +0000)</div>
+
+</BODY></HTML>

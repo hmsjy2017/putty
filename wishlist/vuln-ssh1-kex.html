@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-ssh1-kex</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-ssh1-kex.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-ssh1-kex</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Vulnerability: buffer management bug in SSH-1 key exchange<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.53b 0.54<br>
+<b>fixed-in</b>: 0.55 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=2a88ce62b6f6c43c7a811bb4dd8f198ef58bb4b6">2a88ce62b6f6c43c7a811bb4dd8f198ef58bb4b6</a><br>
+<p>
+All versions of the PuTTY suite prior to 0.55 have a memory
+corruption bug in SSH-1 key exchange, which might lead to a security
+vulnerability.
+
+<p>
+The bug lies in the <code>rsaencrypt()</code> function, which
+performs RSA encryption with
+<a href="ftp://ftp.rsasecurity.com/pub/pkcs/ascii/pkcs-1.asc">PKCS#1 v1.5</a>
+padding, as used in the SSH-1 key exchange. This function assumes
+that the data to be encrypted is smaller than the modulus of the
+public key. If this is not the case, the <code>memmove()</code>
+operation at the start of the function will overwrite memory before
+the input buffer.
+
+<p>
+A malicious server can trigger this bug by sending an unexpectedly
+small public key modulus. However, it is not clear that the server
+can exploit this bug to take <em>control</em> of the client, since
+the data written beyond the buffer is part of the cleartext invented
+by the client, not part of the key modulus sent by the server. I
+(SGT) doubt that a server can do much more than cause the client to
+crash by exploiting this bug.
+
+<p>
+Nonetheless, that's more than a server <em>should</em> be able to
+do, and it is just possible that there is a more damaging exploit in
+spite of appearances, so this is still a serious bug that needs
+fixing. PuTTY release 0.55 fixes it by having
+<code>rsaencrypt()</code> explicitly check that the public key is
+long enough to allow the encryption of the supplied data.
+
+<p>
+Although PuTTY verifies the server's host key against its Registry
+cache before performing the vulnerable encryption operation, this
+does not protect you from a spoofed server or man-in-the-middle
+attack. SSH-1 involves two public keys: a server key (changed every
+hour, for forward security) and a host key (never changed, for
+server authentication). Some data is encrypted using both keys, and
+then the server proves its identity by decrypting it. So a MITM can
+send a maliciously shortened <em>server</em> key and the correct
+<em>host</em> key; the fact that it does not have the private half
+of the host key will not matter, since by the time it is challenged
+to prove its identity by decrypting the doubly encrypted data, the
+short server key will have already triggered the bug and the damage
+will be done.
+
+<p>
+This bug was discovered by
+<a href="http://www.coresecurity.com/">Core Security Technologies</a>,
+and documented in their advisory
+<a href="http://www.coresecurity.com/common/showdoc.php?idx=417&idxseccion=10">CORE-2004-0705</a>.
+It is also mentioned in an advisory by Secunia, numbered
+<a href="http://secunia.com/advisories/12212/">SA12212</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-ssh1-kex;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

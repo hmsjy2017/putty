@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug portfwd-loopback-choice</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/portfwd-loopback-choice.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug portfwd-loopback-choice</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Choice of loopback addresses for local port forwardings<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: 2002-12-19 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=99b870dbc625acd4b19fdb9bb5fc1ac862ec229c">99b870dbc625acd4b19fdb9bb5fc1ac862ec229c</a> (0.54)<br>
+<p>
+Someone suggested that it might be useful to be able to specify
+which loopback address PuTTY should bind to when listening on local
+ports for local-to-remote port forwardings. Apparently, if you want
+to, you can listen separately on 127.0.0.1, 127.0.0.2, 127.0.0.3 and
+so on.
+
+<p>
+This would be useful because it would enable the use of the normal
+port numbers for forwarded services. Might be particularly handy
+when forwarding SMB.
+
+<p>
+The user interface for this would probably just involve specifying
+the IP address alongside the port number in the Tunnels panel:
+instead of asking to forward port 3456, you'd ask for
+127.0.0.2:3456.
+
+<p>
+This was implemented as of 2002-12-19.
+
+<p>
+(Apparently this is also useful for forwarding Windows Terminal
+Services - see <a href="http://groups.google.com/groups?selm=99ab3348.0405241707.74fa3d6b%40posting.google.com">this posting</a>.)
+
+<p>
+<em>Update, 2004-Aug-10</em>: we've had a
+<a href="http://groups.google.com/groups?selm=41182cb2%240%24556%24ed2e19e4%40ptn-nntp-reader04.plus.net">report</a>
+that Windows XP SP2 breaks this. (Apparently RC2 worked, but "RTM" - the
+release - doesn't.)
+There is a fix available from Microsoft - see
+<a href="../faq.html#faq-alternate-localhost">the PuTTY FAQ</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/portfwd-loopback-choice;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:22 +0000)</div>
+
+</BODY></HTML>

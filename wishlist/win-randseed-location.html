@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY semi-bug win-randseed-location</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-randseed-location.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY semi-bug win-randseed-location</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: PuTTY&#x27;s placement of PUTTY.RND is non-optimal on Windows<br>
+<b>class</b>: <i>semi-bug:</i> This might or might not be a bug, depending on your precise definition of what a bug is.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: 2007-01-10 r7082 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=dbbd6eb5ecdad5eb0b010e9ad4997fac53356189">dbbd6eb5ecdad5eb0b010e9ad4997fac53356189</a> (0.59)<br>
+<p>
+PuTTY attempts to store its random number seed file
+<code>PUTTY.RND</code> in a sensible place (such as the user's home
+directory), as described in the <a href="../faq.html#faq-settings">FAQ</a>.
+
+<p>
+However, we've had various reports that this isn't working as
+designed, and that <code>PUTTY.RND</code> is ending up in
+<code>C:\</code>. This has been reported on Windows 2000 and XP.
+
+<p>
+Suggested alternative from
+<code>001201c32fd3$8c5484a0$bc1eb440@hyperwolf</code>: use one of the
+paths returned by <code>SHGetFolderPath</code>. (To use this function
+with the maximal range of old Windows versions, considerable faffing
+is required - full horrors in
+<code>200310180552.h9I5qHZ21748@cs.auckland.ac.nz</code>.)
+
+<p>
+(If this is fixed, we should continue to support
+<em>reading</em> the files from their old locations.)
+
+<p>
+<em>Update, 2006-11-08:</em> it's been suggested that this might stop
+PuTTY running as a standard user in Windows Vista. Bumped priority.
+
+<p>
+<em>Update, 2007-01-09:</em> we now consider keeping <code>PUTTY.RND</code>
+in a path returned from
+<a href="http://msdn.microsoft.com/library/en-us/shellcc/platform/shell/reference/functions/shgetfolderpath.asp"><code>SHGetFolderPath()</code></a>
+on reasonably modern versions of Windows.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-randseed-location;hb=refs/heads/main">Audit trail</a> for this semi-bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

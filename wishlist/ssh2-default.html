@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh2-default</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-default.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh2-default</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Default to SSH-2 protocol instead of SSH-1<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2002-10-14 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=11505ede4951d81eaacb1fa198181e3c6d8fbe29">11505ede4951d81eaacb1fa198181e3c6d8fbe29</a> (0.54)<br>
+<p>
+Version 2 of the SSH protocol has various security and other
+enhancements over SSH-1. We should encourage its use.
+
+<p>
+One way of doing this is to make SSH-2 the default protocol (currently
+it's SSH-1). Note that while PuTTY will fall back to SSH-1 if
+necessary, this <em>is</em> potentially a user-visible change, as
+if SSH-2 is chosen users will be prompted about new host keys.
+(Perhaps the host key dialogue should indicate which keys we
+<em>do</em> have? See also <a href="hostkey-policy.html">hostkey-policy</a>.)
+
+<p>
+Conversely, many upgrading users won't see this change, as it's only
+the `factory default' that changes; if they've got saved settings with
+SSH-1 selected then that won't change.
+
+<p>
+In future we might consider `turning off' SSH-1 by default (i.e.,
+making `2 only' the default). Can't reasonably do this until SSH-2 is
+practically ubiquitous.
+
+<p>
+Our documentation should probably discuss the security implications of
+using SSH-1, too. (For a starting point see
+<a href="http://www.snailbook.com/faq/ssh-1-vs-2.auto.html">the Snail Book FAQ</a>.)
+
+<p>
+<em>Update:</em> Even Debian stable includes SSH-2 support now, so 
+we can reasonably get away with this. Fixed in snapshots.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-default;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 16:52:45 +0100)</div>
+
+</BODY></HTML>

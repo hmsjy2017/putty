@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh2-rsa-kex</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh2-rsa-kex.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh2-rsa-kex</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Implement SSH-2 RSA key exchange<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: r7496 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=dad558a1e59c059b7f3436a4865b5e4e17c59539">dad558a1e59c059b7f3436a4865b5e4e17c59539</a> 2007-05-01 (0.61)<br>
+<p>
+<a href="http://www.ietf.org/rfc/rfc4432.txt">RFC 4432</a>
+(formerly draft-harris-ssh-rsa-kex) defines a means to use RSA key
+exchange in SSH-2 (similar to SSH-1's key exchange, but without the
+other disadvantages of SSH-1). This might be particularly suitable for
+slow client systems.
+
+<p>
+<b>SGT, 2012-06-22</b>: Perhaps this is as good a place as any to keep
+a list of known server-side implementations.
+<ul>
+<li>
+<a href="https://bugzilla.mindrot.org/show_bug.cgi?id=1314">OpenSSH bug #1314</a>
+includes a patch which adds RSA key exchange to OpenSSH, although the
+OpenSSH maintainers decided not to integrate it in the end.
+<li>
+<a href="ftp://sparkle.rodents-montreal.org/pub/mouse/local/src/moussh">MouSSH</a>
+supports RSA key exchange. (It looks as if the FTP link here is the
+most convenient way to get MouSSH: you'll need the contents of that
+directory and several libraries in directories alongside it –
+see the <code>INSTALL</code> file for a list – and I haven't
+personally confirmed that it compiles and works.)
+<li>
+The
+<a href="http://www.proftpd.org/docs/contrib/mod_sftp.html"><code>mod_sftp</code></a>
+module for
+<a href="http://www.proftpd.org/">ProFTPD</a>
+is documented as supporting RSA key exchange. (But it looks as if you
+can't do anything except SFTP over the resulting connection.)
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh2-rsa-kex;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2016-12-27 11:40:21 +0000)</div>
+
+</BODY></HTML>

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-indirect-dll-hijack-2</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-indirect-dll-hijack-2.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-indirect-dll-hijack-2</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Further potential malicious code execution via indirect DLL hijacking<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=f77ee39e8cae2eaaea3a8fdd1eaffaf484cada08">f77ee39e8cae2eaaea3a8fdd1eaffaf484cada08</a> (0.69)<br>
+<p>
+On some versions of Windows, all versions of the PuTTY tools up to and
+including 0.68 can end up loading DLLs from the local directory which
+contains the PuTTY executables.
+
+<p>
+We believed we had fixed this class of problem in 0.68 itself; see
+<a href="vuln-indirect-dll-hijack.html">vuln-indirect-dll-hijack</a>. However, it turned out we hadn't
+caught all cases of it.
+
+<p>
+The special DLL names to which PuTTY 0.68 was still vulnerable (that
+we know of) are:
+<ul>
+<li><code>WINMM.DLL</code>
+<li><code>WINSPOOL.DRV</code>
+<li><code>BCRYPT.DLL</code>
+<li><code>SSPICLI.DLL</code>
+</ul>
+The first three of those are unconditional vulnerabilities as far as
+we know: vulnerable versions of PuTTY will load them at startup time
+no matter what it's doing. The last one, <code>SSPICLI.DLL</code>,
+only seems to be loaded as a side effect of initialising GSSAPI, so if
+you don't use GSSAPI then PuTTY might not be vulnerable to that one.
+
+<p>
+All of the remaining Windows API DLLs that PuTTY loads at startup time
+are included, at least on Windows 10, in the Windows registry location
+for 'known DLLs', at
+<code>HKEY_LOCAL_MACHINE\<wbr>SYSTEM\<wbr>CurrentControlSet\<wbr>Control\<wbr>Session
+Manager\<wbr>KnownDLLs</code>. (See <a
+href="https://isc.sans.edu/forums/diary/DLL+hijacking+vulnerabilities/9445/">SANS's
+writeup</a> which explains this.) After PuTTY starts up, it locks down
+its DLL search path as the very first thing it does, so that further
+DLLs it loads at run time should not be vulnerable.
+
+<p>
+We <em>hope</em> that the fact that the only DLLs we load before
+locking down the search path are on the known-DLLs list means that
+none of them is vulnerable to further attacks along these lines. But,
+unfortunately, we can't be sure; the fact that Microsoft's own
+<a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ff919712(v=vs.85).aspx">advice</a>
+on DLL security doesn't even <em>mention</em> the known DLLs list, and
+certainly doesn't mention that pieces of the Win32 API itself can put
+you at risk if they are in DLLs not on that list (e.g. simply using
+the Win32 printing API turned out to be what caused
+<code>WINSPOOL.DRV</code> to be loaded) suggests that even MS probably
+do not have a full picture of what the risks in this area are, so we
+can't guarantee that further problems might not turn up later.
+
+<p>
+As described in the previous bug entry, the most likely way in which
+this vulnerability could be used in an attack is via a web browser's
+download directory – an attacker contrives to deliver a
+malicious DLL into your download directory under one of the special
+names that an application is vulnerable to, and when you later
+download and run PuTTY, it loads that DLL from alongside itself and is
+taken over. Whereas if PuTTY is installed on the system via the MSI
+installer, then there is no issue, because the installer will put the
+executable files in a dedicated directory, and an attacker with enough
+file access permissions to drop malicious DLLs into that directory
+would probably be able to overwrite the executable files themselves in
+any case.
+
+<p>
+Thanks to 'Zaeek' and Christopher Odenbach for reporting these
+additional vulnerabilities to us.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-indirect-dll-hijack-2;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2017-04-28 17:49:37 +0100)</div>
+
+</BODY></HTML>
