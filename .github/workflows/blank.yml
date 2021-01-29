@@ -1,0 +1,29 @@
+name: rsync
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 21 * * *'
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: rsync
+        run:
+          rsync -avrt rsync://rsync.chiark.greenend.org.uk/ftp/users/sgtatham/putty-website-mirror/ /home/runner/work/putty/putty
+      - name: commit
+        run: |
+          git config --global user.email 1462668901@qq.com
+          git config --global user.name hmsjy2017
+          git add .
+          git commit -m "update" -a
+        
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
