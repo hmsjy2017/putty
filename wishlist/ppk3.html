@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ppk3</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ppk3.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ppk3</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: More resistance to passphrase guessing in SSH private key (PPK) format<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=08d17140a00481603f9692cc2989dba2d103a1ad">08d17140a00481603f9692cc2989dba2d103a1ad</a><br>
+<p>
+New versions of the PuTTY tools use a new file format for SSH
+private keys (or rather keypairs) on disc, PPK version 3.
+
+<p>
+The new format has several benefits for encrypted keys (those with a
+passphrase):
+
+<ul>
+<li>It uses key stretching (with the Argon2 KDF) to make brute-force
+passphrase guessing harder.</li>
+<li>The hash for the MAC has been changed from the weak SHA-1 to
+SHA-256.</li>
+</ul>
+
+<p>
+Keys generated with new versions of PuTTYgen will be in the new format.
+
+<p>
+All existing PPK files, or at least the overwhelming majority, are in
+the PPK version 2 format, defined in the year 2001. New versions of
+the PuTTY tools can continue to use existing PPK key files, of course.
+You may want to upgrade your existing keys (which can be done by
+loading into a new version of PuTTYgen and re-saving, or on Unix with
+the <tt>--reencrypt</tt> option), but if you keep the same passphrase,
+that can't protect you from attacks on old copies of the key file
+(for instance on backup media).
+
+<p>
+Old versions of PuTTY tools can't use the new format; if they encounter
+a new key, they'll give error messages like
+'Unable to load key file "new.ppk" (PuTTY key format too new)'.
+If you have a key in the new PPK version 3 format, you can use PuTTYgen
+to export it to the old PPK version 2 format.
+
+<p>
+The new key format is described (alongside previous formats) in
+<a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/AppendixC.html">a new section of the documentation</a>.
+
+<p>
+(This change only affects key files on disc. It has no effect on
+network compatibility.)
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ppk3;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-03-07 13:41:39 +0000)</div>
+
+</BODY></HTML>
