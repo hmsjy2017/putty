@@ -64,6 +64,7 @@ Download:
 <b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
 <b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
 <b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: 2021-03-14 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=66265d30f513c0496d9f3f882cf61b49f4bfff40">66265d30f513c0496d9f3f882cf61b49f4bfff40</a><br>
 <p>
 PuTTY currently only supports one format for displaying SSH public key
 fingerprints (used when
@@ -168,6 +169,12 @@ proof-of-concept code, both unpublished. (However, the opportune
 moment to push this as a replacement for OpenSSH's scheme has
 clearly passed.)
 
+<p>
+<b>2021-03-14</b>: multiple formats are now supported, and the
+OpenSSH-style SHA256 fingerprint (SHA-256 of the standard public key
+blob, base64-encoded, with trailing <code>=</code> stripped) is now
+the default.
+
 
 
 <p><hr>
@@ -176,6 +183,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-fingerprint-formats;hb=refs/heads/main">Audit trail</a> for this wish.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2020-12-20 12:10:01 +0000)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-03-14 16:13:52 +0000)</div>
 
 </BODY></HTML>
