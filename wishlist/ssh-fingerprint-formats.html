@@ -111,39 +111,46 @@ UI complexity would need to be designed and implemented:
 <li>The GUI dialog box (both Windows and GTK) asking for a host key
 confirmation. Obvious possibilities include a dropdown list of
 fingerprint types, or simply listing all the known ones in a huge
-info-dump.
+info-dump. <i>[We ended up listing SHA-256 by default, and putting
+other formats behind a "More info..." button.]</i>
 <li>The corresponding console message, which can't provide a dropdown
 list. Huge info-dump is one option; something you can type at the
 interactive prompt to provide a different fingerprint format is
-another.
+another <i>[this is what we did]</i>.
 <li>The readonly edit box displaying the fingerprint in Windows (GUI)
 PuTTYgen. The obvious approach here is to have an option in the menu bar
-that selects the format.
+that selects the format <i>[so we did that]</i>.
 <li>The GUI key list window in Windows Pageant. That window doesn't
 have a menu bar at the moment, but cluttering the window with a set of
 radio buttons seems a bit intrusive. Perhaps we should add a menu bar.
+<i>[We added a drop-down.]</i>
 <li>The fingerprint output mode in Unix (command-line) PuTTYgen.
 Probably we do this one by making <code>-O fingerprint</code> and its
 synonym <code>-l</code> use the current default fingerprint style, and
 then add extra explicit modes like <code>-O fingerprint-md5-hex</code>
-or <code>-O fingerprint-sha256-base64</code>.
+or <code>-O fingerprint-sha256-base64</code>. <i>[We added
+<code>-E md5</code> instead.]</i>
 <li>The fingerprints in the output of <code>pageant -l</code> on Unix.
 A command-line option is the obvious way to select these.
+<i>[We added <code>--fptype</code>.]</i>
 <li>The idiom on Unix Pageant's client command line that lets you
 select one of the currently loaded keys by typing a prefix of its
-fingerprint.
+fingerprint. <i>[We added <code>sha256:</code> and <code>md5:</code>
+prefixes.]</i>
 <li>The configuration option in PuTTY itself which allows you to enter
 the fingerprint of a host key you want PuTTY to accept. We'd have to
 accept fingerprints in all formats, and do it in some way that ensured
 they were unambiguous (no fingerprint intended to be type X should be
 accepted on the grounds that it matched some key's type-Y
-fingerprint).
+fingerprint). <i>[We added a <code>SHA256:</code> prefix; you can
+optionally specify <code>MD5:</code> too.]</i>
 <li>The diagnostic message in PuTTY's Event Log. That's text-only (and
 also goes to log files), so once a fingerprint has been written into
 it, it's too late to rewrite it in a different style. Perhaps that one
-should just print all available fingerprint types.
+should just print all available fingerprint types. <i>[We just print
+SHA-256.]</i>
 <li>Diagnostic messages in Unix Pageant (only relevant in debug mode,
-so not vital).
+so not vital). <i>[Ditto.]</i>
 </ul>
 
 <hr>
@@ -183,6 +190,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-fingerprint-formats;hb=refs/heads/main">Audit trail</a> for this wish.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2021-03-14 16:13:52 +0000)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-03-27 18:33:58 +0000)</div>
 
 </BODY></HTML>
