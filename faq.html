@@ -581,7 +581,7 @@ If you're not sure, the <a name="i26"></a>32-bit version is generally the safe o
 The 64-bit version (first released in 0.68) will only run if you have a 64-bit processor <em>and</em> a <a name="i27"></a>64-bit edition of Windows (both of these things are likely to be true of any recent Windows PC). It will run somewhat faster (in particular, the cryptography will be faster, especially during link setup), but it will consume slightly more memory.
 </p>
 <p>
-If you need to use an external <a name="i28"></a>DLL for GSSAPI authentication, that DLL may only be available in a 32-bit or 64-bit form, and that will dictate the version of PuTTY you need to use. (You will probably know if you're doing this; see <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-auth-gssapi-libraries">section 4.25.2</a> in the documentation.)
+If you need to use an external <a name="i28"></a>DLL for GSSAPI authentication, that DLL may only be available in a 32-bit or 64-bit form, and that will dictate the version of PuTTY you need to use. (You will probably know if you're doing this; see <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-auth-gssapi-libraries">section 4.22.2</a> in the documentation.)
 </p>
 <h2><a name="faq-trouble"></a><a name="SA.7"></a>A.7 Troubleshooting</h2>
 <h3><a name="faq-pscp-protocol"></a><a name="QA.7.1"></a>A.7.1 Why do I see &#8216;Fatal: Protocol error: Expected control record&#8217; in PSCP?</h3>
@@ -781,7 +781,7 @@ In the documentation for PuTTY 0.53 and 0.53b, we mentioned that we'd like to he
 Recent versions of PuTTY automatically initiate <a name="i56"></a>repeat key exchange once per hour, to improve session security. If your client or server machine is slow, you may experience this as a delay of anything up to thirty seconds or so.
 </p>
 <p>
-These <a name="i57"></a>delays are inconvenient, but they are there for your protection. If they really cause you a problem, you can choose to turn off periodic rekeying using the &#8216;Kex&#8217; configuration panel (see <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-kex">section 4.21</a>), but be aware that you will be sacrificing security for this. (Falling back to SSH-1 would also remove the delays, but would lose a <em>lot</em> more security still. We do not recommend it.)
+These <a name="i57"></a>delays are inconvenient, but they are there for your protection. If they really cause you a problem, you can choose to turn off periodic rekeying using the &#8216;Kex&#8217; configuration panel (see <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ssh-kex">section 4.18</a>), but be aware that you will be sacrificing security for this. (Falling back to SSH-1 would also remove the delays, but would lose a <em>lot</em> more security still. We do not recommend it.)
 </p>
 <h3><a name="faq-xpwontrun"></a><a name="QA.7.21"></a>A.7.21 PuTTY fails to start up. Windows claims that &#8216;the application configuration is incorrect&#8217;.</h3>
 <p>
@@ -799,7 +799,7 @@ On 64-bit systems, <code>C:\WINDOWS\SYSTEM32</code> is intended to contain only 
 If your SSH server has started unexpectedly closing SSH connections after you enter your password, and it worked before 0.68, you may have a buggy server that objects to certain SSH protocol extensions.
 </p>
 <p>
-The SSH protocol recently gained a new &#8216;terminal mode&#8217;, <code>IUTF8</code>, which PuTTY sends by default; see <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ttymodes">section 4.26.2</a>. This is the first new terminal mode since the SSH-2 protocol was defined. While servers are supposed to ignore modes they don't know about, some buggy servers will unceremoniously close the connection if they see anything they don't recognise. SSH servers in embedded devices, network appliances, and the like seem to disproportionately have this bug.
+The SSH protocol recently gained a new &#8216;terminal mode&#8217;, <code>IUTF8</code>, which PuTTY sends by default; see <a href="https://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-ttymodes">section 4.23.2</a>. This is the first new terminal mode since the SSH-2 protocol was defined. While servers are supposed to ignore modes they don't know about, some buggy servers will unceremoniously close the connection if they see anything they don't recognise. SSH servers in embedded devices, network appliances, and the like seem to disproportionately have this bug.
 </p>
 <p>
 If you think you have such a server, from 0.69 onwards you can disable sending of the <code>IUTF8</code> mode: on the SSH / TTY panel, select <code>IUTF8</code> on the list, select &#8216;Nothing&#8217;, and press &#8216;Set&#8217;. (It's not possible to disable sending this mode in 0.68.)
@@ -1051,5 +1051,5 @@ If you want to comment on this web site, see the
 <a href="feedback.html">Feedback page</a>.
 <br>
 
-(last modified on <!--LASTMOD-->Wed Mar 11 00:58:36 2020<!--END-->)
+(last modified on <!--LASTMOD-->Tue Apr  6 00:40:48 2021<!--END-->)
 </BODY></HTML>
