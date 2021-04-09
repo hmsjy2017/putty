@@ -63,9 +63,9 @@ Download:
 <b>summary</b>: Replace Windows Pageant&#x27;s IPC with named pipes<br>
 <b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
 <b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
-<b>blocks</b>: <em><a href="pageant-deferred-decrypt.html">pageant-deferred-decrypt</a></em> <em><a href="pageant-forwarding-path.html">pageant-forwarding-path</a></em> <em><a href="pageant-key-confirm.html">pageant-key-confirm</a></em><br>
+<b>blocks</b>: <a href="pageant-deferred-decrypt.html">pageant-deferred-decrypt</a> <em><a href="pageant-forwarding-path.html">pageant-forwarding-path</a></em> <em><a href="pageant-key-confirm.html">pageant-key-confirm</a></em><br>
 <b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
-<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=98538caa39d20f3efe8de307fa5169e9fb0787d2">98538caa39d20f3efe8de307fa5169e9fb0787d2</a> 2019-01-26<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=98538caa39d20f3efe8de307fa5169e9fb0787d2">98538caa39d20f3efe8de307fa5169e9fb0787d2</a> 2020-01-26<br>
 <p>
 Windows Pageant's method of communicating with clients, using
 <code>WM_COPYDATA</code> and a piece of shared memory, is absolutely
@@ -152,6 +152,12 @@ interact), then the fallback position would be to simply not present
 any key to <code>WM_COPYDATA</code> clients that isn't immediately
 usable without user interaction.
 
+<hr>
+
+<p>
+2020-01: implemented, including moving <code>WM_COPYDATA</code>
+servicing into a subthread.
+
 
 
 <p><hr>
@@ -160,6 +166,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/pageant-named-pipe;hb=refs/heads/main">Audit trail</a> for this wish.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2020-02-03 01:04:15 +0000)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-04-08 01:12:28 +0100)</div>
 
 </BODY></HTML>
