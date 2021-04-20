@@ -157,8 +157,8 @@ Download:
 </ul></li>
 <li><a href="#faq-admin">A.9 Administrative questions</a>
 <ul>
-<li><a href="#faq-domain">A.9.1 Is <code>putty.org</code> your website?</a></li>
-<li><a href="#faq-domain-2">A.9.2 Would you like me to register you a nicer domain name?</a></li>
+<li><a href="#faq-putty-org">A.9.1 Is <code>putty.org</code> your website?</a></li>
+<li><a href="#faq-domain">A.9.2 Would you like me to register you a nicer domain name?</a></li>
 <li><a href="#faq-webhosting">A.9.3 Would you like free web hosting for the PuTTY web site?</a></li>
 <li><a href="#faq-link">A.9.4 Would you link to my web site from the PuTTY web site?</a></li>
 <li><a href="#faq-sourceforge">A.9.5 Why don't you move PuTTY to SourceForge?</a></li>
@@ -841,14 +841,14 @@ The recently added elliptic-curve signature methods are also DSA-style algorithm
 Unfortunately not. The <code>VirtualLock()</code> function in the Windows API doesn't do a proper job: it may prevent small pieces of a process's memory from being paged to disk while the process is running, but it doesn't stop the process's memory as a whole from being swapped completely out to disk when the process is long-term inactive. And Pageant spends most of its time inactive.
 </p>
 <h2><a name="faq-admin"></a><a name="SA.9"></a>A.9 Administrative questions</h2>
-<h3><a name="faq-domain"></a><a name="QA.9.1"></a>A.9.1 Is <code>putty.org</code> your website?</h3>
+<h3><a name="faq-putty-org"></a><a name="QA.9.1"></a>A.9.1 Is <code>putty.org</code> your website?</h3>
 <p>
 No, it isn't. <code>putty.org</code> is run by an opportunist who uses it to advertise their own commercial SSH implementation to people looking for our free one. We don't own that site, we can't control it, and we don't advise anyone to use it in preference to our own site.
 </p>
 <p>
 The real PuTTY web site, run by the PuTTY team, has always been at <a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/"><code>https://www.chiark.greenend.org.uk/~sgtatham/putty/</code></a>.
 </p>
-<h3><a name="faq-domain-2"></a><a name="QA.9.2"></a>A.9.2 Would you like me to register you a nicer domain name?</h3>
+<h3><a name="faq-domain"></a><a name="QA.9.2"></a>A.9.2 Would you like me to register you a nicer domain name?</h3>
 <p>
 No, thank you. Even if you can find one (most of them seem to have been registered already, by people who didn't ask whether we actually wanted it before they applied), we're happy with the PuTTY web site being exactly where it is. It's not hard to find (just type &#8216;putty&#8217; into <a href="http://www.google.com/">google.com</a> and we're the first link returned), and we don't believe the administrative hassle of moving the site would be worth the benefit.
 </p>
@@ -877,7 +877,7 @@ If you have software based on PuTTY, or specifically designed to interoperate wi
 </p>
 <h3><a name="faq-sourceforge"></a><a name="QA.9.5"></a>A.9.5 Why don't you move PuTTY to SourceForge?</h3>
 <p>
-Partly, because we don't want to move the web site location (see <a href="#faq-domain">question A.9.1</a>).
+Partly, because we don't want to move the web site location (see <a href="#faq-domain">question A.9.2</a>).
 </p>
 <p>
 Also, security reasons. PuTTY is a security product, and as such it is particularly important to guard the code and the web site against unauthorised modifications which might introduce subtle security flaws. Therefore, we prefer that the Git repository, web site and FTP site remain where they are, under the direct control of system administrators we know and trust personally, rather than being run by a large organisation full of people we've never met and which is known to have had breakins in the past.
@@ -1062,5 +1062,5 @@ If you want to comment on this web site, see the
 <a href="feedback.html">Feedback page</a>.
 <br>
 
-(last modified on <!--LASTMOD-->Sun Apr 18 17:10:58 2021<!--END-->)
+(last modified on <!--LASTMOD-->Tue Apr 20 00:54:16 2021<!--END-->)
 </BODY></HTML>
