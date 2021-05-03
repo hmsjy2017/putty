@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug scrollbar-sub-message-loop</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/scrollbar-sub-message-loop.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug scrollbar-sub-message-loop</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../prerel.html">Pre-release</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Dragging the Windows terminal scrollbar blocks handling of many non-GUI events<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>mayhem:</i> Probably impossible<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>On Windows PuTTY, if you click on the terminal's scrollbar thumb
+and start dragging it interactively, then while you're performing that
+drag operation, PuTTY does not respond to various types of event:
+<ul>
+<li>Anything triggered on a timer within PuTTY, such as a flashing cursor,
+or sending pings to the server.
+<li>Anything triggered by reading data from a Windows
+<code>HANDLE</code> (e.g. a serial port or named pipe).
+<li>Anything for which PuTTY's implementation strategy involves
+scheduling a callback to be run from the top-level event loop
+(typically to avoid complicated re-entrancy bugs).
+</ul>
+
+<p>All of those types of event are handled by PuTTY's top-level
+message loop, which is much more complicated than a simple loop on
+<code>GetMessage</code>: instead, it calls
+<code>MsgWaitForMultipleObjects</code> to watch file handles and event
+objects as well as window messages, and it sets the timeout on that
+call to handle timers.
+
+<p>But Windows's handling for an interactive drag of that scrollbar
+works by running a subsidiary Windows message loop that lasts for the
+duration of the drag. And that subsidiary message loop doesn't contain
+any of that extra complexity: it <em>does</em> just loop round on
+<code>GetMessage</code>, so all those other types of event are ignored
+until the interactive drag has finished.
+
+<p>I list this bug at 'mayhem' difficulty because there's not really
+any way to get round it, that I can see. The sub-message-loop (called
+from <code>DefWindowProc</code>'s default handler for the
+<code>WM_SYSCOMMAND</code>/<code>SC_VSCROLL</code> message sent at the
+start of the drag) is the <em>only</em> thing in the Windows GUI
+implementation that knows the right way to translate mouse motion
+events during the drag into the
+<code>WM_SCROLL</code>/<code>SB_THUMBTRACK</code> window messages that
+tell you where to actually scroll to. So your choices are to let
+Windows run its sub-message-loop, or else reimplement that whole piece
+of GUI functionality completely by hand, and of course, you've got no
+chance of getting it all right.
+
+<p>Another option would be to make PuTTY a fundamentally multithreaded
+program, so that the window message loop could run in one thread and
+the handlers for other kinds of event could run in another. But PuTTY
+has had 25 years of being an essentially single-threaded code base (it
+does have sub-threads but they do extremely small jobs carefully
+separated from the main code), and converting it into something
+concurrency-safe at this late date would be tantamount to a rewrite
+from scratch!
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/scrollbar-sub-message-loop;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-05-02 11:23:46 +0100)</div>
+
+</BODY></HTML>

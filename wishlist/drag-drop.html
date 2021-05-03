@@ -84,15 +84,17 @@ into PuTTY. And perhaps other sorts of drag-and-drop should do
 plausible things as well.
 
 <p>
-(A lot of people ask to be able to drag and drop a file out of
-Windows Explorer into PuTTY, and have it automatically start up an
-SCP process to copy that file into the current directory of the
-remote shell. This is not even feasible in theory - there's no
-reliable way for PuTTY to determine what the currect directory of
-the remote shell <em>is</em>. It could be done in principle if you
-didn't mind the files ending up in your home directory rather than
-your current one, but that's a lot less useful and I doubt we'd
-consider it worth the rather complex modifications to PuTTY.)
+Another completely different use of drag and drop would be to drag a
+file out of Windows Explorer into a PuTTY window, and if that window
+is in SSH mode, have it automatically start up an auxiliary SFTP
+channel and use it to upload the file to the server.
+
+<p>
+(In that situation, there would have to be a designated upload
+directory for the dragged file to land in. Some users have suggested a
+version in which it lands in your shell's current directory. That is
+not sensibly possible, and it has its own writeup at Mayhem difficulty
+in <a href="drag-drop-to-cwd.html">drag-drop-to-cwd</a>.)
 
 
 
@@ -102,6 +104,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/drag-drop;hb=refs/heads/main">Audit trail</a> for this wish.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2002-05-09 12:52:35 +0000)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-05-02 11:23:46 +0100)</div>
 
 </BODY></HTML>

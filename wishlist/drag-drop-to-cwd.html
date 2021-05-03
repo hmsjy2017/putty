@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish drag-drop-to-cwd</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/drag-drop-to-cwd.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish drag-drop-to-cwd</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../prerel.html">Pre-release</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Drag and drop support (the hard version)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>mayhem:</i> Probably impossible<br>
+<b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<p>
+<a href="drag-drop.html">drag-drop</a> suggests, among other UI possibilities, the idea
+that dragging and dropping a file into a PuTTY SSH terminal window
+from the Windows Explorer should automatically SFTP it to the server
+via a spare SSH channel.
+
+<p>
+When users have asked for this, one particular request they've often
+made is that the file should be dropped into the <em>current
+directory</em> of the remote shell, so that you'd have it instantly
+available in the directory your prompt was sitting in anyway, and not
+have to go and fish it out of some standard designated uploads
+directory.
+
+<p>
+That, unfortunately, is not even feasible in <em>theory</em>, because
+there's no reliable way for PuTTY to determine what the currect
+directory of the remote shell <em>is</em>.
+
+<p>
+There are lots of ways to do it <em>un</em>reliably, or via setup from
+the user. You could imagine, for example, parsing the user's shell
+prompt to extract the cwd from it – but not all users put their
+cwd in their shell prompt, and the ones who do often format it
+differently. And even telling what is a shell prompt and what is not,
+from just a terminal data stream, needs more human interpretation than
+you'd guess. At best you might make this work, <em>ish</em>, most of
+the time, for a shell account that uses some fixed prompt format, say
+the default one in a clean Ubuntu login account.
+
+<p>
+More ambitiously, we could define some additional terminal escape
+sequence that is used by the shell to communicate its cwd (or rather,
+to communicate its <em>preferred upload directory</em>), and if a user
+wanted this feature, they'd have to set up some shell configuration
+that emitted that sequence every time the cwd changed. But the number
+of ways that could go wrong, from subshells of a different type to
+security hazards if the wrong server-side process was able to emit
+that sequence, don't bear thinking about.
+
+<p>
+So this one goes in at Mayhem difficulty. It's just not feasible.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/drag-drop-to-cwd;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-05-02 11:23:46 +0100)</div>
+
+</BODY></HTML>
