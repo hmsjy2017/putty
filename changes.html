@@ -48,9 +48,6 @@ Download:
 <a href="latest.html">Stable</a>
  &#183;
 
-<a href="prerel.html">Pre-release</a>
- &#183;
-
 <a href="snapshot.html">Snapshot</a>
  |
 
@@ -76,6 +73,32 @@ the development snapshots), see the <a href="wishlist/">wishlist page</a>.
 
 <p>
 These features are
+new in
+<a href="releases/0.75.html">0.75</a>
+(released 2021-05-08):
+
+
+<ul>
+<li>Security fix: on Windows, a server could DoS the whole Windows GUI
+by telling the PuTTY window to change its title repeatedly at high
+speed.
+<li>Pageant now supports loading a key still encrypted, and decrypting
+it later by prompting for the passphrase on first use.
+<li>Upgraded default SSH key fingerprint format to OpenSSH-style SHA-256.
+<li>Upgraded private key file format to PPK3, with improved passphrase
+hashing and no use of SHA-1.
+<li>Terminal now supports ESC [ 9 m for strikethrough text.
+<li>New protocols: bare ssh-connection layer for use over
+already-secure IPC channels, and SUPDUP for talking to very old
+systems such as PDP-10s.
+<li>PuTTYgen now supports alternative provable-prime generation
+algorithm for RSA and DSA.
+<li>The Unix tools can now connect directly to a Unix-domain socket.
+</ul>
+
+
+<p>
+These features were
 new in
 <a href="releases/0.74.html">0.74</a>
 (released 2020-06-27):
@@ -1813,5 +1836,5 @@ If you want to comment on this web site, see the
 <a href="feedback.html">Feedback page</a>.
 <br>
 
-(last modified on <!--LASTMOD-->Sun Apr 18 08:56:08 2021<!--END-->)
+(last modified on <!--LASTMOD-->Sat May  8 09:53:27 2021<!--END-->)
 </BODY></HTML>

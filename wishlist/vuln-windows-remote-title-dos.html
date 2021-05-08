@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY vulnerability vuln-windows-remote-title-dos</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/vuln-windows-remote-title-dos.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY vulnerability vuln-windows-remote-title-dos</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Rapid changes of window title can DoS Windows GUI<br>
+<b>class</b>: <i>vulnerability:</i> This is a security vulnerability.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.74<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d74308e90e3813af664f91ef8c9d1a0644aa9544">d74308e90e3813af664f91ef8c9d1a0644aa9544</a> (0.75)<br>
+<p>In the Windows version of PuTTY (and PuTTYtel), if the server sent
+a rapid series of terminal escape sequences that repeatedly changed
+the title of the terminal window, the Windows GUI could become
+unresponsive, because it couldn't keep up with all the title changes.
+
+<p>We think this is primarily a bug in Windows itself. (If it can't
+handle window title changes that quickly, it should apply a rate
+limit, or else a buggy local program can cause the same problem, by
+accident or on purpose.)
+
+<p>But PuTTY's feature of allowing server-controlled title changes had
+the effect of exporting that local bug over the network, and turning
+it into a <em>remotely</em> triggerable denial of service: it permits
+a server, or a server-side application with the ability to write to
+your terminal device, to DoS the client machine's Windows GUI.
+
+<p>In 0.75, the terminal code has been reworked so that title changes
+are buffered within PuTTY itself, and a rate limit is applied before
+they are passed on to the Windows API. So if the server changes the
+window title 10000 times in a second, only 50 of the title changes
+will actually get as far as the Windows API; the rest will just keep
+rewriting a buffer inside PuTTY's terminal emulation code.
+
+<p>For previous versions of PuTTY, an easy workaround is to disable
+the feature that allows the server to set the window title: on the
+Features panel, tick the box "Disable remote-controlled window title
+changing".
+
+<p>This vulnerability was discovered by Eviatar Gerzi of CyberArk Labs.
+It has been assigned <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-26940">CVE-2021-26940</a>.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-windows-remote-title-dos;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-05-08 09:22:22 +0100)</div>
+
+</BODY></HTML>

@@ -1,0 +1,2 @@
+RedirectMatch temp (.*/)putty-arm64-installer.msi$ $1putty-arm64-0.75-installer.msi
+RedirectMatch temp (.*/)putty-arm64-installer.msi.gpg$ $1putty-arm64-0.75-installer.msi.gpg
