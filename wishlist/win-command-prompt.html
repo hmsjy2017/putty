@@ -64,89 +64,56 @@ Download:
 <b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
 <b>difficulty</b>: <i>mayhem:</i> Probably impossible<br>
 <b>priority</b>: <i>low:</i> We aren&#x27;t sure whether to fix this or not.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=a55aac71e4fa6cf30f976da6727877c4cb117c96">a55aac71e4fa6cf30f976da6727877c4cb117c96</a><br>
 <p>
-Lots of people ask whether PuTTY would be able to act as a front end
-for Windows command interpreters (Command Prompt, bash, etc), in
-place of the not-very-pleasant standard console window.
+Lots of people used to ask whether PuTTY would be able to act as a
+front end for Windows command interpreters (Command Prompt, bash,
+etc), in place of the not-very-pleasant standard console window.
 
 <p>
-I (SGT) have done some experimental work in this direction, but it
-doesn't look promising, since Windows's interface to its console
-devices is fundamentally different in nature from Unix's system of
-terminals and pseudo-terminals.
+Some advantages of this (and probably not all of them):
+<ul>
+<li>You get the same free choice of fonts as PuTTY has: no restriction
+to a strange subset of the system's available fonts.
+<li>You get the same copy-paste gestures as PuTTY: no mental
+gear-shifting when you have command prompts and SSH sessions open on
+the same desktop.
+<li>You get scrollback with the PuTTY semantics: scrolling to the
+bottom gets you to <em>where the action is</em>, as opposed to the way
+you could accidentally find yourself 500 lines past the end of the
+action in a real console.
+</ul>
 
 <p>
-Unix programs communicate with their terminal via a serialised stream
-of data in which literal text to be written to the screen is
-intermixed with control codes to do operations such as positioning the
-cursor, clearing the screen, and setting the colour. This architecture
-makes it very natural and simple to put a network connection in
-between the terminal application and the software or hardware which is
-converting that serialised data stream into a rectangular view of a
-terminal window; Unix supports this by providing "pseudo-terminal"
-devices, which look and behave just like an ordinary Unix terminal
-from the point of view of the applications running in them, but which
-pass the data stream to another application which can interpret it
-itself. Unix programs such as <code>xterm</code>, and also network
-servers such as <code>sshd</code>, all work by using these
-pseudo-terminal devices to retrieve the stream of terminal data. In
-<code>sshd</code>'s case, the data is then passed on to a remote
-network client such as PuTTY, which receives that stream of terminal
-data and interprets all the control codes so as to display the literal
-text into its window as those codes instruct it.
+This wishlist item was raised at Mayhem difficulty, because at the
+time it was originally suggested, there was essentially no way to do
+it reliably. I (SGT) did some experimental work, which involved
+instantiating a Windows console as a hidden window, and using the same
+console API used by applications running in the console to read out
+its screen buffer and transfer that into the PuTTY window. This was
+unreliable in corner cases (in particular, I never got keypresses like
+Ctrl-C to cause the right things to happen in the hidden console), and
+it involved some extremely intrusive refactoring of PuTTY itself (you
+basically needed two totally different shapes of backend, one emitting
+an escape-sequence stream fed to <code>terminal.c</code> and the other
+directly providing updates to a rectangular character grid.
 
 <p>
-By contrast, Windows's console device is much more geared to direct
-access via the Windows API: there are API functions to ask Windows to
-read or write out the contents of a console's rectangular screen
-buffer, to change the colour, and so on. Windows has no analogue of
-Unix's pseudo-terminal device: there is no convenient way to create
-something that looks like a Windows console to its client application
-but passes all requests on to another application which can decide how
-to answer them.
+But in 2018, Windows itself helped out, by introducing the new <a
+href="https://blogs.msdn.microsoft.com/commandline/2018/08/02/windows-command-line-introducing-the-windows-pseudo-console-conpty/">ConPTY</a>
+interface, which means now the Windows API itself does the hard part,
+and all you have to do is to interpret the escape-sequence stream you
+get back.
 
 <p>
-(This is a slight oversimplification. Unix does include one or two
-terminal operations which are not serialised into the usual data
-stream but are instead performed by direct Unix API calls, such as
-resizing the window. However, in such cases Unix is careful to provide
-an out-of-band mechanism for applications using pseudo-terminals to
-arrange correct handling of the operation.)
-
-<p>
-It is just about possible (though extremely fiddly) to construct an
-application which instantiates a Windows console as a hidden window,
-and uses the same console API used by applications running in the
-console to read out its screen buffer and transfer that into the PuTTY
-window. This would give a window that had the look and feel of PuTTY
-(and, in particular, PuTTY's cut and paste interface), but running a
-Windows command prompt inside it. I have an experimental branch of the
-PuTTY code base (last touched in 2009) which attempts this.
-
-<p>
-However, it's not of production quality and probably never will be.
-Many things go subtly wrong when you attempt this sort of hackery, and
-handling of errors and exceptional cases is often very hard to get
-right. For example, it's extremely hard to arrange that if the PuTTY
-managing the invisible console window crashes, all processes using the
-console are cleaned up correctly. It's also hard to get GUI processes
-started from the invisible console not to be invisible themselves.
-Also, important keystrokes like Ctrl-C are difficult to pass through
-properly to the underlying console.
-
-<p>
-On the other hand, making PuTTY behave like a local terminal window
-for <em>Cygwin</em> processes in particular is a much more feasible
-piece of work, since Cygwin carefully emulates the Unix-like terminal
-model which PuTTY already understands, so all that PuTTY has to do is
-to arrange to be able to talk to that emulation. See
-<a href="cygwin-terminal-window.html">cygwin-terminal-window</a> for thoughts on this.
-
-<p>
-<em>2018 update:</em> Windows (as of Windows 10 build 1809) has grown
-an interface called
-<a href="https://blogs.msdn.microsoft.com/commandline/2018/08/02/windows-command-line-introducing-the-windows-pseudo-console-conpty/">ConPTY</a>,
-which ought to help with this.
+As of 2021-05-08, we're now building an experimental
+<code>pterm.exe</code> for Windows. It's not part of the installer or
+<code>putty.zip</code> yet, and we might even delay linking to it from
+the Download page until it's had a bit more developer testing, but you
+can download a snapshot of it by hand using a URL analogous to the
+other links for direct download of development-snapshot
+<code>.exe</code> files. However, at this stage, if it breaks, you get
+to keep all the pieces!
 
 
 
@@ -156,6 +123,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-command-prompt;hb=refs/heads/main">Audit trail</a> for this wish.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2019-01-27 00:01:00 +0000)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-05-08 18:22:25 +0100)</div>
 
 </BODY></HTML>
