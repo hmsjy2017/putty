@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug win-pageant-max-connections</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/win-pageant-max-connections.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug win-pageant-max-connections</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: After 30 or so simultaneous PuTTY sessions, Windows Pageant stops working<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>present-in</b>: 0.75<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6e69223dc262755c2cd2a3bba5c188d8fc91943a">6e69223dc262755c2cd2a3bba5c188d8fc91943a</a><br>
+<p>
+In version 0.75, Windows Pageant would stop working after a certain
+number of PuTTYs (or other PuTTY tools) were active at the same time
+(typically about 30). Subsequently started PuTTY tools would tend to
+hang.
+
+<p>
+This was due to two separate bugs in the new Pageant connection
+arrangements introduced in 0.75 (<a href="pageant-named-pipe.html">pageant-named-pipe</a>):
+<ul>
+<li>Whenever PuTTY made a named-pipe connection to Pageant, it would
+not close the connection when it was done with. The led to connections
+used for initial authentication staying needlessly open for the
+lifetime of the PuTTY tool. This leak was fixed in
+commit 6e69223dc2, which fixed the most obvious manifestations of
+this problem.</li>
+<li>That there was a limit at all on simultaneous connections to
+Pageant was fixed later, in commit 17c57e1078. (The limit was about
+60, but each PuTTY tool might make more than one.)</li>
+</ul>
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-pageant-max-connections;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-05-31 12:03:49 +0100)</div>
+
+</BODY></HTML>
