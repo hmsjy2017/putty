@@ -83,10 +83,10 @@ arrangements introduced in 0.75 (<a href="pageant-named-pipe.html">pageant-named
 not close the connection when it was done with it. This led to connections
 used for initial authentication staying needlessly open for the
 lifetime of the PuTTY tool. This leak was fixed on the <tt>main</tt>
-branch in commit 6e69223dc2, which fixed the most obvious manifestations
+branch in commit <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=6e69223dc262755c2cd2a3bba5c188d8fc91943a">6e69223dc262755c2cd2a3bba5c188d8fc91943a</a>, which fixed the most obvious manifestations
 of this problem.</li>
 <li>That there was a limit at all on simultaneous connections to
-Pageant was fixed later, in commit 17c57e1078. (The limit was about
+Pageant was fixed later, in commit <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=17c57e1078c8fabd5417175247b38ce7b1643ca4">17c57e1078c8fabd5417175247b38ce7b1643ca4</a>. (The limit was about
 60, but each PuTTY tool might make more than one.)</li>
 </ul>
 
@@ -98,6 +98,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/win-pageant-max-connections;hb=refs/heads/main">Audit trail</a> for this bug.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2021-06-22 17:26:39 +0100)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-07-03 11:50:19 +0100)</div>
 
 </BODY></HTML>

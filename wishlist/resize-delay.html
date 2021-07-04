@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY bug resize-delay</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/resize-delay.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY bug resize-delay</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../prerel.html">Pre-release</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Delayed semantic effect of terminal resizing escape sequences<br>
+<b>class</b>: <i>bug:</i> This is clearly an actual problem we want fixed.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>absent-in</b>: 0.74 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=99dfc66457d19f0769a0b5cfe9dd7f924e22ee71">99dfc66457d19f0769a0b5cfe9dd7f924e22ee71</a><br>
+<b>present-in</b>: 0.75 <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d74308e90e3813af664f91ef8c9d1a0644aa9544">d74308e90e3813af664f91ef8c9d1a0644aa9544</a><br>
+<p>When the PuTTY terminal code wants to make a change to the terminal
+window properties, the change is not made immediately, but queued
+until the next window redraw. This policy was <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=d74308e90e3813af664f91ef8c9d1a0644aa9544">introduced</a>
+as a means of limiting the rate at which a server could cause PuTTY to
+perform GUI activity, preventing <a href="vuln-windows-remote-title-dos.html">at least one server-triggerable DoS
+attack</a>.
+
+<p>One of the window-property changes included in this policy is its
+size. When the server sends any of the escape sequences that triggers
+a terminal resize (including both the DECCOLM <code>ESC[?3h</code> /
+<code>ESC[?3l</code> sequences for 80/132 column switch, and the xterm
+general resize sequence
+<code>ESC[8;</code><i>H</i><code>;</code><i>W</i><code>t</code>), the
+actual resize may not happen until up to 20ms later.
+
+<p>But it's not unreasonable for the server to send a control sequence
+to resize the terminal, and then <em>immediately</em> follow that up
+with a stream of terminal output that draws a full screen of text in
+the expectation that it's drawing on the new window size. So if PuTTY
+has not yet enacted the size change, then that redraw can go wrong,
+e.g. with lines of text intended for the new terminal width wrapping
+at the shorter old width. (Or being truncated, depending on other
+terminal settings, but <em>neither</em> of those was what you actually
+wanted.)
+
+<p>It's not clear what the best fix for this might be. I can think of
+several plausible options:
+
+<p><strong>Revert the rate-limiting for resizes</strong>, and put
+things back to the way they used to work, so that window resizes are
+enacted synchronously. That <em>might</em> be OK: we don't know for
+sure that a significant server-triggered DoS is available relating to
+resizes in particular. But it might reintroduce a vulnerability, so
+I'd rather not do it that way.
+
+<p><strong>Pause processing of terminal output until a resize
+completes</strong>. The physical window resize would still happen at
+the same time as it currently does, but until it was finished,
+terminal output would remain in <code>terminal.c</code>'s incoming
+buffer, waiting for the terminal to be the right size to accept it.
+This would introduce up to 20ms of delay in terminal output processing
+whenever a resize took place.
+
+<p><strong>Decouple logical and physical terminal resizes</strong>.
+Perhaps the most conceptually clean solution, but also the trickiest
+to implement: respond to a terminal resize request by immediately
+changing the <em>logical</em> size of the terminal screen in the
+<code>terminal.c</code> data structures, so that further terminal data
+can be immediately processed and will find terminal features like line
+wrapping behaving as expected. But the <em>physical</em> resize of the
+window, in the GUI, would still wait until the next redraw timer, and
+at that point, the window would become the new size and have the new
+contents drawn on it.
+
+<p>The biggest problem with this last option is: what happens if the
+GUI doesn't give us the window size we asked for? If you try to resize
+a window larger than the screen on some GUI platforms (including
+Windows), you get a size that will fit in place of the size you
+requested. And you don't find this out until you actually attempt the
+physical resize in the GUI, and get sent a <code>WM_SIZE</code>
+telling you what size you <em>actually</em> got. So in the decoupled
+approach, you'd end up already having drawn a load of output to the
+terminal data structures in the expectation of getting one size, and
+by the time you find you got a different size instead, it's a bit late
+to figure out what the screen <em>should</em> have ended up looking
+like.
+
+<p>But perhaps that doesn't matter too much, and we should just regard
+that later change of mind on the GUI's part as equivalent to a user
+action resizing the terminal window. It's not clear.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/resize-delay;hb=refs/heads/main">Audit trail</a> for this bug.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-07-03 11:38:49 +0100)</div>
+
+</BODY></HTML>
