@@ -86,3 +86,11 @@ td    { padding-top: 0.2em; padding-bottom: 0.2em; padding-right: 2em; }
 .missing { margin-left: 10%; margin-right: 10%; margin-bottom: 5%;
            border: medium solid red; padding: 3%;
            background-color: #ffcccc; text-color: #000000 }
+
+table.cve-table { border-collapse: collapse; }
+table.cve-table th { border: 1px solid black;
+                     text-align: left;
+                     padding: 0.2em0.5em; }
+table.cve-table td { border: 1px solid black;
+                     vertical-align: top;
+                     padding: 0.2em 0.5em; }
