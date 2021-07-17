@@ -1,0 +1,2 @@
+RedirectMatch temp (.*/)putty-installer.msi$ $1putty-0.76-installer.msi
+RedirectMatch temp (.*/)putty-installer.msi.gpg$ $1putty-0.76-installer.msi.gpg

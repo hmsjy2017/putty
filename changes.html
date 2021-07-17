@@ -48,9 +48,6 @@ Download:
 <a href="latest.html">Stable</a>
  &#183;
 
-<a href="prerel.html">Pre-release</a>
- &#183;
-
 <a href="snapshot.html">Snapshot</a>
  |
 
@@ -76,6 +73,35 @@ the development snapshots), see the <a href="wishlist/">wishlist page</a>.
 
 <p>
 These features are
+new in
+<a href="releases/0.76.html">0.76</a>
+(released 2021-07-17):
+
+
+<ul>
+<li>New option to abandon an SSH connection if the server allows you
+to authenticate in a trivial manner.
+<li>Bug fix: Windows PuTTY crashed when the 'Use system colours'
+option was used.
+<li>Bug fix: crash on Windows when using MIT Kerberos together with
+'Restart Session'.
+<li>Bug fix: Windows PuTTY leaked named pipes after contacting
+Pageant.
+<li>Bug fix: Windows PuTTY didn't update the window while you held
+down the scrollbar arrow buttons long enough to 'key-repeat'.
+<li>Bug fix: user colour-palette reconfiguration via 'Change Settings'
+were delayed-action.
+<li>Bug fix: server colour-palette reconfigurations were sometimes
+lost.
+<li>Bug fix: a tight loop could occur on reading a truncated private
+key file.
+<li>Bug fix: the Windows Pageant GUI key list didn't display key
+lengths.
+</ul>
+
+
+<p>
+These features were
 new in
 <a href="releases/0.75.html">0.75</a>
 (released 2021-05-08):
@@ -1839,5 +1865,5 @@ If you want to comment on this web site, see the
 <a href="feedback.html">Feedback page</a>.
 <br>
 
-(last modified on <!--LASTMOD-->Sun Jun 13 10:27:58 2021<!--END-->)
+(last modified on <!--LASTMOD-->Sat Jul 17 11:53:04 2021<!--END-->)
 </BODY></HTML>

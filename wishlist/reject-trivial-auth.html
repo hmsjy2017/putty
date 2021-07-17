@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish reject-trivial-auth</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/reject-trivial-auth.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish reject-trivial-auth</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: Option to reject trivial authentication in SSH<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>fun:</i> Just needs tuits, and not many of them.<br>
+<b>priority</b>: <i>high:</i> This should be fixed in the next release.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=5f5c710cf3704737e24ffceb2c918e412a2a674f">5f5c710cf3704737e24ffceb2c918e412a2a674f</a> <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=1dc5659aa62848f0aeb5de7bd3839fecc7debefa">1dc5659aa62848f0aeb5de7bd3839fecc7debefa</a> (0.76)<br>
+<p>From version 0.76, PuTTY will include an option to abandon an SSH
+connection if the SSH server ends the user authentication phase of the
+protocol without requiring any substantive input from PuTTY.
+
+<p>This option is available in the GUI in the Connection > SSH >
+Auth config panel ("Disconnect if authentication succeeds trivially"),
+or on the command line as <code>-no-trivial-auth</code>.
+
+<p>This is intended as a second line of defence against the same class
+of problem we describe in <a href="vuln-auth-prompt-spoofing.html">vuln-auth-prompt-spoofing</a>, and
+addressed in 0.71 via a system of trust sigils (in GUI PuTTY) and
+post-authentication confirmation prompts (in command-line Plink).
+
+<p>The general class of attack is: you expect PuTTY itself to request
+some kind of input from you during authentication (such as prompting
+you for your key passphrase), but the server is either compromised or
+malicious, and instead, it sends a
+<code>SSH_MSG_USERAUTH_SUCCESS</code> response immediately, and then
+the <em>server</em> tries to request the same input, by arranging for
+you to receive a similar-looking prompt during the main session.
+
+<p>In this way, for example, you might be tricked into sending your
+private key's decryption passphrase <em>to the server</em>, when it
+never should have left your own machine.
+
+<p>This class of issue was reported to us in 2019, and in 0.71, we
+fixed it by the trust sigil system. Anything the server sends to try
+to trick you into thinking that authentication is still ongoing will
+lack the PuTTY icon to its left.
+
+<p>However, it was suggested to us that it makes life easier for the
+user not to have to spot the presence or absence of that small sigil.
+If you're <em>expecting</em> the server not to let you in without
+actually presenting some authentication (be it a password, a
+public-key signature, a one-time token or whatever), then you can now
+tell PuTTY that, and if the server should be taken over so as to
+attempt this kind of spoofing, PuTTY will disconnect before even
+presenting the spoof prompt.
+
+<p>(But note that it's not a perfect defence in all cases. If an SSH
+server is configured to require two forms of authentication in
+sequence, then it could terminate early after the first of them, and
+this option wouldn't know anything was wrong!)
+
+<p>This is a new <strong>option</strong>, not enabled by default.
+That's because it is perfectly legal for an SSH server to let you in
+without any authentication! Some servers do it entirely on purpose,
+typically because they are SSH wrappers around some other service that
+presents its own login prompt not integrated with the SSH layer.
+
+<p><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-36367">CVE-2021-36367</a> refers to this new option as a fix for a
+vulnerability, and describes the vulnerability as "PuTTY through 0.75
+proceeds with establishing an SSH session even if it has never sent a
+substantive authentication response". With respect to the author of
+that text, we consider that to be misleading. It is perfectly legal
+for the server to waive authentication, and actually useful in some
+legitimate use cases; it is perfectly legal for PuTTY to proceed with
+the connection regardless; and the trust sigil system introduced in
+0.71 <em>already</em> defends against every spoofing attack we know of
+that a server could attempt by doing this unexpectedly. This new
+option is a UI improvement, but not in and of itself a vital
+vulnerability fix.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/reject-trivial-auth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-07-17 11:45:24 +0100)</div>
+
+</BODY></HTML>

@@ -48,9 +48,6 @@ Download:
 <a href="../latest.html">Stable</a>
  &#183;
 
-<a href="../prerel.html">Pre-release</a>
- &#183;
-
 <a href="../snapshot.html">Snapshot</a>
  |
 
@@ -170,6 +167,27 @@ This vulnerability was found as part of a
 <a href="https://hackerone.com/putty_h1c">bug bounty programme</a> run under
 the auspices of the EU-FOSSA project.
 
+<p>
+<strong>2021-07-17</strong>: 0.76 will include an additional defence
+against this same class of spoofing attacks, in the form of a <a href="reject-trivial-auth.html">new configuration option</a> to make PuTTY
+abandon the SSH connection if the server terminates authentication
+without asking for any actual proof of identity (no password, no
+signature, etc). This way, if a server attempts this kind of spoofing,
+you don't have to spot the lack of trust sigil on the server's spoof
+prompt, because PuTTY will have terminated the connection already
+before the server even <em>presents</em> the spoof prompt. (However,
+you have to enable this option, because it is also legitimate and
+actually seen in practice for servers to perform trivial userauth for
+<em>sensible</em> reasons.)
+
+<p>
+<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-36367">CVE-2021-36367</a> also refers to this general class of
+attack. The public text in Mitre's database lists it as a
+vulnerability up to and including PuTTY 0.75, because they're thinking
+of 0.76's new config option as the only defence against it. With
+respect to them, we do not agree: <em>we</em> regard this class of
+vulnerability as having been addressed from 0.71 onwards.
+
 
 
 <p><hr>
@@ -178,6 +196,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/vuln-auth-prompt-spoofing;hb=refs/heads/main">Audit trail</a> for this vulnerability.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2019-03-26 00:15:27 +0000)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-07-17 11:45:24 +0100)</div>
 
 </BODY></HTML>
