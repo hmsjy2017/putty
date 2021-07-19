@@ -95,14 +95,15 @@ fixed it by the trust sigil system. Anything the server sends to try
 to trick you into thinking that authentication is still ongoing will
 lack the PuTTY icon to its left.
 
-<p>However, it was suggested to us that it makes life easier for the
-user not to have to spot the presence or absence of that small sigil.
-If you're <em>expecting</em> the server not to let you in without
-actually presenting some authentication (be it a password, a
+<p>However, AUT-milCERT suggested to us that it makes life easier for
+the user not to have to spot the presence or absence of that small
+sigil. If you're <em>expecting</em> the server not to let you in
+without actually presenting some authentication (be it a password, a
 public-key signature, a one-time token or whatever), then you can now
 tell PuTTY that, and if the server should be taken over so as to
 attempt this kind of spoofing, PuTTY will disconnect before even
-presenting the spoof prompt.
+presenting the spoof prompt. In addition to making this suggestion,
+AUT-milCERT also did the bulk of the work to implement it.
 
 <p>(But note that it's not a perfect defence in all cases. If an SSH
 server is configured to require two forms of authentication in
@@ -136,6 +137,6 @@ If you want to comment on this web site, see the
 <br>
 <div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/reject-trivial-auth;hb=refs/heads/main">Audit trail</a> for this wish.</div>
 
-<div class="timestamp">(last revision of this bug record was at 2021-07-17 11:45:24 +0100)</div>
+<div class="timestamp">(last revision of this bug record was at 2021-07-18 11:31:25 +0100)</div>
 
 </BODY></HTML>

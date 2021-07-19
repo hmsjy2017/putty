@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD>
+<TITLE>PuTTY wish ssh-proxy</TITLE>
+<link rel="canonical" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/wishlist/ssh-proxy.html">
+<link rel="stylesheet" type="text/css" href="../sitestyle.css" title="PuTTY Home Page Style">
+<link rel="shortcut icon" href="putty.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="robots" content="noindex,nofollow">
+</HEAD>
+<BODY>
+<h1 align=center>PuTTY wish ssh-proxy</h1>
+
+<div align=center class="mirrorwarning">
+This is a mirror. Follow this link to find
+<a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/">the primary PuTTY web site</a>.
+</div>
+
+<p align=center>
+
+<a href="../">Home</a>
+ |
+
+<a href="../faq.html">FAQ</a>
+ |
+
+<a href="../feedback.html">Feedback</a>
+ |
+
+<a href="../licence.html">Licence</a>
+ |
+
+<a href="../maillist.html">Updates</a>
+ |
+
+<a href="../mirrors.html">Mirrors</a>
+ |
+
+<a href="../keys.html">Keys</a>
+ |
+
+<a href="../links.html">Links</a>
+ |
+
+<a href="../team.html">Team</a>
+<br>
+Download:
+
+<a href="../latest.html">Stable</a>
+ &#183;
+
+<a href="../snapshot.html">Snapshot</a>
+ |
+
+<a href="../docs.html">Docs</a>
+ |
+
+<a href="../changes.html">Changes</a>
+ |
+
+<a href="./">Wishlist</a>
+</p>
+
+<b>summary</b>: In-process proxy SSH connections (like OpenSSH&#x27;s -J/ProxyJump)<br>
+<b>class</b>: <i>wish:</i> This is a request for an enhancement.<br>
+<b>difficulty</b>: <i>tricky:</i> Needs many tuits.<br>
+<b>priority</b>: <i>medium:</i> This should be fixed one day.<br>
+<b>fixed-in</b>: <a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=0d3bb73608f1a5d1d5337e51736d48dad1436af5">0d3bb73608f1a5d1d5337e51736d48dad1436af5</a><br>
+<p>
+The ability to connect to an SSH server 'A' by first making an SSH
+connection to an intermediate server 'B' (sometimes called a 'bastion'
+or 'jump host'), and using that connection to open a tunnel to A's SSH
+server port.
+
+<p>
+This is already possible in PuTTY using the 'Local' proxy type with a
+command (specified in the 'Proxy hostname' field) like
+'<tt>plink -batch %proxyhost -nc %host:%port</tt>', but it's fiddly
+– requiring the separate Plink executable to be installed and
+identified – and doesn't allow you to interact with the
+intermediate host, for instance to enter a password.
+
+<p>
+Having a single PuTTY instance manage both SSH connections would make
+it possible to avoid these problems. (This is similar to what OpenSSH
+has implemented since
+<a href="https://www.openssh.com/txt/release-7.3">7.3</a> with its
+<tt>-J</tt> / <tt>ProxyJump</tt> feature.)
+
+<p>
+<em>Current status, May 2021:</em> an early version of such a feature
+is available in the development snapshots, as the "SSH" option on the
+"Proxy" tab. Its limitations are well described in
+<a href="https://git.tartarus.org/?p=simon/putty.git;a=commitdiff;h=0d3bb73608f1a5d1d5337e51736d48dad1436af5">the initial commit message</a>;
+a major one is that it doesn't yet actually support interacting with
+the intermediate host.
+
+<p>
+Since the 'Proxy hostname' field can identify a PuTTY saved session as
+well as a hostname, the intermediate host can have its own
+configuration, such as using a particular key file. This allow allows
+multi-hop jump paths, if the saved session for the intermediate host
+is itself configured to use an SSH proxy; similarly, it allows the
+feature to be used in combination with a non-SSH proxy.
+
+
+
+<p><hr>
+If you want to comment on this web site, see the
+<a href="../feedback.html">Feedback page</a>.
+<br>
+<div class="audit"><a href="https://git.tartarus.org/?p=simon/putty-wishlist.git;a=history;f=data/ssh-proxy;hb=refs/heads/main">Audit trail</a> for this wish.</div>
+
+<div class="timestamp">(last revision of this bug record was at 2021-07-18 14:38:54 +0100)</div>
+
+</BODY></HTML>
